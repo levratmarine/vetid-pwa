@@ -8,104 +8,40 @@
 <meta name="apple-mobile-web-app-title" content="VetID">
 <meta name="theme-color" content="#2A9D8F">
 <title>VetID — Santé animale</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
-:root{--teal:#2A9D8F;--teal-light:#E1F5EE;--teal-dark:#1a6b60;--coral:#E76F51;--bg:#F8F9FA;--white:#FFFFFF;--text:#1a1a2e;--muted:#6B7280;--border:#E5E7EB;--green:#22c55e;--orange:#f97316;--red:#ef4444}
+:root{--teal:#2A9D8F;--teal-light:#E1F5EE;--teal-dark:#1a6b60;--bg:#F8F9FA;--white:#FFFFFF;--text:#1a1a2e;--muted:#6B7280;--border:#E5E7EB;--green:#22c55e;--orange:#f97316;--red:#ef4444}
 body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .screen{display:none;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
-
-/* ONBOARDING */
-.onb-wrap{flex:1;display:flex;flex-direction:column;background:var(--white)}
-.onb-slides{flex:1;overflow:hidden;position:relative}
-.onb-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center;gap:24px;opacity:0;transition:opacity .4s;pointer-events:none}
-.onb-slide.active{opacity:1;pointer-events:all}
-.onb-icon-wrap{width:120px;height:120px;border-radius:36px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:52px}
-.onb-title{font-size:24px;font-weight:700;color:var(--text);line-height:1.3}
-.onb-sub{font-size:15px;color:var(--muted);line-height:1.7;max-width:300px}
-.onb-dots{display:flex;gap:8px;justify-content:center;padding:16px 0}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s}
-.dot.active{background:var(--teal);width:24px;border-radius:4px}
-.onb-footer{padding:16px 24px 40px;display:flex;flex-direction:column;gap:12px}
-
-/* TUTO INSTALL */
-.tuto-wrap{flex:1;background:var(--white);padding:24px;overflow-y:auto}
-.tuto-header{text-align:center;padding:20px 0;margin-bottom:24px}
-.tuto-step{display:flex;gap:16px;padding:16px;background:var(--bg);border-radius:16px;margin-bottom:12px;align-items:flex-start}
-.tuto-num{width:36px;height:36px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
-.tuto-text{flex:1}
-.tuto-text strong{font-size:15px;color:var(--text);display:block;margin-bottom:4px}
-.tuto-text span{font-size:13px;color:var(--muted);line-height:1.5}
-.tuto-visual{background:var(--teal-light);border-radius:12px;padding:12px;margin-top:8px;font-size:13px;color:var(--teal-dark);display:flex;align-items:center;gap:8px}
-.os-tabs{display:flex;gap:8px;margin-bottom:20px}
-.os-tab{flex:1;padding:10px;border-radius:12px;border:2px solid var(--border);font-size:14px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center;transition:all .2s}
-.os-tab.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark)}
-.os-content{display:none}
-.os-content.active{display:block}
-
-/* AUTH */
-.auth-wrap{flex:1;padding:24px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;background:var(--white)}
-.auth-logo{text-align:center;padding:24px 0 8px}
-.auth-logo-icon{font-size:48px}
-.auth-logo-name{font-size:32px;font-weight:800;color:var(--teal);margin-top:4px}
-.auth-tagline{font-size:14px;color:var(--muted)}
-.auth-title{font-size:22px;font-weight:700;color:var(--text)}
-.field-group{display:flex;flex-direction:column;gap:6px}
-.field-label{font-size:13px;font-weight:500;color:var(--muted)}
-.field-input{border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--text);outline:none;width:100%;background:var(--white);transition:border-color .2s}
-.field-input:focus{border-color:var(--teal)}
-.auth-switch{text-align:center;font-size:14px;color:var(--muted)}
-.auth-switch span{color:var(--teal);font-weight:600;cursor:pointer}
-.legal{text-align:center;font-size:11px;color:var(--muted);line-height:1.6}
-.legal span{color:var(--teal)}
-
-/* BUTTONS */
 .btn-primary{background:var(--teal);color:#fff;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:600;cursor:pointer;width:100%;transition:opacity .2s}
 .btn-primary:active{opacity:.85}
 .btn-ghost{background:transparent;color:var(--muted);border:none;font-size:14px;cursor:pointer;padding:8px;width:100%}
 .btn-outline{background:transparent;color:var(--teal);border:1.5px solid var(--teal);border-radius:14px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;width:100%}
-
-/* DASHBOARD */
-.dash-header{background:var(--teal);padding:20px 20px 24px;color:#fff;flex-shrink:0}
-.dash-greeting{font-size:14px;opacity:.85}
-.dash-title{font-size:22px;font-weight:700;margin-top:2px}
-.dash-body{flex:1;overflow-y:auto;padding:16px}
+.field-input{border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--text);outline:none;width:100%;background:var(--white);transition:border-color .2s}
+.field-input:focus{border-color:var(--teal)}
+.field-label{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block}
+.form-row{display:flex;flex-direction:column;gap:6px}
 .section-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;margin-top:16px}
-.animal-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .15s}
-.animal-card:active{transform:scale(.98)}
-.animal-avatar{width:52px;height:52px;border-radius:14px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
-.animal-info{flex:1}
-.animal-name{font-size:15px;font-weight:600;color:var(--text)}
-.animal-breed{font-size:12px;color:var(--muted);margin-top:1px}
-.badges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
-.badge{font-size:11px;padding:3px 9px;border-radius:8px;font-weight:500}
-.badge-green{background:#dcfce7;color:#166534}
-.badge-orange{background:#fed7aa;color:#9a3412}
-.badge-red{background:#fee2e2;color:#991b1b}
-.alert-banner{background:#fee2e2;border:1px solid #fca5a5;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px;color:#991b1b}
-.empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
-.empty-icon{font-size:48px;margin-bottom:16px}
-.empty-title{font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px}
-.empty-sub{font-size:14px;line-height:1.6}
-.fab{position:fixed;bottom:90px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:100}
-
-/* BOTTOM NAV */
+.page-header{background:var(--teal);padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.back-btn{font-size:26px;cursor:pointer;line-height:1}
+.page-body{flex:1;overflow-y:auto;padding:16px}
+.dash-header{background:var(--teal);padding:20px 20px 24px;color:#fff;flex-shrink:0}
 .bottom-nav{height:72px;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 8px 8px;flex-shrink:0;position:sticky;bottom:0}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 0}
 .nav-icon{font-size:22px}
 .nav-label{font-size:10px;color:var(--muted);font-weight:500}
 .nav-item.active .nav-label{color:var(--teal)}
-
-/* PROFIL ANIMAL */
-.page-header{background:var(--teal);padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0}
-.back-btn{font-size:24px;cursor:pointer;line-height:1;padding-right:4px}
-.page-body{flex:1;overflow-y:auto;padding:16px}
-.photo-upload{display:flex;flex-direction:column;align-items:center;padding:20px 0;gap:8px}
-.photo-circle{width:88px;height:88px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:40px;border:2px dashed var(--teal)}
+.animal-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.animal-avatar{width:52px;height:52px;border-radius:14px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.badges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.badge{font-size:11px;padding:3px 9px;border-radius:8px;font-weight:500}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-orange{background:#fed7aa;color:#9a3412}
+.badge-red{background:#fee2e2;color:#991b1b}
+.fab{position:fixed;bottom:90px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:100}
 .form-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:14px}
-.form-card-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
-.form-row{display:flex;flex-direction:column;gap:6px}
-.form-label{font-size:13px;font-weight:500;color:var(--muted)}
 .species-row{display:flex;gap:8px}
 .species-btn{flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--border);font-size:15px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center;transition:all .2s}
 .species-btn.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark)}
@@ -114,9 +50,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .toggle.on{background:var(--teal)}
 .toggle::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s}
 .toggle.on::after{transform:translateX(22px)}
-.id-info{font-size:11px;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 10px;line-height:1.5}
-
-/* TRAITEMENTS */
 .treat-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:12px}
 .treat-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .treat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
@@ -126,178 +59,170 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .date-label{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase}
 .date-val{font-size:13px;font-weight:600;color:var(--text);margin-top:2px}
 .progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:12px}
-.progress-fill{height:100%;border-radius:3px;transition:width .5s}
-.treat-actions{display:flex;gap:8px}
-.btn-small{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--text)}
-.btn-small-primary{background:var(--teal);color:#fff;border-color:var(--teal)}
-.btn-small-teal{color:var(--teal);border-color:var(--teal)}
+.progress-fill{height:100%;border-radius:3px}
 .notif-banner{background:var(--teal-light);border-radius:12px;padding:14px;margin-bottom:16px;border-left:4px solid var(--teal)}
 .notif-banner-title{font-size:13px;font-weight:600;color:var(--teal-dark);margin-bottom:4px}
 .notif-banner-text{font-size:12px;color:var(--teal-dark);line-height:1.6}
-
-/* REGLAGES */
 .settings-group{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;margin-bottom:12px}
 .settings-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
 .settings-row:last-child{border-bottom:none}
 .settings-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.settings-row-info{flex:1}
-.settings-row-title{font-size:15px;color:var(--text);font-weight:500}
-.settings-row-sub{font-size:12px;color:var(--muted);margin-top:1px}
-.disabled-section{opacity:.5;pointer-events:none}
-.coming-soon{background:#fef3c7;border-radius:10px;padding:10px 12px;font-size:12px;color:#92400e;margin-top:8px;margin-bottom:4px;line-height:1.5}
-
-/* BLOG */
-.blog-search{background:rgba(255,255,255,.2);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;margin-top:12px;color:rgba(255,255,255,.8);font-size:14px}
-.cat-scroll{display:flex;gap:8px;padding:14px 16px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.cat-pill{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);white-space:nowrap;flex-shrink:0}
-.cat-pill.active{background:var(--teal);color:#fff;border-color:var(--teal)}
-.blog-list{flex:1;overflow-y:auto;padding:12px 16px}
+.disabled-section{opacity:.45;pointer-events:none}
+.coming-soon{background:#fef3c7;border-radius:10px;padding:10px 12px;font-size:12px;color:#92400e;margin-bottom:12px;line-height:1.5}
 .blog-article{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer}
 .blog-thumb{width:76px;height:76px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
 .sponsored-tag{font-size:10px;background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:6px;font-weight:500}
-
-/* MODAL */
+.cat-pill{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);white-space:nowrap;flex-shrink:0}
+.cat-pill.active{background:var(--teal);color:#fff;border-color:var(--teal)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
 .modal-overlay.open{display:flex}
-.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:85vh;overflow-y:auto}
-.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
-
-/* TOAST */
+.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:88vh;overflow-y:auto;touch-action:pan-y}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;cursor:grab}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
+.onb-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center;gap:24px;opacity:0;transition:opacity .4s;pointer-events:none}
+.onb-slide.active{opacity:1;pointer-events:all}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s}
+.dot.active{background:var(--teal);width:24px;border-radius:4px}
+.tuto-step{display:flex;gap:16px;padding:16px;background:var(--bg);border-radius:16px;margin-bottom:12px}
+.tuto-num{width:36px;height:36px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.os-tab{flex:1;padding:10px;border-radius:12px;border:2px solid var(--border);font-size:14px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center}
+.os-tab.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark)}
+.os-content{display:none}
+.os-content.active{display:block}
+.tuto-visual{background:var(--teal-light);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:13px;color:var(--teal-dark);line-height:1.5}
+.article-body{line-height:1.8;font-size:15px;color:var(--text)}
+.article-body h3{font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--text)}
+.article-body p{margin-bottom:12px}
+.article-body ul{padding-left:20px;margin-bottom:12px}
+.article-body li{margin-bottom:6px}
+.privacy-body{padding:20px;font-size:14px;line-height:1.8;color:var(--text)}
+.privacy-body h2{font-size:18px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)}
+.privacy-body p{margin-bottom:12px;color:var(--muted)}
 </style>
 </head>
 <body>
 
-<!-- ONBOARDING -->
+<!-- ═══ ONBOARDING ═══ -->
 <div id="screen-onboarding" class="screen active">
-  <div class="onb-wrap">
-    <div class="onb-slides">
+  <div style="flex:1;background:var(--white);display:flex;flex-direction:column">
+    <div style="flex:1;position:relative;overflow:hidden">
       <div class="onb-slide active" id="slide-0">
-        <div class="onb-icon-wrap">🐾</div>
-        <div class="onb-title">Bienvenue sur VetID</div>
-        <div class="onb-sub">Le carnet de santé numérique pour votre chien ou chat. Gratuit, simple, toujours à portée de main.</div>
+        <div style="width:120px;height:120px;border-radius:36px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:56px">🐾</div>
+        <div style="font-size:26px;font-weight:700;color:var(--text)">Bienvenue sur VetID</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:300px">Le carnet de santé numérique pour votre chien ou chat. Gratuit, simple, toujours à portée de main.</div>
       </div>
       <div class="onb-slide" id="slide-1">
-        <div class="onb-icon-wrap">🔔</div>
-        <div class="onb-title">Rappels intelligents</div>
-        <div class="onb-sub">Vaccins, vermifuges, anti-puces… VetID calcule les prochaines échéances et vous prévient à temps.</div>
+        <div style="width:120px;height:120px;border-radius:36px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:56px">🔔</div>
+        <div style="font-size:26px;font-weight:700;color:var(--text)">Rappels intelligents</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:300px">Vaccins, vermifuges, anti-puces… VetID calcule les prochaines échéances et les affiche dans l'app.</div>
       </div>
       <div class="onb-slide" id="slide-2">
-        <div class="onb-icon-wrap">📖</div>
-        <div class="onb-title">Contenu pédagogique</div>
-        <div class="onb-sub">Des articles de qualité pour prendre les meilleures décisions pour votre animal.</div>
+        <div style="width:120px;height:120px;border-radius:36px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:56px">📖</div>
+        <div style="font-size:26px;font-weight:700;color:var(--text)">Contenu pédagogique</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:300px">Des articles de qualité sur la santé animale pour prendre les meilleures décisions pour votre compagnon.</div>
       </div>
     </div>
-    <div class="onb-dots">
-      <div class="dot active" id="dot-0"></div>
-      <div class="dot" id="dot-1"></div>
-      <div class="dot" id="dot-2"></div>
+    <div style="display:flex;gap:8px;justify-content:center;padding:16px 0">
+      <div class="dot active" id="dot-0"></div><div class="dot" id="dot-1"></div><div class="dot" id="dot-2"></div>
     </div>
-    <div class="onb-footer">
+    <div style="padding:16px 24px 40px;display:flex;flex-direction:column;gap:12px">
       <button class="btn-primary" id="onb-btn" onclick="nextSlide()">Continuer</button>
       <button class="btn-ghost" id="onb-skip" onclick="goToAuth()">Passer</button>
     </div>
   </div>
 </div>
 
-<!-- AUTH -->
+<!-- ═══ AUTH ═══ -->
 <div id="screen-auth" class="screen">
-  <div class="auth-wrap">
-    <div class="auth-logo">
-      <div class="auth-logo-icon">🐾</div>
-      <div class="auth-logo-name">VetID</div>
-      <div class="auth-tagline">La santé de votre animal, simplifiée</div>
+  <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;background:var(--white)">
+    <div style="text-align:center;padding:24px 0 8px">
+      <div style="font-size:56px">🐾</div>
+      <div style="font-size:32px;font-weight:800;color:var(--teal)">VetID</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:4px">La santé de votre animal, simplifiée</div>
     </div>
-    <div class="auth-title" id="auth-title">Créer un compte</div>
-    <div class="field-group">
-      <div class="field-label">Prénom</div>
-      <input class="field-input" id="auth-prenom" type="text" placeholder="Sophie">
+    <div style="font-size:22px;font-weight:700;color:var(--text)" id="auth-title">Créer un compte</div>
+    <div id="prenom-group" class="form-row"><label class="field-label">Prénom</label><input class="field-input" id="auth-prenom" type="text" placeholder="Sophie"></div>
+    <div class="form-row"><label class="field-label">Adresse email</label><input class="field-input" id="auth-email" type="email" placeholder="sophie@email.com"></div>
+    <div class="form-row"><label class="field-label">Mot de passe</label><input class="field-input" id="auth-password" type="password" placeholder="••••••••"></div>
+    <div class="toggle-row" style="padding:4px 0">
+      <div style="font-size:14px;color:var(--text)">Rester connecté</div>
+      <div class="toggle on" id="stay-toggle" onclick="this.classList.toggle('on')"></div>
     </div>
-    <div class="field-group">
-      <div class="field-label">Adresse email</div>
-      <input class="field-input" id="auth-email" type="email" placeholder="sophie@email.com">
-    </div>
-    <div class="field-group">
-      <div class="field-label">Mot de passe</div>
-      <input class="field-input" id="auth-password" type="password" placeholder="••••••••">
-    </div>
-    <button class="btn-primary" onclick="doAuth()">Créer mon compte</button>
-    <div class="auth-switch" id="auth-switch">Déjà un compte ? <span onclick="toggleAuth()">Se connecter</span></div>
-    <div class="legal">En créant un compte, vous acceptez nos <span>CGU</span> et notre <span>politique de confidentialité</span>.</div>
+    <button class="btn-primary" onclick="doAuth()" id="auth-btn">Créer mon compte</button>
+    <div style="text-align:center;font-size:14px;color:var(--muted)" id="auth-switch">Déjà un compte ? <span style="color:var(--teal);font-weight:600;cursor:pointer" onclick="toggleAuth()">Se connecter</span></div>
+    <div style="text-align:center;font-size:11px;color:var(--muted);line-height:1.6">En créant un compte, vous acceptez nos <span style="color:var(--teal);cursor:pointer" onclick="showPrivacy()">CGU</span> et notre <span style="color:var(--teal);cursor:pointer" onclick="showPrivacy()">politique de confidentialité</span>.</div>
   </div>
 </div>
 
-<!-- TUTO INSTALL -->
+<!-- ═══ TUTO INSTALL ═══ -->
 <div id="screen-tuto" class="screen">
   <div style="background:var(--teal);padding:20px;color:#fff;flex-shrink:0">
     <div style="font-size:20px;font-weight:700">📲 Installer VetID</div>
-    <div style="font-size:13px;opacity:.85;margin-top:4px">Ajoutez l'app à votre écran d'accueil</div>
+    <div style="font-size:13px;opacity:.85;margin-top:4px">Pour une expérience optimale, comme une vraie app</div>
   </div>
-  <div class="tuto-wrap">
+  <div style="flex:1;padding:20px;overflow-y:auto;background:var(--white)">
     <div style="background:var(--teal-light);border-radius:16px;padding:16px;margin-bottom:20px;text-align:center">
-      <div style="font-size:15px;font-weight:600;color:var(--teal-dark);margin-bottom:4px">VetID fonctionne comme une vraie app !</div>
-      <div style="font-size:13px;color:var(--teal-dark);line-height:1.6">En l'ajoutant à votre écran d'accueil, elle s'ouvrira sans navigateur, en plein écran, exactement comme une application téléchargée.</div>
+      <div style="font-size:15px;font-weight:600;color:var(--teal-dark);margin-bottom:6px">VetID fonctionne comme une vraie app !</div>
+      <div style="font-size:13px;color:var(--teal-dark);line-height:1.6">Ajoutez-la à votre écran d'accueil pour l'ouvrir en plein écran, sans barre de navigateur, exactement comme une application téléchargée.</div>
     </div>
-    <div class="os-tabs">
+    <div style="display:flex;gap:8px;margin-bottom:20px">
       <div class="os-tab active" onclick="switchOS('ios',this)">📱 iPhone (iOS)</div>
       <div class="os-tab" onclick="switchOS('android',this)">🤖 Android</div>
     </div>
     <div class="os-content active" id="os-ios">
       <div class="tuto-step">
         <div class="tuto-num">1</div>
-        <div class="tuto-text">
-          <strong>Ouvrez Safari</strong>
-          <span>VetID doit être ouvert dans Safari (pas Chrome). Si ce n'est pas le cas, copiez le lien et ouvrez-le dans Safari.</span>
+        <div>
+          <strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Ouvrez dans Safari</strong>
+          <span style="font-size:13px;color:var(--muted);line-height:1.5">VetID doit être ouvert dans Safari. Si vous êtes dans Chrome, copiez le lien et collez-le dans Safari.</span>
         </div>
       </div>
       <div class="tuto-step">
         <div class="tuto-num">2</div>
-        <div class="tuto-text">
-          <strong>Appuyez sur le bouton Partager</strong>
-          <span>En bas de Safari, appuyez sur l'icône carrée avec une flèche vers le haut ↑</span>
-          <div class="tuto-visual">⬆️ Le bouton se trouve dans la barre du bas de Safari</div>
+        <div>
+          <strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur les 3 petits points •••</strong>
+          <span style="font-size:13px;color:var(--muted);line-height:1.5">En bas à droite de Safari, appuyez sur l'icône avec 3 points.</span>
+          <div class="tuto-visual">⬤ ⬤ ⬤ &nbsp; Le bouton se trouve dans la barre du bas</div>
         </div>
       </div>
       <div class="tuto-step">
         <div class="tuto-num">3</div>
-        <div class="tuto-text">
-          <strong>Appuyez sur "Sur l'écran d'accueil"</strong>
-          <span>Faites défiler le menu vers le bas et appuyez sur "Ajouter à l'écran d'accueil"</span>
-          <div class="tuto-visual">🏠 Cherchez l'icône avec un petit + dans un carré</div>
+        <div>
+          <strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Partager" ↑</strong>
+          <span style="font-size:13px;color:var(--muted);line-height:1.5">Dans le menu qui s'ouvre, appuyez sur le bouton "Partager" avec la flèche vers le haut.</span>
+          <div class="tuto-visual">↑ Partager</div>
         </div>
       </div>
       <div class="tuto-step">
         <div class="tuto-num">4</div>
-        <div class="tuto-text">
-          <strong>Appuyez sur "Ajouter"</strong>
-          <span>Le nom "VetID" apparaît déjà. Appuyez sur "Ajouter" en haut à droite. C'est fait !</span>
-          <div class="tuto-visual">✅ L'icône VetID apparaît sur votre écran d'accueil</div>
+        <div>
+          <strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Plus" puis "Sur l'écran d'accueil"</strong>
+          <span style="font-size:13px;color:var(--muted);line-height:1.5">Faites défiler et appuyez sur "Plus", puis sélectionnez "Sur l'écran d'accueil".</span>
+          <div class="tuto-visual">⊕ Sur l'écran d'accueil</div>
+        </div>
+      </div>
+      <div class="tuto-step">
+        <div class="tuto-num">5</div>
+        <div>
+          <strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter"</strong>
+          <span style="font-size:13px;color:var(--muted);line-height:1.5">"VetID" apparaît déjà comme nom. Appuyez sur "Ajouter" en haut à droite. L'icône 🐾 apparaît sur votre écran d'accueil !</span>
+          <div class="tuto-visual">✅ VetID est installé !</div>
         </div>
       </div>
     </div>
     <div class="os-content" id="os-android">
       <div class="tuto-step">
         <div class="tuto-num">1</div>
-        <div class="tuto-text">
-          <strong>Ouvrez Chrome</strong>
-          <span>VetID doit être ouvert dans Chrome sur Android.</span>
-        </div>
+        <div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Ouvrez dans Chrome</strong><span style="font-size:13px;color:var(--muted)">VetID doit être ouvert dans Chrome sur Android.</span></div>
       </div>
       <div class="tuto-step">
         <div class="tuto-num">2</div>
-        <div class="tuto-text">
-          <strong>Appuyez sur les 3 points ⋮</strong>
-          <span>En haut à droite de Chrome, appuyez sur le menu (3 points verticaux)</span>
-        </div>
+        <div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur ⋮ (3 points)</strong><span style="font-size:13px;color:var(--muted)">En haut à droite de Chrome, appuyez sur les 3 points verticaux.</span></div>
       </div>
       <div class="tuto-step">
         <div class="tuto-num">3</div>
-        <div class="tuto-text">
-          <strong>Appuyez sur "Ajouter à l'écran d'accueil"</strong>
-          <span>Ou "Installer l'application" si cette option apparaît directement</span>
-          <div class="tuto-visual">📲 L'icône VetID s'installe automatiquement</div>
-        </div>
+        <div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter à l'écran d'accueil"</strong><span style="font-size:13px;color:var(--muted)">Ou "Installer l'application" si cette option apparaît directement.</span><div class="tuto-visual">📲 L'icône VetID 🐾 s'installe automatiquement</div></div>
       </div>
     </div>
     <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
@@ -307,56 +232,42 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ═══ DASHBOARD ═══ -->
 <div id="screen-dashboard" class="screen">
   <div class="dash-header">
-    <div class="dash-greeting" id="dash-greeting">Bonjour 👋</div>
-    <div class="dash-title">Mes animaux</div>
+    <div id="dash-greeting" style="font-size:14px;opacity:.85">Bonjour 👋</div>
+    <div style="font-size:22px;font-weight:700;margin-top:2px">Mes animaux</div>
   </div>
-  <div class="dash-body" id="dash-body">
-    <div class="empty-state" id="empty-state">
-      <div class="empty-icon">🐾</div>
-      <div class="empty-title">Aucun animal pour l'instant</div>
-      <div class="empty-sub">Ajoutez votre premier compagnon en appuyant sur le bouton + ci-dessous</div>
+  <div style="flex:1;overflow-y:auto;padding:16px" id="dash-body">
+    <div id="empty-state" style="text-align:center;padding:48px 24px;color:var(--muted)">
+      <div style="font-size:48px;margin-bottom:16px">🐾</div>
+      <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Aucun animal pour l'instant</div>
+      <div style="font-size:14px;line-height:1.6">Ajoutez votre premier compagnon en appuyant sur le bouton + ci-dessous</div>
     </div>
     <div id="animals-list"></div>
-    <div id="blog-preview" style="margin-top:8px">
+    <div id="blog-preview">
       <div class="section-title">Derniers articles</div>
-      <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:8px">
-        <div style="min-width:140px;background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden;cursor:pointer" onclick="goToTab('blog')">
-          <div style="height:72px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:28px">🦷</div>
-          <div style="padding:8px"><div style="font-size:10px;color:var(--teal);font-weight:600">SANTÉ</div><div style="font-size:12px;font-weight:600;color:var(--text)">Hygiène dentaire du chien</div><div style="font-size:10px;color:var(--muted);margin-top:2px">4 min</div></div>
-        </div>
-        <div style="min-width:140px;background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden;cursor:pointer" onclick="goToTab('blog')">
-          <div style="height:72px;background:#FAECE7;display:flex;align-items:center;justify-content:center;font-size:28px">🍗</div>
-          <div style="padding:8px"><div style="font-size:10px;color:var(--teal);font-weight:600">NUTRITION</div><div style="font-size:12px;font-weight:600;color:var(--text)">Alimentation senior</div><div style="font-size:10px;color:var(--muted);margin-top:2px">6 min</div></div>
-        </div>
-        <div style="min-width:140px;background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden;cursor:pointer" onclick="goToTab('blog')">
-          <div style="height:72px;background:#EAF3DE;display:flex;align-items:center;justify-content:center;font-size:28px">🌿</div>
-          <div style="padding:8px"><div style="font-size:10px;color:var(--teal);font-weight:600">CONSEILS</div><div style="font-size:12px;font-weight:600;color:var(--text)">Préparer son animal pour l'été</div><div style="font-size:10px;color:var(--muted);margin-top:2px">3 min</div></div>
-        </div>
+      <div id="blog-preview-list" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:8px">
+        <div style="min-width:140px;border-radius:12px;border:1px solid var(--border);background:var(--white);overflow:hidden;display:flex;align-items:center;justify-content:center;height:120px;font-size:13px;color:var(--muted)">Chargement…</div>
       </div>
     </div>
   </div>
   <button class="fab" onclick="openAddAnimal()">+</button>
   <div class="bottom-nav">
-    <div class="nav-item active" id="nav-home" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item" id="nav-treat" onclick="goToTab('treat')"><div class="nav-icon">💊</div><div class="nav-label">Traitements</div></div>
-    <div class="nav-item" id="nav-blog" onclick="goToTab('blog')"><div class="nav-icon">📖</div><div class="nav-label">Blog</div></div>
-    <div class="nav-item" id="nav-settings" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
+    <div class="nav-item active" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+    <div class="nav-item" onclick="goToTab('treat')"><div class="nav-icon">💊</div><div class="nav-label">Traitements</div></div>
+    <div class="nav-item" onclick="goToTab('blog')"><div class="nav-icon">📖</div><div class="nav-label">Blog</div></div>
+    <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
   </div>
 </div>
 
-<!-- TRAITEMENTS TAB -->
+<!-- ═══ TRAITEMENTS ═══ -->
 <div id="screen-treat" class="screen">
-  <div class="dash-header">
-    <div class="dash-title">Traitements</div>
-    <div class="dash-greeting">Suivi de vos animaux</div>
-  </div>
-  <div class="dash-body" id="treat-body">
+  <div class="dash-header"><div style="font-size:22px;font-weight:700">Traitements</div><div style="font-size:14px;opacity:.85;margin-top:2px">Suivi de vos animaux</div></div>
+  <div style="flex:1;overflow-y:auto;padding:16px" id="treat-body">
     <div class="notif-banner">
-      <div class="notif-banner-title">🔔 À propos des rappels</div>
-      <div class="notif-banner-text">VetID V1 calcule vos prochaines échéances et les affiche ici. Les notifications push (comme les autres apps) arrivent en V2 — vous serez prévenus en priorité en tant que bêta-testeurs !</div>
+      <div class="notif-banner-title">🔔 À propos des notifications</div>
+      <div class="notif-banner-text">Vous testez actuellement la version bêta de la future application. Il n'est donc pas possible de vous envoyer des notifications push ou de faire figurer des pastilles pour le moment. Cette option sera disponible dans la prochaine version.</div>
     </div>
     <div id="treat-list"></div>
   </div>
@@ -368,25 +279,21 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- BLOG TAB -->
+<!-- ═══ BLOG ═══ -->
 <div id="screen-blog" class="screen">
   <div class="dash-header">
-    <div class="dash-title">Blog santé</div>
-    <div class="blog-search">🔍 Rechercher un article...</div>
+    <div style="font-size:22px;font-weight:700">Blog santé</div>
+    <div style="background:rgba(255,255,255,.2);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;margin-top:12px;color:rgba(255,255,255,.8);font-size:14px">🔍 Rechercher un article...</div>
   </div>
-  <div class="cat-scroll">
-    <div class="cat-pill active">Tous</div>
-    <div class="cat-pill">Santé</div>
-    <div class="cat-pill">Nutrition</div>
-    <div class="cat-pill">Comportement</div>
-    <div class="cat-pill">Conseils</div>
+  <div style="display:flex;gap:8px;padding:14px 16px 0;overflow-x:auto">
+    <div class="cat-pill active" onclick="filterBlog('',this)">Tous</div>
+    <div class="cat-pill" onclick="filterBlog('Santé',this)">Santé</div>
+    <div class="cat-pill" onclick="filterBlog('Nutrition',this)">Nutrition</div>
+    <div class="cat-pill" onclick="filterBlog('Comportement',this)">Comportement</div>
+    <div class="cat-pill" onclick="filterBlog('Conseils',this)">Conseils</div>
   </div>
-  <div class="blog-list">
-    <div class="blog-article"><div class="blog-thumb" style="background:var(--teal-light)">🦷</div><div style="flex:1"><div style="font-size:10px;color:var(--teal);font-weight:600">SANTÉ</div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-top:2px">L'hygiène dentaire de votre chien : guide complet</div><div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">4 min de lecture</span></div></div></div>
-    <div class="blog-article"><div class="blog-thumb" style="background:#FAECE7">🍗</div><div style="flex:1"><div style="font-size:10px;color:var(--teal);font-weight:600">NUTRITION</div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-top:2px">Alimentation senior : tout ce qu'il faut savoir</div><div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">6 min</span><span class="sponsored-tag">Sponsorisé</span></div></div></div>
-    <div class="blog-article"><div class="blog-thumb" style="background:#EAF3DE">😺</div><div style="flex:1"><div style="font-size:10px;color:var(--teal);font-weight:600">COMPORTEMENT</div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-top:2px">Comprendre les miaulements de votre chat</div><div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">5 min</span></div></div></div>
-    <div class="blog-article"><div class="blog-thumb" style="background:#fef3c7">🌿</div><div style="flex:1"><div style="font-size:10px;color:var(--teal);font-weight:600">CONSEILS</div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-top:2px">Préparer son animal pour les chaleurs estivales</div><div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">3 min</span><span class="sponsored-tag">Sponsorisé</span></div></div></div>
-    <div class="blog-article"><div class="blog-thumb" style="background:#E6F1FB">💉</div><div style="flex:1"><div style="font-size:10px;color:var(--teal);font-weight:600">SANTÉ</div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-top:2px">Calendrier vaccinal du chiot : ce que dit le vétérinaire</div><div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">7 min</span></div></div></div>
+  <div style="flex:1;overflow-y:auto;padding:12px 16px" id="blog-list">
+    <div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Chargement des articles…</div>
   </div>
   <div class="bottom-nav">
     <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
@@ -396,62 +303,67 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- REGLAGES TAB -->
-<div id="screen-settings" class="screen">
-  <div class="dash-header">
-    <div class="dash-title">Réglages</div>
-    <div class="dash-greeting" id="settings-email"></div>
+<!-- ═══ ARTICLE DETAIL ═══ -->
+<div id="screen-article" class="screen">
+  <div class="page-header">
+    <div class="back-btn" onclick="goToTab('blog')">‹</div>
+    <div style="flex:1"><div id="article-cat" style="font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.5px"></div><div id="article-title-header" style="font-size:16px;font-weight:700"></div></div>
   </div>
-  <div class="dash-body">
+  <div style="flex:1;overflow-y:auto">
+    <div style="padding:20px 20px 8px;display:flex;align-items:center;gap:12px">
+      <div id="article-emoji" style="font-size:36px"></div>
+      <div><div id="article-title-big" style="font-size:20px;font-weight:700;color:var(--text)"></div><div id="article-meta" style="font-size:12px;color:var(--muted);margin-top:4px"></div></div>
+    </div>
+    <div class="article-body" style="padding:0 20px 40px" id="article-content"></div>
+  </div>
+</div>
+
+<!-- ═══ REGLAGES ═══ -->
+<div id="screen-settings" class="screen">
+  <div class="dash-header"><div style="font-size:22px;font-weight:700">Réglages</div><div id="settings-email" style="font-size:13px;opacity:.8;margin-top:2px"></div></div>
+  <div style="flex:1;overflow-y:auto;padding:16px">
     <div class="section-title">Mon compte</div>
     <div class="settings-group">
-      <div class="settings-row">
+      <div class="settings-row" style="cursor:default">
         <div class="settings-icon" style="background:var(--teal-light)">👤</div>
-        <div class="settings-row-info"><div class="settings-row-title" id="settings-name">Mon profil</div><div class="settings-row-sub" id="settings-mail-display"></div></div>
-        <span style="color:var(--muted)">›</span>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)" id="settings-name"></div><div style="font-size:12px;color:var(--muted)" id="settings-mail-display"></div></div>
       </div>
     </div>
-
     <div class="section-title">Partage</div>
-    <div class="settings-group">
-      <div class="settings-row disabled-section">
+    <div class="settings-group disabled-section">
+      <div class="settings-row">
         <div class="settings-icon" style="background:#f3f4f6">👥</div>
-        <div class="settings-row-info">
-          <div class="settings-row-title" style="color:var(--muted)">Partager avec un proche</div>
-          <div class="settings-row-sub">Invitez votre conjoint(e)</div>
-        </div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--muted)">Partager avec un proche</div><div style="font-size:12px;color:var(--muted)">Invitez votre conjoint(e)</div></div>
         <span style="color:var(--border)">›</span>
       </div>
     </div>
     <div class="coming-soon">👥 Le partage avec un proche arrive en V2 de VetID. En tant que bêta-testeur, vous serez parmi les premiers à en profiter !</div>
-
     <div class="section-title">Confidentialité & RGPD</div>
     <div class="settings-group">
-      <div class="settings-row">
+      <div class="settings-row" onclick="showPrivacy()">
         <div class="settings-icon" style="background:#EAF3DE">📄</div>
-        <div class="settings-row-info"><div class="settings-row-title">Politique de confidentialité</div></div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)">Politique de confidentialité</div></div>
         <span style="color:var(--muted)">›</span>
       </div>
       <div class="settings-row" onclick="exportData()">
         <div class="settings-icon" style="background:#E6F1FB">📦</div>
-        <div class="settings-row-info"><div class="settings-row-title">Exporter mes données</div><div class="settings-row-sub">Droit à la portabilité (RGPD)</div></div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)">Exporter mes données</div><div style="font-size:12px;color:var(--muted)">Droit à la portabilité (RGPD)</div></div>
         <span style="color:var(--muted)">›</span>
       </div>
       <div class="settings-row" onclick="deleteAccount()">
         <div class="settings-icon" style="background:#fee2e2">🗑</div>
-        <div class="settings-row-info"><div class="settings-row-title" style="color:var(--red)">Supprimer mon compte</div><div class="settings-row-sub">Suppression définitive</div></div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--red)">Supprimer mon compte</div><div style="font-size:12px;color:var(--muted)">Suppression définitive de toutes les données</div></div>
         <span style="color:var(--red)">›</span>
       </div>
     </div>
-
     <div class="section-title">Version</div>
     <div class="settings-group">
       <div class="settings-row" style="cursor:default">
         <div class="settings-icon" style="background:var(--teal-light)">🐾</div>
-        <div class="settings-row-info"><div class="settings-row-title">VetID V1 — Bêta</div><div class="settings-row-sub">Version de test — vos retours comptent !</div></div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)">VetID V1 — Bêta</div><div style="font-size:12px;color:var(--muted)">Version de test — vos retours comptent !</div></div>
       </div>
     </div>
-    <button class="btn-outline" style="margin-top:8px" onclick="logout()">Se déconnecter</button>
+    <button class="btn-outline" style="margin-top:8px;margin-bottom:32px" onclick="logout()">Se déconnecter</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
@@ -461,76 +373,81 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- MODAL AJOUT ANIMAL -->
+<!-- ═══ PRIVACY ═══ -->
+<div id="screen-privacy" class="screen">
+  <div class="page-header">
+    <div class="back-btn" onclick="history.back(); showPrevScreen()">‹</div>
+    <div style="font-size:18px;font-weight:700">Politique de confidentialité</div>
+  </div>
+  <div class="privacy-body" style="flex:1;overflow-y:auto">
+    <p style="color:var(--muted);font-size:13px">Dernière mise à jour : juin 2026</p>
+    <h2>1. Qui sommes-nous ?</h2>
+    <p>VetID est une application bêta de suivi de santé animale. Dans cette version de test, l'application fonctionne sans serveur distant : toutes vos données sont stockées localement sur votre appareil.</p>
+    <h2>2. Données collectées</h2>
+    <p>Lors de votre inscription, nous collectons votre prénom et votre adresse email via notre partenaire Brevo, afin de vous contacter dans le cadre du programme bêta-testeur.</p>
+    <p>Les données relatives à vos animaux (nom, race, traitements, numéro d'identification) sont stockées uniquement sur votre appareil. Elles ne sont jamais transmises à nos serveurs.</p>
+    <h2>3. Utilisation des données</h2>
+    <p>Votre email est utilisé exclusivement pour vous informer des évolutions de VetID dans le cadre du programme bêta. Il ne sera jamais vendu ni transmis à des tiers.</p>
+    <h2>4. Vos droits (RGPD)</h2>
+    <p>Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants :</p>
+    <ul>
+      <li>Droit d'accès à vos données</li>
+      <li>Droit de rectification</li>
+      <li>Droit à l'effacement ("droit à l'oubli")</li>
+      <li>Droit à la portabilité (export disponible dans Réglages)</li>
+      <li>Droit d'opposition au traitement</li>
+    </ul>
+    <p>Pour exercer ces droits, supprimez votre compte depuis Réglages → "Supprimer mon compte".</p>
+    <h2>5. Cookies et traceurs</h2>
+    <p>VetID n'utilise aucun cookie de traçage ou publicitaire. Le stockage local (localStorage) est utilisé uniquement pour sauvegarder vos données sur votre appareil.</p>
+    <h2>6. Sécurité</h2>
+    <p>Vos données animaux étant stockées localement, elles ne transitent pas sur internet et ne peuvent pas faire l'objet d'une fuite de données depuis nos serveurs.</p>
+    <h2>7. Contact</h2>
+    <p>Pour toute question relative à vos données personnelles, contactez-nous via le chat disponible sur l'application.</p>
+  </div>
+</div>
+
+<!-- ═══ MODAL ANIMAL ═══ -->
 <div class="modal-overlay" id="modal-animal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
+  <div class="modal-sheet" id="sheet-animal">
+    <div class="modal-handle" id="handle-animal"></div>
     <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px">🐾 Ajouter un animal</div>
     <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="form-row"><div class="form-label">Nom de l'animal</div><input class="field-input" id="a-name" type="text" placeholder="Milo"></div>
-      <div class="form-row">
-        <div class="form-label">Espèce</div>
-        <div class="species-row">
-          <div class="species-btn active" id="sp-dog" onclick="selectSpecies('dog')">🐶 Chien</div>
-          <div class="species-btn" id="sp-cat" onclick="selectSpecies('cat')">🐱 Chat</div>
-        </div>
-      </div>
-      <div class="form-row"><div class="form-label">Race</div><input class="field-input" id="a-breed" type="text" placeholder="Labrador Retriever"></div>
-      <div class="form-row"><div class="form-label">Date de naissance</div><input class="field-input" id="a-birth" type="date"></div>
-      <div class="form-row">
-        <div class="form-label">Sexe</div>
-        <div class="species-row">
-          <div class="species-btn active" id="sx-m" onclick="selectSex('m')">♂ Mâle</div>
-          <div class="species-btn" id="sx-f" onclick="selectSex('f')">♀ Femelle</div>
-        </div>
-      </div>
-      <div class="toggle-row">
-        <div><div style="font-size:14px;font-weight:500;color:var(--text)">Stérilisé(e)</div></div>
-        <div class="toggle" id="steril-toggle" onclick="this.classList.toggle('on')"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-label">Type d'identification</div>
-        <div class="species-row">
-          <div class="species-btn active" id="id-puce" onclick="selectIdType('puce')">📡 Puce</div>
-          <div class="species-btn" id="id-tat" onclick="selectIdType('tatouage')">🖊 Tatouage</div>
-        </div>
-      </div>
-      <div class="form-row"><div class="form-label">Numéro d'identification</div><input class="field-input" id="a-idnum" type="text" placeholder="250 268 731 456 789"><div class="id-info">Le numéro de puce (15 chiffres) se trouve sur le carnet de santé de votre animal ou auprès de votre vétérinaire.</div></div>
-      <button class="btn-primary" onclick="saveAnimal()" style="margin-top:4px">Enregistrer</button>
+      <div class="form-row"><label class="field-label">Nom de l'animal</label><input class="field-input" id="a-name" type="text" placeholder="Milo"></div>
+      <div class="form-row"><label class="field-label">Espèce</label><div class="species-row"><div class="species-btn active" id="sp-dog" onclick="selectSpecies('dog')">🐶 Chien</div><div class="species-btn" id="sp-cat" onclick="selectSpecies('cat')">🐱 Chat</div></div></div>
+      <div class="form-row"><label class="field-label">Race</label><input class="field-input" id="a-breed" type="text" placeholder="Labrador Retriever"></div>
+      <div class="form-row"><label class="field-label">Date de naissance</label><input class="field-input" id="a-birth" type="date"></div>
+      <div class="form-row"><label class="field-label">Sexe</label><div class="species-row"><div class="species-btn active" id="sx-m" onclick="selectSex('m')">♂ Mâle</div><div class="species-btn" id="sx-f" onclick="selectSex('f')">♀ Femelle</div></div></div>
+      <div class="toggle-row"><div><div style="font-size:14px;font-weight:500;color:var(--text)">Stérilisé(e)</div></div><div class="toggle" id="steril-toggle" onclick="this.classList.toggle('on')"></div></div>
+      <div class="form-row"><label class="field-label">Identification</label><div class="species-row"><div class="species-btn active" id="id-puce" onclick="selectIdType('puce')">📡 Puce</div><div class="species-btn" id="id-tat" onclick="selectIdType('tatouage')">🖊 Tatouage</div></div></div>
+      <div class="form-row"><label class="field-label">Numéro d'identification</label><input class="field-input" id="a-idnum" type="text" placeholder="250 268 731 456 789"><div style="font-size:11px;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 10px;line-height:1.5;margin-top:4px">Le numéro de puce (15 chiffres) se trouve sur le carnet de santé ou auprès de votre vétérinaire.</div></div>
+      <button class="btn-primary" onclick="saveAnimal()">Enregistrer</button>
       <button class="btn-ghost" onclick="closeModal('modal-animal')">Annuler</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL TRAITEMENT -->
+<!-- ═══ MODAL TRAITEMENT ═══ -->
 <div class="modal-overlay" id="modal-treat">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px" id="modal-treat-title">💊 Ajouter un traitement</div>
+  <div class="modal-sheet" id="sheet-treat">
+    <div class="modal-handle" id="handle-treat"></div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">💊 Ajouter un traitement</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:20px" id="modal-treat-animal"></div>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div class="form-row">
-        <div class="form-label">Type de traitement</div>
-        <div class="species-row" style="flex-wrap:wrap;gap:8px">
-          <div class="species-btn active" id="tt-antipuces" onclick="selectTreatType('antipuces')" style="flex:none;padding:10px 14px">🦟 Anti-puces</div>
-          <div class="species-btn" id="tt-vermifuge" onclick="selectTreatType('vermifuge')" style="flex:none;padding:10px 14px">💊 Vermifuge</div>
-          <div class="species-btn" id="tt-vaccin" onclick="selectTreatType('vaccin')" style="flex:none;padding:10px 14px">💉 Vaccin</div>
+        <label class="field-label">Type de traitement</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="species-btn active" id="tt-antipuces" onclick="selectTreatType('antipuces')" style="flex:none;padding:10px 16px">🦟 Anti-puces</div>
+          <div class="species-btn" id="tt-vermifuge" onclick="selectTreatType('vermifuge')" style="flex:none;padding:10px 16px">💊 Vermifuge</div>
+          <div class="species-btn" id="tt-vaccin" onclick="selectTreatType('vaccin')" style="flex:none;padding:10px 16px">💉 Vaccin</div>
         </div>
       </div>
-      <div class="form-row"><div class="form-label">Nom du produit (optionnel)</div><input class="field-input" id="t-product" type="text" placeholder="Ex: Frontline, Milbemax..."></div>
-      <div class="form-row"><div class="form-label">Date de la dernière prise</div><input class="field-input" id="t-lastdate" type="date"></div>
-      <div class="form-row">
-        <div class="form-label">Fréquence</div>
-        <select class="field-input" id="t-freq">
-          <option value="1">Tous les mois</option>
-          <option value="3" selected>Tous les 3 mois</option>
-          <option value="6">Tous les 6 mois</option>
-          <option value="12">Tous les ans</option>
-        </select>
-      </div>
-      <div class="notif-banner" style="margin-bottom:0">
-        <div class="notif-banner-title">🔔 À propos des rappels</div>
-        <div class="notif-banner-text">VetID V1 calcule et affiche vos prochaines échéances directement dans l'app. Les notifications push arrivent en V2 — vous serez prévenus en priorité !</div>
+      <div class="form-row"><label class="field-label">Nom du produit (optionnel)</label><input class="field-input" id="t-product" type="text" placeholder="Ex: Frontline, Milbemax…"></div>
+      <div class="form-row"><label class="field-label">Date de la dernière prise</label><input class="field-input" id="t-lastdate" type="date"></div>
+      <div class="form-row"><label class="field-label">Fréquence</label><select class="field-input" id="t-freq"><option value="1">Tous les mois</option><option value="3" selected>Tous les 3 mois</option><option value="6">Tous les 6 mois</option><option value="12">Tous les ans</option></select></div>
+      <div class="notif-banner">
+        <div class="notif-banner-title">🔔 À propos des notifications</div>
+        <div class="notif-banner-text">Vous testez la version bêta. Les notifications push arrivent en V2 — vous serez prévenus en priorité !</div>
       </div>
       <button class="btn-primary" onclick="saveTreatment()">Enregistrer</button>
       <button class="btn-ghost" onclick="closeModal('modal-treat')">Annuler</button>
@@ -538,32 +455,35 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-let state={user:null,animals:[],treatments:[],currentAnimalId:null,selectedSpecies:'dog',selectedSex:'m',selectedIdType:'puce',selectedTreatType:'antipuces',isLogin:false};
+// ═══ CONFIG — REMPLACER SUR GITHUB ═══
+const BREVO_API_KEY = "VOTRE_CLE_BREVO_ICI";
+const NOTION_TOKEN = "VOTRE_TOKEN_NOTION_ICI";
+const NOTION_DB_ID = "328271f15e61803e8a3ed413318c4d21";
+
+// ═══ STATE ═══
+let state={user:null,animals:[],treatments:[],currentAnimalId:null,selectedSpecies:'dog',selectedSex:'m',selectedIdType:'puce',selectedTreatType:'antipuces',isLogin:false,prevScreen:'dashboard'};
+let allArticles=[];
+let currentFilter='';
 
 function loadState(){
-  const s=localStorage.getItem('vetid_state');
-  if(s){const p=JSON.parse(s);state.user=p.user;state.animals=p.animals||[];state.treatments=p.treatments||[];}
+  const s=localStorage.getItem('vetid_v2');
+  if(s){const p=JSON.parse(s);Object.assign(state,{user:p.user,animals:p.animals||[],treatments:p.treatments||[]});}
 }
-function saveState(){
-  localStorage.setItem('vetid_state',JSON.stringify({user:state.user,animals:state.animals,treatments:state.treatments}));
-}
+function saveState(){localStorage.setItem('vetid_v2',JSON.stringify({user:state.user,animals:state.animals,treatments:state.treatments}));}
 
+// ═══ NAVIGATION ═══
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   window.scrollTo(0,0);
 }
+function showPrevScreen(){showScreen(state.prevScreen);}
 
+// ═══ ONBOARDING ═══
 let onbStep=0;
-const onbData=[
-  {icon:'🐾',title:'Bienvenue sur VetID',sub:'Le carnet de santé numérique pour votre chien ou chat. Gratuit, simple, toujours à portée de main.'},
-  {icon:'🔔',title:'Rappels intelligents',sub:'Vaccins, vermifuges, anti-puces… VetID calcule les prochaines échéances et les affiche dans l\'app.'},
-  {icon:'📖',title:'Contenu vétérinaire',sub:'Des articles validés par des vétérinaires pour prendre les meilleures décisions pour votre animal.'}
-];
 function nextSlide(){
   if(onbStep<2){
     document.getElementById('slide-'+onbStep).classList.remove('active');
@@ -576,30 +496,45 @@ function nextSlide(){
 }
 function goToAuth(){showScreen('auth');}
 
+// ═══ AUTH ═══
 function toggleAuth(){
   state.isLogin=!state.isLogin;
   const t=state.isLogin;
   document.getElementById('auth-title').textContent=t?'Se connecter':'Créer un compte';
-  document.getElementById('auth-switch').innerHTML=t?'Pas encore de compte ? <span onclick="toggleAuth()">Créer un compte</span>':'Déjà un compte ? <span onclick="toggleAuth()">Se connecter</span>';
-  document.querySelector('#screen-auth .field-group:first-of-type').style.display=t?'none':'flex';
+  document.getElementById('auth-btn').textContent=t?'Se connecter':'Créer mon compte';
+  document.getElementById('auth-switch').innerHTML=t?'Pas encore de compte ? <span style="color:var(--teal);font-weight:600;cursor:pointer" onclick="toggleAuth()">Créer un compte</span>':'Déjà un compte ? <span style="color:var(--teal);font-weight:600;cursor:pointer" onclick="toggleAuth()">Se connecter</span>';
+  document.getElementById('prenom-group').style.display=t?'none':'flex';
 }
 
-function doAuth(){
+async function doAuth(){
   const email=document.getElementById('auth-email').value.trim();
   const password=document.getElementById('auth-password').value;
   const prenom=document.getElementById('auth-prenom').value.trim();
   if(!email||!password){showToast('Veuillez remplir tous les champs');return;}
   if(!state.isLogin&&!prenom){showToast('Veuillez entrer votre prénom');return;}
+  if(!email.includes('@')||!email.includes('.')){showToast('Adresse email invalide');return;}
+  if(password.length<6){showToast('Mot de passe trop court (6 caractères min.)');return;}
   state.user={email,prenom:prenom||email.split('@')[0]};
-  saveState();
-  showScreen('tuto');
+  const stayConnected=document.getElementById('stay-toggle').classList.contains('on');
+  if(stayConnected)saveState();
+  if(!state.isLogin)await registerToBrevo(email,prenom);
+  goToDashboard();
 }
 
-function goToDashboard(){
-  updateDashboard();
-  showScreen('dashboard');
+async function registerToBrevo(email,prenom){
+  if(BREVO_API_KEY==="VOTRE_CLE_BREVO_ICI")return;
+  try{
+    await fetch('https://api.brevo.com/v3/contacts',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','api-key':BREVO_API_KEY},
+      body:JSON.stringify({email,attributes:{PRENOM:prenom,SOURCE:'VetID Beta'},listIds:[2],updateEnabled:true})
+    });
+  }catch(e){console.log('Brevo:',e);}
 }
 
+function goToDashboard(){updateDashboard();loadBlogPreview();showScreen('dashboard');}
+
+// ═══ TUTO ═══
 function switchOS(os,el){
   document.querySelectorAll('.os-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.os-content').forEach(c=>c.classList.remove('active'));
@@ -607,120 +542,75 @@ function switchOS(os,el){
   document.getElementById('os-'+os).classList.add('active');
 }
 
+// ═══ TABS ═══
 function goToTab(tab){
-  const tabs={home:'dashboard',treat:'treat',blog:'blog',settings:'settings'};
-  showScreen(tabs[tab]||tab);
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  if(tab==='home')document.getElementById('nav-home')?.classList.add('active');
-  if(tab==='treat'){renderTreatments();document.querySelectorAll('#screen-treat .nav-item')[1]?.classList.add('active');}
-  if(tab==='blog')document.querySelectorAll('#screen-blog .nav-item')[2]?.classList.add('active');
+  const map={home:'dashboard',treat:'treat',blog:'blog',settings:'settings'};
+  const screenId=map[tab]||tab;
+  showScreen(screenId);
+  if(tab==='treat')renderTreatments();
+  if(tab==='blog')loadBlog();
   if(tab==='settings'){
     document.getElementById('settings-email').textContent=state.user?.email||'';
-    document.getElementById('settings-name').textContent=(state.user?.prenom||'Mon profil');
+    document.getElementById('settings-name').textContent=state.user?.prenom||'';
     document.getElementById('settings-mail-display').textContent=state.user?.email||'';
   }
 }
 
+// ═══ DASHBOARD ═══
 function updateDashboard(){
   if(state.user)document.getElementById('dash-greeting').textContent=`Bonjour ${state.user.prenom} 👋`;
   const list=document.getElementById('animals-list');
   const empty=document.getElementById('empty-state');
   if(state.animals.length===0){empty.style.display='block';list.innerHTML='';return;}
-  empty.style.display='none';
-  list.innerHTML='';
-  const alerts=state.animals.filter(a=>getAnimalStatus(a.id)==='red');
-  if(alerts.length>0){
+  empty.style.display='none';list.innerHTML='';
+  const delayed=state.animals.filter(a=>getAnimalStatus(a.id)==='red');
+  if(delayed.length>0){
     const b=document.createElement('div');
-    b.className='alert-banner';
-    b.innerHTML=`<span style="font-size:18px">⚠</span><span><strong>${alerts[0].name}</strong> — Traitement en retard</span>`;
+    b.className='badge badge-red';b.style.cssText='display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:12px;margin-bottom:12px;font-size:13px;width:100%';
+    b.innerHTML=`⚠️ <span><strong>${delayed[0].name}</strong> — traitement en retard</span>`;
     list.appendChild(b);
   }
-  const title=document.createElement('div');
-  title.className='section-title';
-  title.textContent='Mes compagnons';
-  list.appendChild(title);
+  const t=document.createElement('div');t.className='section-title';t.textContent='Mes compagnons';list.appendChild(t);
   state.animals.forEach(a=>{
-    const status=getAnimalStatus(a.id);
-    const card=document.createElement('div');
-    card.className='animal-card';
     const treats=state.treatments.filter(t=>t.animalId===a.id);
     const badgesHtml=treats.map(t=>{
       const s=getTreatStatus(t);
       const cls=s==='red'?'badge-red':s==='orange'?'badge-orange':'badge-green';
-      const label=s==='red'?'En retard':s==='orange'?'Bientôt':'À jour';
-      return `<span class="badge ${cls}">${t.type==='antipuces'?'Anti-puces':t.type==='vermifuge'?'Vermifuge':'Vaccin'} — ${label}</span>`;
+      const lbl=s==='red'?'En retard':s==='orange'?'Bientôt':'À jour';
+      const n=t.type==='antipuces'?'Anti-puces':t.type==='vermifuge'?'Vermifuge':'Vaccin';
+      return `<span class="badge ${cls}">${n} — ${lbl}</span>`;
     }).join('');
-    card.innerHTML=`<div class="animal-avatar">${a.species==='dog'?'🐶':'🐱'}</div><div class="animal-info"><div class="animal-name">${a.name}</div><div class="animal-breed">${a.breed||''} · ${calcAge(a.birth)}</div><div class="badges">${badgesHtml||'<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>'}</div></div><span style="color:var(--muted);font-size:20px">›</span>`;
-    card.onclick=()=>openAnimalDetail(a.id);
+    const card=document.createElement('div');card.className='animal-card';
+    card.innerHTML=`<div class="animal-avatar">${a.species==='dog'?'🐶':'🐱'}</div><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">${a.name}</div><div style="font-size:12px;color:var(--muted)">${a.breed||''} · ${calcAge(a.birth)}</div><div class="badges">${badgesHtml||'<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>'}</div></div><span style="color:var(--muted);font-size:22px">›</span>`;
+    card.onclick=()=>openTreatModal(a.id);
     list.appendChild(card);
   });
 }
 
-function calcAge(birth){
-  if(!birth)return '';
-  const d=new Date(birth),now=new Date();
-  let y=now.getFullYear()-d.getFullYear(),m=now.getMonth()-d.getMonth();
-  if(m<0){y--;m+=12;}
-  return y>0?`${y} an${y>1?'s':''}`:`${m} mois`;
-}
+function calcAge(b){if(!b)return '';const d=new Date(b),n=new Date();let y=n.getFullYear()-d.getFullYear(),m=n.getMonth()-d.getMonth();if(m<0){y--;m+=12;}return y>0?`${y} an${y>1?'s':''}`:`${m} mois`;}
+function getAnimalStatus(aid){const ts=state.treatments.filter(t=>t.animalId===aid);if(ts.some(t=>getTreatStatus(t)==='red'))return 'red';if(ts.some(t=>getTreatStatus(t)==='orange'))return 'orange';return 'green';}
+function getTreatStatus(t){if(!t.nextDate)return 'green';const d=(new Date(t.nextDate)-new Date())/(864e5);return d<0?'red':d<=14?'orange':'green';}
+function formatDate(d){if(!d)return '—';return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});}
 
-function getAnimalStatus(aid){
-  const ts=state.treatments.filter(t=>t.animalId===aid);
-  if(ts.some(t=>getTreatStatus(t)==='red'))return 'red';
-  if(ts.some(t=>getTreatStatus(t)==='orange'))return 'orange';
-  return 'green';
-}
-
-function getTreatStatus(t){
-  if(!t.nextDate)return 'green';
-  const next=new Date(t.nextDate),now=new Date(),diff=(next-now)/(1000*60*60*24);
-  if(diff<0)return 'red';
-  if(diff<=14)return 'orange';
-  return 'green';
-}
-
+// ═══ ANIMAL ═══
 function openAddAnimal(){document.getElementById('modal-animal').classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-
-function selectSpecies(s){
-  state.selectedSpecies=s;
-  document.getElementById('sp-dog').classList.toggle('active',s==='dog');
-  document.getElementById('sp-cat').classList.toggle('active',s==='cat');
-}
-function selectSex(s){
-  state.selectedSex=s;
-  document.getElementById('sx-m').classList.toggle('active',s==='m');
-  document.getElementById('sx-f').classList.toggle('active',s==='f');
-}
-function selectIdType(t){
-  state.selectedIdType=t;
-  document.getElementById('id-puce').classList.toggle('active',t==='puce');
-  document.getElementById('id-tat').classList.toggle('active',t==='tatouage');
-}
+function selectSpecies(s){state.selectedSpecies=s;document.getElementById('sp-dog').classList.toggle('active',s==='dog');document.getElementById('sp-cat').classList.toggle('active',s==='cat');}
+function selectSex(s){state.selectedSex=s;document.getElementById('sx-m').classList.toggle('active',s==='m');document.getElementById('sx-f').classList.toggle('active',s==='f');}
+function selectIdType(t){state.selectedIdType=t;document.getElementById('id-puce').classList.toggle('active',t==='puce');document.getElementById('id-tat').classList.toggle('active',t==='tatouage');}
 
 function saveAnimal(){
   const name=document.getElementById('a-name').value.trim();
   if(!name){showToast('Donnez un nom à votre animal');return;}
   const animal={id:Date.now().toString(),name,species:state.selectedSpecies,breed:document.getElementById('a-breed').value.trim(),birth:document.getElementById('a-birth').value,sex:state.selectedSex,sterilized:document.getElementById('steril-toggle').classList.contains('on'),idType:state.selectedIdType,idNum:document.getElementById('a-idnum').value.trim()};
-  state.animals.push(animal);
-  saveState();
-  closeModal('modal-animal');
-  document.getElementById('a-name').value='';document.getElementById('a-breed').value='';document.getElementById('a-birth').value='';document.getElementById('a-idnum').value='';
-  updateDashboard();
-  showToast(`${animal.name} ajouté avec succès ! 🐾`);
+  state.animals.push(animal);saveState();closeModal('modal-animal');
+  ['a-name','a-breed','a-birth','a-idnum'].forEach(id=>document.getElementById(id).value='');
+  updateDashboard();showToast(`${animal.name} ajouté ! 🐾`);
 }
 
-function openAnimalDetail(aid){
-  state.currentAnimalId=aid;
-  const a=state.animals.find(x=>x.id===aid);
-  document.getElementById('modal-treat-animal').textContent=`Pour ${a.name}`;
-  document.getElementById('modal-treat').classList.add('open');
-}
-
-function selectTreatType(t){
-  state.selectedTreatType=t;
-  ['antipuces','vermifuge','vaccin'].forEach(x=>document.getElementById('tt-'+x).classList.toggle('active',x===t));
-}
+// ═══ TRAITEMENTS ═══
+function openTreatModal(aid){state.currentAnimalId=aid;const a=state.animals.find(x=>x.id===aid);document.getElementById('modal-treat-animal').textContent=`Pour ${a.name}`;document.getElementById('modal-treat').classList.add('open');}
+function selectTreatType(t){state.selectedTreatType=t;['antipuces','vermifuge','vaccin'].forEach(x=>document.getElementById('tt-'+x).classList.toggle('active',x===t));}
 
 function saveTreatment(){
   const lastDate=document.getElementById('t-lastdate').value;
@@ -729,76 +619,138 @@ function saveTreatment(){
   const next=new Date(lastDate);next.setMonth(next.getMonth()+freq);
   const treat={id:Date.now().toString(),animalId:state.currentAnimalId,type:state.selectedTreatType,product:document.getElementById('t-product').value.trim(),lastDate,freqMonths:freq,nextDate:next.toISOString().split('T')[0]};
   state.treatments=state.treatments.filter(t=>!(t.animalId===state.currentAnimalId&&t.type===state.selectedTreatType));
-  state.treatments.push(treat);
-  saveState();
-  closeModal('modal-treat');
+  state.treatments.push(treat);saveState();closeModal('modal-treat');
   document.getElementById('t-product').value='';document.getElementById('t-lastdate').value='';
-  updateDashboard();
-  showToast('Traitement enregistré ✓');
+  updateDashboard();showToast('Traitement enregistré ✓');
 }
 
 function renderTreatments(){
   const body=document.getElementById('treat-list');
-  if(state.animals.length===0){body.innerHTML='<div class="empty-state"><div class="empty-icon">💊</div><div class="empty-title">Aucun animal</div><div class="empty-sub">Ajoutez d\'abord un animal depuis l\'accueil</div></div>';return;}
+  if(state.animals.length===0){body.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Ajoutez d\'abord un animal depuis l\'accueil</div>';return;}
   body.innerHTML='';
   state.animals.forEach(a=>{
     const treats=state.treatments.filter(t=>t.animalId===a.id);
-    const section=document.createElement('div');
-    section.innerHTML=`<div class="section-title">${a.species==='dog'?'🐶':'🐱'} ${a.name}</div>`;
-    body.appendChild(section);
-    if(treats.length===0){
-      const empty=document.createElement('div');
-      empty.style.cssText='background:var(--white);border-radius:12px;border:1px solid var(--border);padding:16px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:12px';
-      empty.textContent='Aucun traitement — ajoutez-en depuis l\'accueil';
-      body.appendChild(empty);
-    }
+    const sec=document.createElement('div');sec.innerHTML=`<div class="section-title">${a.species==='dog'?'🐶':'🐱'} ${a.name}</div>`;body.appendChild(sec);
+    if(!treats.length){const e=document.createElement('div');e.style.cssText='background:var(--white);border-radius:12px;border:1px solid var(--border);padding:16px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:12px;cursor:pointer';e.textContent='Appuyez pour ajouter un traitement';e.onclick=()=>openTreatModal(a.id);body.appendChild(e);return;}
     treats.forEach(t=>{
       const s=getTreatStatus(t);
-      const card=document.createElement('div');
-      card.className='treat-card';
       const icons={antipuces:'🦟',vermifuge:'💊',vaccin:'💉'};
-      const colors={red:'#fee2e2',orange:'#fed7aa',green:'#dcfce7'};
-      const textColors={red:'#991b1b',orange:'#9a3412',green:'#166534'};
-      const labels={red:'En retard',orange:'Bientôt',green:'À jour'};
-      const next=new Date(t.nextDate),last=new Date(t.lastDate),total=next-last,elapsed=Date.now()-last;
-      const pct=Math.min(100,Math.max(0,Math.round(elapsed/total*100)));
-      const typeLabel=t.type==='antipuces'?'Anti-puces / Tiques':t.type==='vermifuge'?'Vermifuge':'Vaccin';
-      card.innerHTML=`
-        <div class="treat-top">
-          <div class="treat-icon" style="background:${colors[s]}">${icons[t.type]}</div>
-          <div><div style="font-size:15px;font-weight:600;color:var(--text)">${typeLabel}</div><div style="font-size:12px;color:var(--muted)">${t.product||'—'} · tous les ${t.freqMonths} mois</div></div>
-          <div class="status-badge" style="background:${colors[s]};color:${textColors[s]}">${labels[s]}</div>
-        </div>
-        <div class="treat-dates">
-          <div class="date-box"><div class="date-label">Dernière</div><div class="date-val">${formatDate(t.lastDate)}</div></div>
-          <div class="date-box"><div class="date-label">Prochaine</div><div class="date-val" style="color:${s==='red'?'var(--red)':s==='orange'?'var(--orange)':'var(--green)'}">${formatDate(t.nextDate)}</div></div>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${s==='red'?'var(--red)':s==='orange'?'var(--orange)':'var(--green)'}"></div></div>
-        <div class="treat-actions">
-          <button class="btn-small btn-small-primary" onclick="markDone('${t.id}')">Marquer effectué ✓</button>
-        </div>`;
+      const bg={red:'#fee2e2',orange:'#fed7aa',green:'#dcfce7'};
+      const tc={red:'#991b1b',orange:'#9a3412',green:'#166534'};
+      const lbl={red:'En retard',orange:'Bientôt',green:'À jour'};
+      const next=new Date(t.nextDate),last=new Date(t.lastDate);
+      const pct=Math.min(100,Math.max(0,Math.round((Date.now()-last)/(next-last)*100)));
+      const tname=t.type==='antipuces'?'Anti-puces / Tiques':t.type==='vermifuge'?'Vermifuge':'Vaccin';
+      const card=document.createElement('div');card.className='treat-card';
+      card.innerHTML=`<div class="treat-top"><div class="treat-icon" style="background:${bg[s]}">${icons[t.type]}</div><div><div style="font-size:15px;font-weight:600;color:var(--text)">${tname}</div><div style="font-size:12px;color:var(--muted)">${t.product||'—'} · tous les ${t.freqMonths} mois</div></div><div class="status-badge" style="background:${bg[s]};color:${tc[s]}">${lbl[s]}</div></div><div class="treat-dates"><div class="date-box"><div class="date-label">Dernière</div><div class="date-val">${formatDate(t.lastDate)}</div></div><div class="date-box"><div class="date-label">Prochaine</div><div class="date-val" style="color:${s==='red'?'var(--red)':s==='orange'?'var(--orange)':'var(--green)'}">${formatDate(t.nextDate)}</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${s==='red'?'var(--red)':s==='orange'?'var(--orange)':'var(--green)'}"></div></div><div style="display:flex;gap:8px"><button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--teal);background:var(--white);color:var(--teal)" onclick="openTreatModal('${a.id}')">Modifier</button><button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:var(--teal);color:#fff;border:none" onclick="markDone('${t.id}')">Effectué ✓</button></div>`;
       body.appendChild(card);
     });
   });
 }
 
 function markDone(tid){
-  const t=state.treatments.find(x=>x.id===tid);
-  if(!t)return;
+  const t=state.treatments.find(x=>x.id===tid);if(!t)return;
   const today=new Date().toISOString().split('T')[0];
   const next=new Date();next.setMonth(next.getMonth()+t.freqMonths);
   t.lastDate=today;t.nextDate=next.toISOString().split('T')[0];
-  saveState();renderTreatments();updateDashboard();showToast('Traitement marqué comme effectué ✓');
+  saveState();renderTreatments();updateDashboard();showToast('Traitement marqué effectué ✓');
 }
 
-function formatDate(d){
-  if(!d)return '—';
-  const dt=new Date(d);
-  return dt.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+// ═══ BLOG ═══
+async function fetchNotionArticles(){
+  if(NOTION_TOKEN==="VOTRE_TOKEN_NOTION_ICI")return getFallbackArticles();
+  try{
+    const res=await fetch(`https://api.notion.com/v1/databases/${NOTION_DB_ID}/query`,{
+      method:'POST',
+      headers:{'Authorization':`Bearer ${NOTION_TOKEN}`,'Notion-Version':'2022-06-28','Content-Type':'application/json'},
+      body:JSON.stringify({filter:{property:'Publie',checkbox:{equals:true}}})
+    });
+    const data=await res.json();
+    return data.results.map(p=>{
+      const props=p.properties;
+      return {
+        id:p.id,
+        title:props.Titre?.title?.[0]?.plain_text||'Sans titre',
+        category:props.Categorie?.select?.name||'',
+        resume:props.Resume?.rich_text?.[0]?.plain_text||'',
+        content:props.Contenu?.rich_text?.[0]?.plain_text||'',
+        duration:props.Duree?.number||5,
+        sponsored:props.Sponsorise?.checkbox||false,
+        emoji:props.Emoji?.rich_text?.[0]?.plain_text||'📄'
+      };
+    });
+  }catch(e){console.log('Notion:',e);return getFallbackArticles();}
 }
 
+function getFallbackArticles(){
+  return [
+    {id:'1',title:"L'hygiène dentaire de votre chien",category:'Santé',resume:'Les maladies dentaires touchent plus de 80% des chiens. Quelques gestes simples suffisent.',content:"Les bactéries qui s'accumulent dans la bouche de votre chien forment une plaque dentaire. Sans entretien, cette plaque se minéralise en tartre et irrite les gencives.\n\n### Les bons gestes\n\nBrossez les dents de votre chien 3 fois par semaine avec un dentifrice spécial animal. Complétez avec des jouets à mâcher et des friandises dentaires.\n\n### Le détartrage vétérinaire\n\nUn détartrage professionnel est recommandé tous les 1 à 2 ans chez votre vétérinaire.",duration:4,sponsored:false,emoji:'🦷'},
+    {id:'2',title:"Alimentation du chien senior",category:'Nutrition',resume:'À partir de 7 ans, les besoins nutritionnels de votre chien évoluent.',content:"Le vieillissement s'accompagne d'un ralentissement du métabolisme. Réduire légèrement les calories sans rogner sur les protéines est la règle d'or.\n\n### Ce qui change\n\nMoins de calories, plus de protéines de qualité, des oméga-3 pour les articulations et moins de phosphore pour les reins.\n\n### Pratiquement\n\nPassez progressivement à une alimentation senior sur 7 à 10 jours. Fractionnez les repas en 2 à 3 prises par jour.",duration:5,sponsored:false,emoji:'🍗'},
+    {id:'3',title:"Comprendre les miaulements de votre chat",category:'Comportement',resume:'Votre chat communique uniquement avec les humains par les miaulements.',content:"Contrairement aux idées reçues, les chats adultes ne miaulements pas entre eux. C'est un langage développé pour communiquer avec les humains.\n\n### Les types de vocalisations\n\n- Miaule court : salutation\n- Miaule long et insistant : demande (faim, porte)\n- Miaule plaintif et bas : inconfort ou douleur\n- Trille : contentement\n- Chatter : frustration de chasse",duration:5,sponsored:false,emoji:'😺'},
+    {id:'4',title:"Préparer son animal pour les fortes chaleurs",category:'Conseils',resume:'Le coup de chaleur peut être fatal en quelques minutes. Voici comment protéger votre animal.',content:"Le coup de chaleur est une urgence vétérinaire. Les chiens régulent leur température par le halètement, qui devient insuffisant au-delà de 40°C.\n\n### Les règles d'or\n\nNe jamais laisser un animal dans une voiture. Promenez tôt le matin ou en soirée. Hydratez en permanence avec de l'eau fraîche.\n\n### Reconnaître un coup de chaleur\n\nHalètement excessif, salivation, gencives rouges, vomissements : mouillez l'animal et foncez chez le vétérinaire.",duration:4,sponsored:false,emoji:'☀️'},
+    {id:'5',title:"Calendrier vaccinal du chiot",category:'Santé',resume:'Les premiers mois sont décisifs pour la protection immunitaire de votre chiot.',content:"La vaccination protège contre des maladies graves pour lesquelles il n'existe pas de traitement efficace.\n\n### Le calendrier\n\n- 8-12 semaines : primo-vaccination CDHP + Leptospirose\n- 12-16 semaines : rappel CDHP + Leptospirose\n- 12 semaines minimum : vaccin antirabique\n- Rappel à 1 an puis tous les 1 à 3 ans\n\n### Ce que contient le CDHP\n\nMaladie de Carré, Hépatite de Rubarth, Parvovirose, Parainfluenza.",duration:6,sponsored:false,emoji:'💉'}
+  ];
+}
+
+async function loadBlog(){
+  document.getElementById('blog-list').innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Chargement…</div>';
+  allArticles=await fetchNotionArticles();
+  renderBlog(allArticles);
+}
+
+async function loadBlogPreview(){
+  allArticles=await fetchNotionArticles();
+  const preview=document.getElementById('blog-preview-list');
+  const catColors={'Santé':'var(--teal-light)','Nutrition':'#FAECE7','Comportement':'#EAF3DE','Conseils':'#fef3c7'};
+  preview.innerHTML=allArticles.slice(0,3).map((a,i)=>`
+    <div style="min-width:140px;background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden;cursor:pointer;flex-shrink:0" onclick="openArticle(${i})">
+      <div style="height:72px;background:${catColors[a.category]||'var(--teal-light)'};display:flex;align-items:center;justify-content:center;font-size:28px">${a.emoji}</div>
+      <div style="padding:8px"><div style="font-size:10px;color:var(--teal);font-weight:600">${a.category.toUpperCase()}</div><div style="font-size:12px;font-weight:600;color:var(--text);line-height:1.3;margin-top:2px">${a.title}</div><div style="font-size:10px;color:var(--muted);margin-top:4px">${a.duration} min</div></div>
+    </div>`).join('');
+}
+
+function renderBlog(articles){
+  const catColors={'Santé':'var(--teal-light)','Nutrition':'#FAECE7','Comportement':'#EAF3DE','Conseils':'#fef3c7'};
+  const list=document.getElementById('blog-list');
+  if(!articles.length){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">Aucun article trouvé</div>';return;}
+  list.innerHTML=articles.map((a,i)=>`
+    <div class="blog-article" onclick="openArticle(${allArticles.indexOf(a)})">
+      <div class="blog-thumb" style="background:${catColors[a.category]||'var(--teal-light)'}">${a.emoji}</div>
+      <div style="flex:1">
+        <div style="font-size:10px;color:var(--teal);font-weight:600">${a.category.toUpperCase()}</div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-top:2px">${a.title}</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.4;margin-top:4px">${a.resume}</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">${a.duration} min de lecture</span>${a.sponsored?'<span class="sponsored-tag">Sponsorisé</span>':''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function filterBlog(cat,el){
+  currentFilter=cat;
+  document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderBlog(cat?allArticles.filter(a=>a.category===cat):allArticles);
+}
+
+function openArticle(idx){
+  const a=allArticles[idx];if(!a)return;
+  state.prevScreen='blog';
+  document.getElementById('article-cat').textContent=a.category;
+  document.getElementById('article-title-header').textContent=a.title;
+  document.getElementById('article-emoji').textContent=a.emoji;
+  document.getElementById('article-title-big').textContent=a.title;
+  document.getElementById('article-meta').textContent=`${a.category} · ${a.duration} min de lecture${a.sponsored?' · Sponsorisé':''}`;
+  const html=a.content.replace(/### (.+)/g,'<h3>$1</h3>').replace(/- (.+)/g,'<li>$1</li>').replace(/(<li>.*<\/li>)/gs,'<ul>$1</ul>').split('\n\n').map(p=>p.startsWith('<')?p:`<p>${p}</p>`).join('');
+  document.getElementById('article-content').innerHTML=html;
+  showScreen('article');
+}
+
+// ═══ PRIVACY ═══
+function showPrivacy(){state.prevScreen=document.querySelector('.screen.active')?.id?.replace('screen-','')||'settings';showScreen('privacy');}
+
+// ═══ RGPD ═══
 function exportData(){
-  const data={user:state.user,animals:state.animals,treatments:state.treatments,exportDate:new Date().toISOString()};
+  const data={user:{prenom:state.user?.prenom,email:state.user?.email},animals:state.animals,treatments:state.treatments,exportDate:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download='vetid-mes-donnees.json';a.click();
@@ -807,38 +759,49 @@ function exportData(){
 
 function deleteAccount(){
   if(confirm('Supprimer définitivement votre compte et toutes vos données ?')){
-    localStorage.removeItem('vetid_state');
-    state={user:null,animals:[],treatments:[]};
-    showScreen('onboarding');
-    onbStep=0;
-    document.getElementById('slide-0').classList.add('active');
-    document.getElementById('slide-1').classList.remove('active');
-    document.getElementById('slide-2').classList.remove('active');
-    document.getElementById('dot-0').classList.add('active');
-    document.getElementById('dot-1').classList.remove('active');
-    document.getElementById('dot-2').classList.remove('active');
-    document.getElementById('onb-btn').textContent='Continuer';
-    document.getElementById('onb-btn').onclick=nextSlide;
-    document.getElementById('onb-skip').style.display='block';
+    localStorage.removeItem('vetid_v2');
+    location.reload();
   }
 }
 
 function logout(){
   state.user=null;
-  localStorage.removeItem('vetid_state');
+  localStorage.removeItem('vetid_v2');
   showScreen('auth');
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
+// ═══ TOAST ═══
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+// ═══ SWIPE TO CLOSE MODALS ═══
+function initSwipeClose(handleId,overlayId){
+  const handle=document.getElementById(handleId);
+  const overlay=document.getElementById(overlayId);
+  if(!handle||!overlay)return;
+  let startY=0,isDragging=false;
+  const sheet=handle.parentElement;
+  handle.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;isDragging=true;},{ passive:true});
+  document.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    const dy=e.touches[0].clientY-startY;
+    if(dy>0)sheet.style.transform=`translateY(${dy}px)`;
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(!isDragging)return;
+    isDragging=false;
+    const dy=e.changedTouches[0].clientY-startY;
+    if(dy>100){overlay.classList.remove('open');sheet.style.transform='';}
+    else{sheet.style.transition='transform .3s';sheet.style.transform='';setTimeout(()=>sheet.style.transition='',300);}
+  });
+  overlay.addEventListener('click',e=>{if(e.target===overlay){overlay.classList.remove('open');sheet.style.transform='';}});
 }
 
-// Init
+// ═══ INIT ═══
 loadState();
-if(state.user){updateDashboard();showScreen('dashboard');}
+if(state.user){updateDashboard();loadBlogPreview();showScreen('dashboard');}
 else{showScreen('onboarding');}
+initSwipeClose('handle-animal','modal-animal');
+initSwipeClose('handle-treat','modal-treat');
 </script>
 </body>
 </html>
