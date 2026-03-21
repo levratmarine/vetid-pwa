@@ -647,8 +647,12 @@ function selectIdType(t){state.selectedIdType=t;document.getElementById('id-puce
 function saveAnimal(){
   const name=document.getElementById('a-name').value.trim();
   if(!name){showToast('Donnez un nom à votre animal');return;}
-  const animal={id:Date.now().toString(),name,species:state.selectedSpecies,breed:document.getElementById('a-breed').value.trim(),birth:document.getElementById('a-birth').value,sex:state.selectedSex,sterilized:document.getElementById('steril-toggle').classList.contains('on'),idType:state.selectedIdType,idNum:document.getElementById('a-idnum').value.trim()};
-  state.animals.push(animal);saveState();closeModal('modal-animal');
+  const isEdit=!!state.editingAnimalId;
+  const animal={id:isEdit?state.editingAnimalId:Date.now().toString(),name,species:state.selectedSpecies,breed:document.getElementById('a-breed').value.trim(),birth:document.getElementById('a-birth').value,sex:state.selectedSex,sterilized:document.getElementById('steril-toggle').classList.contains('on'),idType:state.selectedIdType,idNum:document.getElementById('a-idnum').value.trim()};
+if(isEdit){const idx=state.animals.findIndex(x=>x.id===state.editingAnimalId);if(idx>-1)state.animals[idx]=animal;}
+  else{state.animals.push(animal);}
+  state.editingAnimalId=null;
+  saveState();closeModal('modal-animal');
   ['a-name','a-breed','a-birth','a-idnum'].forEach(id=>document.getElementById(id).value='');
   updateDashboard();showToast(`${animal.name} ajouté ! 🐾`);
   function openEditAnimal(aid){
