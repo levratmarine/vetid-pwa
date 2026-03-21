@@ -46,6 +46,8 @@
 <!-- Crisp -->
 <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="9f0d05ec-24b6-429d-9646-0dccded1af98";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 <style>
+  .crisp-client .cc-tlyw{bottom:160px !important;}
+.crisp-client .cc-kxkl{bottom:160px !important;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
 :root{--teal:#2A9D8F;--teal-light:#E1F5EE;--teal-dark:#1a6b60;--bg:#F8F9FA;--white:#FFFFFF;--text:#1a1a2e;--muted:#6B7280;--border:#E5E7EB;--green:#22c55e;--orange:#f97316;--red:#ef4444}
 body{background:var(--bg);min-height:100vh;overflow-x:hidden}
@@ -75,7 +77,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .badge-green{background:#dcfce7;color:#166534}
 .badge-orange{background:#fed7aa;color:#9a3412}
 .badge-red{background:#fee2e2;color:#991b1b}
-.fab{position:fixed;bottom:90px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:100}
+.fab{position:fixed;bottom:160px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:100}
 .form-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:14px}
 .species-row{display:flex;gap:8px}
 .species-btn{flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--border);font-size:15px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center;transition:all .2s}
@@ -624,8 +626,8 @@ function updateDashboard(){
       return `<span class="badge ${cls}">${n} — ${lbl}</span>`;
     }).join('');
     const card=document.createElement('div');card.className='animal-card';
-    card.innerHTML=`<div class="animal-avatar">${a.species==='dog'?'🐶':'🐱'}</div><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">${a.name}</div><div style="font-size:12px;color:var(--muted)">${a.breed||''} · ${calcAge(a.birth)}</div><div class="badges">${badgesHtml||'<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>'}</div></div><span style="color:var(--muted);font-size:22px">›</span>`;
-    card.onclick=()=>openTreatModal(a.id);
+   card.innerHTML=`<div class="animal-avatar">${a.species==='dog'?'🐶':'🐱'}</div><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">${a.name}</div><div style="font-size:12px;color:var(--muted)">${a.breed||''} · ${calcAge(a.birth)}</div><div class="badges">${badgesHtml||'<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>'}</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><span style="font-size:22px;color:var(--muted)">›</span><span style="font-size:18px;cursor:pointer;padding:4px" onclick="event.stopPropagation();openEditAnimal('${a.id}')">✏️</span></div>`;
+card.onclick=()=>openTreatModal(a.id);
     list.appendChild(card);
   });
 }
@@ -649,6 +651,21 @@ function saveAnimal(){
   state.animals.push(animal);saveState();closeModal('modal-animal');
   ['a-name','a-breed','a-birth','a-idnum'].forEach(id=>document.getElementById(id).value='');
   updateDashboard();showToast(`${animal.name} ajouté ! 🐾`);
+  function openEditAnimal(aid){
+  const a=state.animals.find(x=>x.id===aid);
+  if(!a)return;
+  document.getElementById('a-name').value=a.name;
+  document.getElementById('a-breed').value=a.breed||'';
+  document.getElementById('a-birth').value=a.birth||'';
+  document.getElementById('a-idnum').value=a.idNum||'';
+  selectSpecies(a.species);
+  selectSex(a.sex||'m');
+  selectIdType(a.idType||'puce');
+  if(a.sterilized)document.getElementById('steril-toggle').classList.add('on');
+  else document.getElementById('steril-toggle').classList.remove('on');
+  state.editingAnimalId=aid;
+  document.getElementById('modal-animal').classList.add('open');
+}
 }
 
 // ═══ TRAITEMENTS ═══
