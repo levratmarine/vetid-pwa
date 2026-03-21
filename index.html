@@ -648,13 +648,15 @@ function saveAnimal(){
   if(!name){showToast('Donnez un nom à votre animal');return;}
   const isEdit=!!state.editingAnimalId;
   const animal={id:isEdit?state.editingAnimalId:Date.now().toString(),name,species:state.selectedSpecies,breed:document.getElementById('a-breed').value.trim(),birth:document.getElementById('a-birth').value,sex:state.selectedSex,sterilized:document.getElementById('steril-toggle').classList.contains('on'),idType:state.selectedIdType,idNum:document.getElementById('a-idnum').value.trim()};
-if(isEdit){const idx=state.animals.findIndex(x=>x.id===state.editingAnimalId);if(idx>-1)state.animals[idx]=animal;}
+  if(isEdit){const idx=state.animals.findIndex(x=>x.id===state.editingAnimalId);if(idx>-1)state.animals[idx]=animal;}
   else{state.animals.push(animal);}
   state.editingAnimalId=null;
   saveState();closeModal('modal-animal');
   ['a-name','a-breed','a-birth','a-idnum'].forEach(id=>document.getElementById(id).value='');
-  updateDashboard();showToast(`${animal.name} ajouté ! 🐾`);
-  function openEditAnimal(aid){
+  updateDashboard();showToast(isEdit?`${animal.name} modifié ✓`:`${animal.name} ajouté ! 🐾`);
+}
+
+function openEditAnimal(aid){
   if(!aid)return;
   const a=state.animals.find(x=>x.id===aid);
   if(!a)return;
@@ -669,7 +671,6 @@ if(isEdit){const idx=state.animals.findIndex(x=>x.id===state.editingAnimalId);if
   else document.getElementById('steril-toggle').classList.remove('on');
   state.editingAnimalId=aid;
   document.getElementById('modal-animal').classList.add('open');
-}
 }
 
 // ═══ TRAITEMENTS ═══
