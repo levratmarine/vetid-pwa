@@ -37,8 +37,7 @@
       if(active && (active.id === 'screen-auth' || active.id === 'screen-onboarding')) {
         updateDashboard();
         loadBlogPreview();
-        const tutoSeen = localStorage.getItem('vetid_tuto_seen');
-        if(tutoSeen) { goToDashboard(); } else { showScreen('tuto'); }
+      goToDashboard();
       }
     }
   });
