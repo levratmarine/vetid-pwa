@@ -10,11 +10,9 @@
 <link rel="manifest" href="/manifest.json">
 <title>VetID — Santé animale</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
-<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyBlUWYVZEuigQ-cqzgwurOYORypi_QzApM",
     authDomain: "vetidapp.firebaseapp.com",
@@ -23,7 +21,6 @@
     messagingSenderId: "21167219835",
     appId: "1:21167219835:web:3037543f920e10fb156ede"
   };
-
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   window._auth = auth;
@@ -33,21 +30,20 @@
   window._signOut = signOut;
   window._updateProfile = updateProfile;
   window._onAuthStateChanged = onAuthStateChanged;
-
   onAuthStateChanged(auth, (user) => {
     if (user) {
       state.user = { email: user.email, prenom: user.displayName || user.email.split('@')[0], uid: user.uid };
-      if(document.getElementById('screen-auth').classList.contains('active') || document.getElementById('screen-onboarding').classList.contains('active')){
-        updateDashboard(); loadBlogPreview(); showScreen('tuto');
+      const active = document.querySelector('.screen.active');
+      if(active && (active.id === 'screen-auth' || active.id === 'screen-onboarding')) {
+        updateDashboard();
+        loadBlogPreview();
+        const tutoSeen = localStorage.getItem('vetid_tuto_seen');
+        if(tutoSeen) { goToDashboard(); } else { showScreen('tuto'); }
       }
     }
   });
 </script>
 <style>
-#crisp-chatbox{bottom:80px !important;}
-.cc-tlyw{bottom:80px !important;}
-.cc-kxkl{bottom:80px !important;}
-[data-id="crisp-chatbox"]{bottom:80px !important;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
 :root{--teal:#2A9D8F;--teal-light:#E1F5EE;--teal-dark:#1a6b60;--bg:#F8F9FA;--white:#FFFFFF;--text:#1a1a2e;--muted:#6B7280;--border:#E5E7EB;--green:#22c55e;--orange:#f97316;--red:#ef4444}
 body{background:var(--bg);min-height:100vh;overflow-x:hidden}
@@ -78,7 +74,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .badge-orange{background:#fed7aa;color:#9a3412}
 .badge-red{background:#fee2e2;color:#991b1b}
 .fab{position:fixed;bottom:160px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:100}
-.form-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:14px}
 .species-row{display:flex;gap:8px}
 .species-btn{flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--border);font-size:15px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center;transition:all .2s}
 .species-btn.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark)}
@@ -139,20 +134,8 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .blog-preview-img{height:56px;display:flex;align-items:center;justify-content:center;font-size:22px}
 .blog-preview-info{padding:6px}
 </style>
-<!-- Crisp -->
-<script type="text/javascript">
-window.$crisp=[];
-window.CRISP_WEBSITE_ID="9f0d05ec-24b6-429d-9646-0dccded1af98";
-(function(){
-  d=document;s=d.createElement("script");
-  s.src="https://client.crisp.chat/l.js";
-  s.async=1;
-  d.getElementsByTagName("head")[0].appendChild(s);
-})();
-function fixCrisp(){
-  var style=document.getElementById('crisp-fix');
-  if(!style){style=document.createElement('style');style.id='crisp-fix';document.head.appendChild(style);}
-  style.innerHTML='.cc-tlyw{bottom:80px !important;}.cc-kxkl{bottom:80px !important;}.cc-1xry{bottom:80px !important;}.cc-unoo{bottom:80px !important;}iframe[title="Crisp"]
+</head>
+<body>
 
 <!-- ONBOARDING -->
 <div id="screen-onboarding" class="screen active">
@@ -195,18 +178,16 @@ function fixCrisp(){
     <div style="font-size:22px;font-weight:700;color:var(--text)" id="auth-title">Créer un compte</div>
     <div id="prenom-group" class="form-row"><label class="field-label">Prénom</label><input class="field-input" id="auth-prenom" type="text" placeholder="Sophie"></div>
     <div class="form-row"><label class="field-label">Adresse email</label><input class="field-input" id="auth-email" type="email" placeholder="sophie@email.com"></div>
-    <div class="form-row"><label class="field-label">Mot de passe</label><input class="field-input" id="auth-password" type="password" placeholder="••••••••  (6 caractères min.)"></div>
+    <div class="form-row"><label class="field-label">Mot de passe</label><input class="field-input" id="auth-password" type="password" placeholder="•••••••• (6 caractères min.)"></div>
     <div class="error-msg" id="auth-error"></div>
     <div class="toggle-row" style="padding:4px 0">
       <div style="font-size:14px;color:var(--text)">Rester connecté</div>
       <div class="toggle on" id="stay-toggle" onclick="this.classList.toggle('on')"></div>
     </div>
     <button class="btn-primary" id="auth-btn" onclick="doAuth()">Créer mon compte</button>
-    <div style="text-align:center">
-      <span style="font-size:14px;color:var(--teal);cursor:pointer;font-weight:500" id="forgot-link" onclick="showForgot()" style="display:none"></span>
-    </div>
+    <div style="text-align:center"><span style="font-size:14px;color:var(--teal);cursor:pointer;font-weight:500;display:none" id="forgot-link" onclick="showScreen('forgot')">Mot de passe oublié ?</span></div>
     <div style="text-align:center;font-size:14px;color:var(--muted)" id="auth-switch">Déjà un compte ? <span style="color:var(--teal);font-weight:600;cursor:pointer" onclick="toggleAuth()">Se connecter</span></div>
-    <div style="text-align:center;font-size:11px;color:var(--muted);line-height:1.6">En créant un compte, vous acceptez nos <span style="color:var(--teal);cursor:pointer" onclick="showPrivacy()">CGU</span> et notre <span style="color:var(--teal);cursor:pointer" onclick="showPrivacy()">politique de confidentialité</span>.</div>
+    <div style="text-align:center;font-size:11px;color:var(--muted);line-height:1.6">En créant un compte, vous acceptez nos <span style="color:var(--teal);cursor:pointer" onclick="showScreen('privacy')">CGU</span> et notre <span style="color:var(--teal);cursor:pointer" onclick="showScreen('privacy')">politique de confidentialité</span>.</div>
   </div>
 </div>
 
@@ -225,7 +206,7 @@ function fixCrisp(){
   </div>
 </div>
 
-<!-- TUTO INSTALL -->
+<!-- TUTO INSTALL (affiché une seule fois) -->
 <div id="screen-tuto" class="screen">
   <div style="background:var(--teal);padding:20px;color:#fff;flex-shrink:0">
     <div style="font-size:20px;font-weight:700">📲 Installer VetID</div>
@@ -242,19 +223,19 @@ function fixCrisp(){
     </div>
     <div class="os-content active" id="os-ios">
       <div class="tuto-step"><div class="tuto-num">1</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Ouvrez dans Safari</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">VetID doit être ouvert dans Safari. Si vous êtes dans Chrome, copiez le lien et collez-le dans Safari.</span></div></div>
-      <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur les 3 petits points •••</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">En bas à droite de Safari, appuyez sur l'icône avec 3 points.</span><div class="tuto-visual">⬤ ⬤ ⬤ &nbsp; Le bouton se trouve dans la barre du bas</div></div></div>
-      <div class="tuto-step"><div class="tuto-num">3</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Partager" ↑</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">Dans le menu qui s'ouvre, appuyez sur le bouton "Partager" avec la flèche vers le haut.</span><div class="tuto-visual">↑ Partager</div></div></div>
-      <div class="tuto-step"><div class="tuto-num">4</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Plus" puis "Sur l'écran d'accueil"</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">Faites défiler et appuyez sur "Plus", puis sélectionnez "Sur l'écran d'accueil".</span><div class="tuto-visual">⊕ Sur l'écran d'accueil</div></div></div>
-      <div class="tuto-step"><div class="tuto-num">5</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter"</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">"VetID" apparaît déjà comme nom. Appuyez sur "Ajouter" en haut à droite. L'icône 🐾 apparaît sur votre écran d'accueil !</span><div class="tuto-visual">✅ VetID est installé !</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur les 3 petits points •••</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">En bas à droite de Safari.</span><div class="tuto-visual">⬤ ⬤ ⬤ &nbsp; Le bouton se trouve dans la barre du bas</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">3</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Partager" ↑</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">Dans le menu qui s'ouvre, appuyez sur "Partager".</span><div class="tuto-visual">↑ Partager</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">4</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Plus" puis "Sur l'écran d'accueil"</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">Faites défiler et appuyez sur "Plus", puis "Sur l'écran d'accueil".</span><div class="tuto-visual">⊕ Sur l'écran d'accueil</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">5</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter"</strong><span style="font-size:13px;color:var(--muted);line-height:1.5">L'icône 🐾 apparaît sur votre écran d'accueil !</span><div class="tuto-visual">✅ VetID est installé !</div></div></div>
     </div>
     <div class="os-content" id="os-android">
       <div class="tuto-step"><div class="tuto-num">1</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Ouvrez dans Chrome</strong><span style="font-size:13px;color:var(--muted)">VetID doit être ouvert dans Chrome sur Android.</span></div></div>
       <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur ⋮ (3 points)</strong><span style="font-size:13px;color:var(--muted)">En haut à droite de Chrome.</span></div></div>
-      <div class="tuto-step"><div class="tuto-num">3</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter à l'écran d'accueil"</strong><span style="font-size:13px;color:var(--muted)">Ou "Installer l'application".</span><div class="tuto-visual">📲 L'icône VetID 🐾 s'installe automatiquement</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">3</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter à l'écran d'accueil"</strong><div class="tuto-visual">📲 L'icône VetID 🐾 s'installe automatiquement</div></div></div>
     </div>
     <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
-      <button class="btn-primary" onclick="goToDashboard()">J'ai installé VetID ✓</button>
-      <button class="btn-ghost" onclick="goToDashboard()">Faire ça plus tard</button>
+      <button class="btn-primary" onclick="doneTuto()">J'ai installé VetID ✓</button>
+      <button class="btn-ghost" onclick="doneTuto()">Faire ça plus tard</button>
     </div>
   </div>
 </div>
@@ -265,7 +246,7 @@ function fixCrisp(){
     <div id="dash-greeting" style="font-size:14px;opacity:.85">Bonjour 👋</div>
     <div style="font-size:22px;font-weight:700;margin-top:2px">Mes animaux</div>
   </div>
-  <div style="flex:1;overflow-y:auto;padding:16px" id="dash-body">
+  <div style="flex:1;overflow-y:auto;padding:16px">
     <div id="empty-state" style="text-align:center;padding:48px 24px;color:var(--muted)">
       <div style="font-size:48px;margin-bottom:16px">🐾</div>
       <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Aucun animal pour l'instant</div>
@@ -367,7 +348,7 @@ function fixCrisp(){
     <div class="coming-soon">👥 Le partage avec un proche arrive en V2 de VetID. En tant que bêta-testeur, vous serez parmi les premiers à en profiter !</div>
     <div class="section-title">Confidentialité & RGPD</div>
     <div class="settings-group">
-      <div class="settings-row" onclick="showPrivacy()">
+      <div class="settings-row" onclick="showScreen('privacy')">
         <div class="settings-icon" style="background:#EAF3DE">📄</div>
         <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)">Politique de confidentialité</div></div>
         <span style="color:var(--muted)">›</span>
@@ -415,7 +396,7 @@ function fixCrisp(){
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">3. Utilisation</h2>
     <p style="margin-bottom:12px;color:var(--muted)">Votre email est utilisé uniquement pour l'authentification et les communications liées au programme bêta. Il ne sera jamais vendu ni transmis à des tiers.</p>
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">4. Vos droits (RGPD)</h2>
-    <p style="margin-bottom:8px;color:var(--muted)">Vous disposez des droits d'accès, rectification, effacement et portabilité. Pour exercer ces droits, utilisez les options dans Réglages ou contactez-nous via le chat.</p>
+    <p style="margin-bottom:12px;color:var(--muted)">Vous disposez des droits d'accès, rectification, effacement et portabilité. Pour exercer ces droits, utilisez les options dans Réglages ou contactez-nous via le chat.</p>
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">5. Sécurité</h2>
     <p style="margin-bottom:12px;color:var(--muted)">Votre mot de passe est chiffré par Firebase et n'est jamais accessible en clair. Les données animaux restent sur votre appareil.</p>
   </div>
@@ -425,7 +406,7 @@ function fixCrisp(){
 <div class="modal-overlay" id="modal-animal">
   <div class="modal-sheet" id="sheet-animal">
     <div class="modal-handle" id="handle-animal"></div>
-    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px">🐾 Ajouter un animal</div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px" id="modal-animal-title">🐾 Ajouter un animal</div>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div class="form-row"><label class="field-label">Nom</label><input class="field-input" id="a-name" type="text" placeholder="Milo"></div>
       <div class="form-row"><label class="field-label">Espèce</label><div class="species-row"><div class="species-btn active" id="sp-dog" onclick="selectSpecies('dog')">🐶 Chien</div><div class="species-btn" id="sp-cat" onclick="selectSpecies('cat')">🐱 Chat</div></div></div>
@@ -477,16 +458,20 @@ function fixCrisp(){
 
 <div class="toast" id="toast"></div>
 
+<!-- Crisp chat -->
+<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="9f0d05ec-24b6-429d-9646-0dccded1af98";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+
 <script>
 // ═══ STATE ═══
-let state={user:null,animals:[],treatments:[],currentAnimalId:null,editingAnimalId:null,selectedSpecies:'dog',selectedSex:'m',selectedIdType:'puce',selectedTreatType:'antipuces',isLogin:false};let allArticles=[];
+let state={user:null,animals:[],treatments:[],currentAnimalId:null,editingAnimalId:null,selectedSpecies:'dog',selectedSex:'m',selectedIdType:'puce',selectedTreatType:'antipuces',isLogin:false};
+let allArticles=[];
 
 function loadState(){
-  const s=localStorage.getItem('vetid_v3');
+  const s=localStorage.getItem('vetid_v4');
   if(s){const p=JSON.parse(s);state.animals=p.animals||[];state.treatments=p.treatments||[];}
 }
 function saveState(){
-  if(state.user)localStorage.setItem('vetid_v3',JSON.stringify({animals:state.animals,treatments:state.treatments}));
+  if(state.user)localStorage.setItem('vetid_v4',JSON.stringify({animals:state.animals,treatments:state.treatments}));
 }
 
 // ═══ NAVIGATION ═══
@@ -494,6 +479,12 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   window.scrollTo(0,0);
+}
+
+// ═══ TUTO (une seule fois) ═══
+function doneTuto(){
+  localStorage.setItem('vetid_tuto_seen','1');
+  goToDashboard();
 }
 
 // ═══ ONBOARDING ═══
@@ -510,7 +501,7 @@ function nextSlide(){
 }
 function goToAuth(){showScreen('auth');}
 
-// ═══ AUTH FIREBASE ═══
+// ═══ AUTH ═══
 function toggleAuth(){
   state.isLogin=!state.isLogin;
   const t=state.isLogin;
@@ -518,24 +509,16 @@ function toggleAuth(){
   document.getElementById('auth-btn').textContent=t?'Se connecter':'Créer mon compte';
   document.getElementById('auth-switch').innerHTML=t?'Pas encore de compte ? <span style="color:var(--teal);font-weight:600;cursor:pointer" onclick="toggleAuth()">Créer un compte</span>':'Déjà un compte ? <span style="color:var(--teal);font-weight:600;cursor:pointer" onclick="toggleAuth()">Se connecter</span>';
   document.getElementById('prenom-group').style.display=t?'none':'flex';
-  document.getElementById('forgot-link').textContent=t?'Mot de passe oublié ?':'';
+  document.getElementById('forgot-link').style.display=t?'inline':'none';
   hideError('auth-error');
 }
 
 function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.classList.add('show');}
-function hideError(id){const el=document.getElementById(id);el.classList.remove('show');}
+function hideError(id){document.getElementById(id).classList.remove('show');}
 
 function getFirebaseError(code){
-  const errors={
-    'auth/email-already-in-use':'Cette adresse email est déjà utilisée.',
-    'auth/invalid-email':'Adresse email invalide.',
-    'auth/weak-password':'Mot de passe trop court (6 caractères minimum).',
-    'auth/user-not-found':'Aucun compte trouvé avec cet email.',
-    'auth/wrong-password':'Mot de passe incorrect.',
-    'auth/invalid-credential':'Email ou mot de passe incorrect.',
-    'auth/too-many-requests':'Trop de tentatives. Réessayez dans quelques minutes.',
-  };
-  return errors[code]||'Une erreur est survenue. Réessayez.';
+  const e={'auth/email-already-in-use':'Cette adresse email est déjà utilisée.','auth/invalid-email':'Adresse email invalide.','auth/weak-password':'Mot de passe trop court (6 caractères minimum).','auth/user-not-found':'Aucun compte trouvé avec cet email.','auth/wrong-password':'Mot de passe incorrect.','auth/invalid-credential':'Email ou mot de passe incorrect.','auth/too-many-requests':'Trop de tentatives. Réessayez dans quelques minutes.'};
+  return e[code]||'Une erreur est survenue. Réessayez.';
 }
 
 async function doAuth(){
@@ -545,21 +528,21 @@ async function doAuth(){
   hideError('auth-error');
   if(!email||!password){showError('auth-error','Veuillez remplir tous les champs.');return;}
   if(!state.isLogin&&!prenom){showError('auth-error','Veuillez entrer votre prénom.');return;}
-  document.getElementById('auth-btn').textContent='Chargement…';
-  document.getElementById('auth-btn').disabled=true;
+  const btn=document.getElementById('auth-btn');
+  btn.textContent='Chargement…';btn.disabled=true;
   try{
     if(state.isLogin){
-      await window._signIn(window._auth, email, password);
+      await window._signIn(window._auth,email,password);
     } else {
-      const cred=await window._createUser(window._auth, email, password);
+      const cred=await window._createUser(window._auth,email,password);
       await window._updateProfile(cred.user,{displayName:prenom});
       state.user={email,prenom,uid:cred.user.uid};
       await registerToBrevo(email,prenom);
     }
-  } catch(e){
-    showError('auth-error', getFirebaseError(e.code));
-    document.getElementById('auth-btn').textContent=state.isLogin?'Se connecter':'Créer mon compte';
-    document.getElementById('auth-btn').disabled=false;
+  }catch(e){
+    showError('auth-error',getFirebaseError(e.code));
+    btn.textContent=state.isLogin?'Se connecter':'Créer mon compte';
+    btn.disabled=false;
   }
 }
 
@@ -573,24 +556,20 @@ async function registerToBrevo(email,prenom){
   }catch(e){console.log('Brevo:',e);}
 }
 
-function showForgot(){showScreen('forgot');document.getElementById('forgot-email').value=document.getElementById('auth-email').value;}
-
 async function doResetPassword(){
   const email=document.getElementById('forgot-email').value.trim();
   hideError('forgot-error');
   if(!email){showError('forgot-error','Veuillez entrer votre adresse email.');return;}
   try{
-    await window._resetPassword(window._auth, email);
+    await window._resetPassword(window._auth,email);
     showToast('Email envoyé ! Vérifiez votre boîte mail.');
     setTimeout(()=>showScreen('auth'),2000);
-  }catch(e){
-    showError('forgot-error', getFirebaseError(e.code));
-  }
+  }catch(e){showError('forgot-error',getFirebaseError(e.code));}
 }
 
 function goToDashboard(){updateDashboard();loadBlogPreview();showScreen('dashboard');}
 
-// ═══ TUTO ═══
+// ═══ TUTO OS ═══
 function switchOS(os,el){
   document.querySelectorAll('.os-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.os-content').forEach(c=>c.classList.remove('active'));
@@ -636,8 +615,8 @@ function updateDashboard(){
       return `<span class="badge ${cls}">${n} — ${lbl}</span>`;
     }).join('');
     const card=document.createElement('div');card.className='animal-card';
-   card.innerHTML=`<div class="animal-avatar">${a.species==='dog'?'🐶':'🐱'}</div><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">${a.name}</div><div style="font-size:12px;color:var(--muted)">${a.breed||''} · ${calcAge(a.birth)}</div><div class="badges">${badgesHtml||'<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>'}</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><span style="font-size:22px;color:var(--muted)">›</span><span style="font-size:18px;cursor:pointer;padding:4px" onclick="event.stopPropagation();openEditAnimal(this.dataset.id)" data-id="${a.id}">✏️</span></div>`;
-card.onclick=()=>openTreatModal(a.id);
+    card.innerHTML=`<div class="animal-avatar">${a.species==='dog'?'🐶':'🐱'}</div><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">${a.name}</div><div style="font-size:12px;color:var(--muted)">${a.breed||''} · ${calcAge(a.birth)}</div><div class="badges">${badgesHtml||'<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>'}</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><span style="font-size:22px;color:var(--muted)">›</span><span style="font-size:18px;cursor:pointer;padding:4px" onclick="event.stopPropagation();openEditAnimal('${a.id}')">✏️</span></div>`;
+    card.onclick=()=>openTreatModal(a.id);
     list.appendChild(card);
   });
 }
@@ -648,7 +627,32 @@ function getTreatStatus(t){if(!t.nextDate)return 'green';const d=(new Date(t.nex
 function formatDate(d){if(!d)return '—';return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});}
 
 // ═══ ANIMAL ═══
-function openAddAnimal(){document.getElementById('modal-animal').classList.add('open');}
+function openAddAnimal(){
+  state.editingAnimalId=null;
+  document.getElementById('modal-animal-title').textContent='🐾 Ajouter un animal';
+  ['a-name','a-breed','a-birth','a-idnum'].forEach(id=>document.getElementById(id).value='');
+  selectSpecies('dog');selectSex('m');selectIdType('puce');
+  document.getElementById('steril-toggle').classList.remove('on');
+  document.getElementById('modal-animal').classList.add('open');
+}
+
+function openEditAnimal(aid){
+  const a=state.animals.find(x=>x.id===aid);
+  if(!a)return;
+  state.editingAnimalId=aid;
+  document.getElementById('modal-animal-title').textContent='✏️ Modifier '+a.name;
+  document.getElementById('a-name').value=a.name;
+  document.getElementById('a-breed').value=a.breed||'';
+  document.getElementById('a-birth').value=a.birth||'';
+  document.getElementById('a-idnum').value=a.idNum||'';
+  selectSpecies(a.species);
+  selectSex(a.sex||'m');
+  selectIdType(a.idType||'puce');
+  if(a.sterilized)document.getElementById('steril-toggle').classList.add('on');
+  else document.getElementById('steril-toggle').classList.remove('on');
+  document.getElementById('modal-animal').classList.add('open');
+}
+
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function selectSpecies(s){state.selectedSpecies=s;document.getElementById('sp-dog').classList.toggle('active',s==='dog');document.getElementById('sp-cat').classList.toggle('active',s==='cat');}
 function selectSex(s){state.selectedSex=s;document.getElementById('sx-m').classList.toggle('active',s==='m');document.getElementById('sx-f').classList.toggle('active',s==='f');}
@@ -663,29 +667,17 @@ function saveAnimal(){
   else{state.animals.push(animal);}
   state.editingAnimalId=null;
   saveState();closeModal('modal-animal');
-  ['a-name','a-breed','a-birth','a-idnum'].forEach(id=>document.getElementById(id).value='');
-  updateDashboard();showToast(isEdit?`${animal.name} modifié ✓`:`${animal.name} ajouté ! 🐾`);
-}
-
-function openEditAnimal(aid){
-  if(!aid)return;
-  const a=state.animals.find(x=>x.id===aid);
-  if(!a)return;
-  document.getElementById('a-name').value=a.name;
-  document.getElementById('a-breed').value=a.breed||'';
-  document.getElementById('a-birth').value=a.birth||'';
-  document.getElementById('a-idnum').value=a.idNum||'';
-  selectSpecies(a.species);
-  selectSex(a.sex||'m');
-  selectIdType(a.idType||'puce');
-  if(a.sterilized)document.getElementById('steril-toggle').classList.add('on');
-  else document.getElementById('steril-toggle').classList.remove('on');
-  state.editingAnimalId=aid;
-  document.getElementById('modal-animal').classList.add('open');
+  updateDashboard();
+  showToast(isEdit?`${animal.name} modifié ✓`:`${animal.name} ajouté ! 🐾`);
 }
 
 // ═══ TRAITEMENTS ═══
-function openTreatModal(aid){state.currentAnimalId=aid;const a=state.animals.find(x=>x.id===aid);document.getElementById('modal-treat-animal').textContent=`Pour ${a.name}`;document.getElementById('modal-treat').classList.add('open');}
+function openTreatModal(aid){
+  state.currentAnimalId=aid;
+  const a=state.animals.find(x=>x.id===aid);
+  document.getElementById('modal-treat-animal').textContent=`Pour ${a.name}`;
+  document.getElementById('modal-treat').classList.add('open');
+}
 function selectTreatType(t){state.selectedTreatType=t;['antipuces','vermifuge','vaccin'].forEach(x=>document.getElementById('tt-'+x).classList.toggle('active',x===t));}
 
 function saveTreatment(){
@@ -734,23 +726,17 @@ function markDone(tid){
 
 // ═══ BLOG ═══
 async function fetchNotionArticles(){
-  try{
-    const res=await fetch('/api/articles');
-    const data=await res.json();
-    return data.results;
-  }catch(e){
-    console.log('Notion:',e);
-    return getFallbackArticles();
-  }
+  try{const res=await fetch('/api/articles');const data=await res.json();return data.results;}
+  catch(e){return getFallbackArticles();}
 }
 
 function getFallbackArticles(){
   return [
-    {id:'1',title:"L'hygiène dentaire de votre chien",category:'Santé',resume:'Les maladies dentaires touchent plus de 80% des chiens.',content:"### Les bons gestes\n\nBrossez les dents de votre chien 3 fois par semaine avec un dentifrice spécial animal.\n\n### Le détartrage vétérinaire\n\nUn détartrage professionnel est recommandé tous les 1 à 2 ans.",duration:4,sponsored:false,emoji:'🦷'},
+    {id:'1',title:"L'hygiène dentaire de votre chien",category:'Santé',resume:'Les maladies dentaires touchent plus de 80% des chiens.',content:"### Les bons gestes\n\nBrossez les dents 3 fois par semaine avec un dentifrice spécial animal.\n\n### Le détartrage\n\nUn détartrage professionnel est recommandé tous les 1 à 2 ans.",duration:4,sponsored:false,emoji:'🦷'},
     {id:'2',title:"Alimentation du chien senior",category:'Nutrition',resume:'À partir de 7 ans, les besoins nutritionnels évoluent.',content:"### Ce qui change\n\nMoins de calories, plus de protéines de qualité, des oméga-3 pour les articulations.",duration:5,sponsored:false,emoji:'🍗'},
-    {id:'3',title:"Comprendre les miaulements",category:'Comportement',resume:'Votre chat communique avec vous par les miaulements.',content:"### Les types de vocalisations\n\n- Miaule court : salutation\n- Miaule long : demande\n- Miaule plaintif : inconfort",duration:5,sponsored:false,emoji:'😺'},
+    {id:'3',title:"Comprendre les miaulements",category:'Comportement',resume:'Votre chat communique avec vous par les miaulements.',content:"### Les types\n\n- Court : salutation\n- Long : demande\n- Plaintif : inconfort",duration:5,sponsored:false,emoji:'😺'},
     {id:'4',title:"Préparer son animal pour l'été",category:'Conseils',resume:'Le coup de chaleur peut être fatal.',content:"### Les règles d'or\n\nNe jamais laisser un animal dans une voiture. Hydratez en permanence.",duration:4,sponsored:false,emoji:'☀️'},
-    {id:'5',title:"Calendrier vaccinal du chiot",category:'Santé',resume:'Les premiers mois sont décisifs.',content:"### Le calendrier\n\n- 8-12 semaines : primo-vaccination CDHP\n- 12-16 semaines : rappel\n- 12 semaines : vaccin antirabique",duration:6,sponsored:false,emoji:'💉'}
+    {id:'5',title:"Calendrier vaccinal du chiot",category:'Santé',resume:'Les premiers mois sont décisifs.',content:"### Le calendrier\n\n- 8-12 semaines : primo-vaccination CDHP\n- 12-16 semaines : rappel\n- 12 semaines minimum : vaccin antirabique",duration:6,sponsored:false,emoji:'💉'}
   ];
 }
 
@@ -768,7 +754,7 @@ async function loadBlogPreview(){
     <div class="blog-preview-card" onclick="openArticle(${i})">
       <div class="blog-preview-img" style="background:${catColors[a.category]||'var(--teal-light)'}">${a.emoji}</div>
       <div class="blog-preview-info">
-        <div style="font-size:9px;color:var(--teal);font-weight:600">${a.category.toUpperCase()}</div>
+        <div style="font-size:9px;color:var(--teal);font-weight:600">${(a.category||'').toUpperCase()}</div>
         <div style="font-size:11px;font-weight:600;color:var(--text);line-height:1.3;margin-top:2px">${a.title}</div>
         <div style="font-size:9px;color:var(--muted);margin-top:3px">${a.duration} min</div>
       </div>
@@ -783,7 +769,7 @@ function renderBlog(articles){
     <div class="blog-article" onclick="openArticle(${allArticles.indexOf(a)})">
       <div class="blog-thumb" style="background:${catColors[a.category]||'var(--teal-light)'}">${a.emoji}</div>
       <div style="flex:1">
-        <div style="font-size:10px;color:var(--teal);font-weight:600">${a.category.toUpperCase()}</div>
+        <div style="font-size:10px;color:var(--teal);font-weight:600">${(a.category||'').toUpperCase()}</div>
         <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-top:2px">${a.title}</div>
         <div style="font-size:12px;color:var(--muted);line-height:1.4;margin-top:4px">${a.resume}</div>
         <div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">${a.duration} min de lecture</span>${a.sponsored?'<span class="sponsored-tag">Sponsorisé</span>':''}</div>
@@ -809,9 +795,6 @@ function openArticle(idx){
   showScreen('article');
 }
 
-// ═══ PRIVACY ═══
-function showPrivacy(){showScreen('privacy');}
-
 // ═══ RGPD ═══
 function exportData(){
   const data={user:{prenom:state.user?.prenom,email:state.user?.email},animals:state.animals,treatments:state.treatments,exportDate:new Date().toISOString()};
@@ -823,15 +806,15 @@ function exportData(){
 
 function deleteAccount(){
   if(confirm('Supprimer définitivement votre compte et toutes vos données ?')){
-    localStorage.removeItem('vetid_v3');
-    if(window._auth?.currentUser) window._signOut(window._auth);
+    localStorage.clear();
+    if(window._auth?.currentUser)window._signOut(window._auth);
     location.reload();
   }
 }
 
 function logout(){
-  localStorage.removeItem('vetid_v3');
-  if(window._auth?.currentUser) window._signOut(window._auth);
+  localStorage.removeItem('vetid_v4');
+  if(window._auth?.currentUser)window._signOut(window._auth);
   state.user=null;state.animals=[];state.treatments=[];
   showScreen('auth');
 }
