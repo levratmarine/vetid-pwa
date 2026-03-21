@@ -468,8 +468,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 
 <script>
 // ═══ STATE ═══
-let state={user:null,animals:[],treatments:[],currentAnimalId:null,selectedSpecies:'dog',selectedSex:'m',selectedIdType:'puce',selectedTreatType:'antipuces',isLogin:false};
-let allArticles=[];
+let state={user:null,animals:[],treatments:[],currentAnimalId:null,editingAnimalId:null,selectedSpecies:'dog',selectedSex:'m',selectedIdType:'puce',selectedTreatType:'antipuces',isLogin:false};let allArticles=[];
 
 function loadState(){
   const s=localStorage.getItem('vetid_v3');
