@@ -44,8 +44,25 @@
   });
 </script>
 <!-- Crisp -->
-<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="9f0d05ec-24b6-429d-9646-0dccded1af98";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-<style>
+<script type="text/javascript">
+window.$crisp=[];
+window.CRISP_WEBSITE_ID="9f0d05ec-24b6-429d-9646-0dccded1af98";
+(function(){
+  d=document;s=d.createElement("script");
+  s.src="https://client.crisp.chat/l.js";
+  s.async=1;
+  s.onload=function(){
+    setTimeout(function(){
+      var els=document.querySelectorAll('[data-id="crisp-chatbox"], .cc-tlyw, .cc-kxkl, #crisp-chatbox');
+      els.forEach(function(el){
+        el.style.setProperty('bottom','80px','important');
+        el.style.setProperty('right','16px','important');
+      });
+    },2000);
+  };
+  d.getElementsByTagName("head")[0].appendChild(s);
+})();
+</script><style>
 #crisp-chatbox{bottom:80px !important;}
 .cc-tlyw{bottom:80px !important;}
 .cc-kxkl{bottom:80px !important;}
