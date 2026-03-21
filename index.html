@@ -625,7 +625,7 @@ function updateDashboard(){
       return `<span class="badge ${cls}">${n} — ${lbl}</span>`;
     }).join('');
     const card=document.createElement('div');card.className='animal-card';
-   card.innerHTML=`<div class="animal-avatar">${a.species==='dog'?'🐶':'🐱'}</div><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">${a.name}</div><div style="font-size:12px;color:var(--muted)">${a.breed||''} · ${calcAge(a.birth)}</div><div class="badges">${badgesHtml||'<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>'}</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><span style="font-size:22px;color:var(--muted)">›</span><span style="font-size:18px;cursor:pointer;padding:4px" onclick="event.stopPropagation();openEditAnimal('${a.id}')">✏️</span></div>`;
+   card.innerHTML=`<div class="animal-avatar">${a.species==='dog'?'🐶':'🐱'}</div><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">${a.name}</div><div style="font-size:12px;color:var(--muted)">${a.breed||''} · ${calcAge(a.birth)}</div><div class="badges">${badgesHtml||'<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>'}</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><span style="font-size:22px;color:var(--muted)">›</span><span style="font-size:18px;cursor:pointer;padding:4px" onclick="event.stopPropagation();openEditAnimal(this.dataset.id)" data-id="${a.id}">✏️</span></div>`;
 card.onclick=()=>openTreatModal(a.id);
     list.appendChild(card);
   });
@@ -655,6 +655,7 @@ if(isEdit){const idx=state.animals.findIndex(x=>x.id===state.editingAnimalId);if
   ['a-name','a-breed','a-birth','a-idnum'].forEach(id=>document.getElementById(id).value='');
   updateDashboard();showToast(`${animal.name} ajouté ! 🐾`);
   function openEditAnimal(aid){
+  if(!aid)return;
   const a=state.animals.find(x=>x.id===aid);
   if(!a)return;
   document.getElementById('a-name').value=a.name;
