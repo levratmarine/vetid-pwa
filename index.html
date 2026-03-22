@@ -32,6 +32,7 @@ window._updateProfile = updateProfile;
 onAuthStateChanged(auth, (user) => {
   if (user) {
     state.user = { email: user.email, prenom: user.displayName || user.email.split('@')[0], uid: user.uid };
+    loadState(user.uid);
     const active = document.querySelector('.screen.active');
     if (active && (active.id === 'screen-auth' || active.id === 'screen-onboarding')) {
       updateDashboard();
@@ -188,8 +189,10 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
     </div>
     <div class="form-row">
       <label class="field-label">Mot de passe</label>
-      <input class="field-input" id="auth-password" type="password" placeholder="•••••••• (6 caractères min.)">
-    </div>
+<div style="position:relative">
+  <input class="field-input" id="auth-password" type="password" placeholder="•••••••• (6 caractères min.)" style="padding-right:48px">
+  <span onclick="togglePwd()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px" id="pwd-eye">👁</span>
+</div>    </div>
     <div class="error-msg" id="auth-error"></div>
     <div class="toggle-row" style="padding:4px 0">
       <div style="font-size:14px;color:var(--text)">Rester connecté</div>
@@ -512,6 +515,12 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
 <div class="toast" id="toast"></div>
 
 <script>
+  function togglePwd() {
+  const input = document.getElementById('auth-password');
+  const eye = document.getElementById('pwd-eye');
+  if (input.type === 'password') { input.type = 'text'; eye.textContent = '🙈'; }
+  else { input.type = 'password'; eye.textContent = '👁'; }
+}
 // STATE
 let state = {
   user: null, animals: [], treatments: [],
@@ -522,12 +531,16 @@ let state = {
 };
 let allArticles = [];
 
-function loadState() {
-  const s = localStorage.getItem('vetid_v5');
+function getStorageKey() {
+  return state.user ? 'vetid_' + state.user.uid : 'vetid_guest';
+}
+function loadState(uid) {
+  const key = uid ? 'vetid_' + uid : 'vetid_guest';
+  const s = localStorage.getItem(key);
   if (s) { const p = JSON.parse(s); state.animals = p.animals || []; state.treatments = p.treatments || []; }
 }
 function saveState() {
-  if (state.user) localStorage.setItem('vetid_v5', JSON.stringify({ animals: state.animals, treatments: state.treatments }));
+  if (state.user) localStorage.setItem('vetid_' + state.user.uid, JSON.stringify({ animals: state.animals, treatments: state.treatments }));
 }
 
 // NAVIGATION
