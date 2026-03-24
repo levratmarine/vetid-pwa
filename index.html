@@ -520,7 +520,6 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
         <div class="notif-banner-title">🔔 À propos des notifications</div>
         <div class="notif-banner-text">Vous testez la version bêta. Les notifications push arrivent en V2 !</div>
       </div>
-      <div class="cal-banner">📅 La synchronisation des dates de traitement avec votre agenda sera disponible dans la prochaine version de VetID !</div>
       <button class="btn-primary" onclick="saveTreatment()">Enregistrer</button>
       <button class="btn-ghost" onclick="closeModal('modal-treat')">Annuler</button>
     </div>
@@ -942,18 +941,51 @@ function renderTreatments() {
 
       const btns = document.createElement('div');
       btns.style.cssText = 'display:flex;gap:8px';
-      btns.innerHTML = '<button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--teal);background:var(--white);color:var(--teal)" onclick="openTreatModal(\'' + a.id + '\')">Modifier</button>'
-        + '<button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:var(--teal);color:#fff;border:none" onclick="markDone(\'' + t.id + '\')">Effectué ✓</button>';
+     btns.innerHTML = '<button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--teal);background:var(--white);color:var(--teal)" onclick="openTreatModal(\'' + a.id + '\')">Modifier</button>'
+  + '<button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:var(--teal);color:#fff;border:none" onclick="markDone(\'' + t.id + '\')">Effectué ✓</button>';
 
-      const calBanner = document.createElement('div');
-      calBanner.className = 'cal-banner';
-      calBanner.textContent = '📅 La synchronisation avec votre agenda arrive en V2 !';
+const calBtn = document.createElement('button');
+calBtn.style.cssText = 'width:100%;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--text);margin-top:8px';
+calBtn.textContent = '📅 Ajouter au calendrier';
+calBtn.onclick = function() { generateICS(a.name, t.type, t.nextDate); };
+btns.appendChild(calBtn);
+      function generateICS(animalName, treatType, nextDate) {
+  const typeName = treatType === 'antipuces' ? 'Anti-puces / Tiques' : treatType === 'vermifuge' ? 'Vermifuge' : 'Vaccin';
+  const title = animalName + ' — ' + typeName;
+  const date = nextDate.replace(/-/g, '');
+  const uid = Date.now() + '@vetid.app';
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//VetID//FR',
+    'BEGIN:VEVENT',
+    'UID:' + uid,
+    'DTSTART;VALUE=DATE:' + date,
+    'DTEND;VALUE=DATE:' + date,
+    'SUMMARY:' + title,
+    'DESCRIPTION:Rappel de traitement VetID pour ' + animalName,
+    'BEGIN:VALARM',
+    'TRIGGER:-PT0S',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Rappel ' + title,
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'vetid-' + animalName.toLowerCase() + '-' + treatType + '.ics';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Ouverture dans votre Calendrier… 📅');
+}
 
       card.appendChild(top);
       card.appendChild(dates);
       card.appendChild(progress);
       card.appendChild(btns);
-      card.appendChild(calBanner);
       body.appendChild(card);
     });
   });
