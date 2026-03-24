@@ -912,7 +912,9 @@ function markDone(tid) {
 
 // BLOG
 async function fetchNotionArticles() {
-  try { const res = await fetch('/api/articles'); const data = await res.json(); return data.results; }
+  try { const res = await fetch('/api/articles', {
+  headers: { 'x-vetid-token': 'vetid2026beta' }
+}); const data = await res.json(); return data.results; }
   catch (e) { return getFallbackArticles(); }
 }
 
