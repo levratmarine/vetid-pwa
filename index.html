@@ -949,37 +949,45 @@ calBtn.style.cssText = 'width:100%;padding:10px;border-radius:10px;font-size:13p
 calBtn.textContent = '📅 Ajouter au calendrier';
 calBtn.onclick = function() { generateICS(a.name, t.type, t.nextDate); };
 btns.appendChild(calBtn);
-      function generateICS(animalName, treatType, nextDate) {
+function generateICS(animalName, treatType, nextDate) {
   const typeName = treatType === 'antipuces' ? 'Anti-puces / Tiques' : treatType === 'vermifuge' ? 'Vermifuge' : 'Vaccin';
   const title = animalName + ' — ' + typeName;
-  const date = nextDate.replace(/-/g, '');
   const uid = Date.now() + '@vetid.app';
-  const ics = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//VetID//FR',
-    'BEGIN:VEVENT',
-    'UID:' + uid,
-    'DTSTART;VALUE=DATE:' + date,
-    'DTEND;VALUE=DATE:' + date,
-    'SUMMARY:' + title,
-    'DESCRIPTION:Rappel de traitement VetID pour ' + animalName,
-    'BEGIN:VALARM',
-    'TRIGGER:-PT0S',
-    'ACTION:DISPLAY',
-    'DESCRIPTION:Rappel ' + title,
-    'END:VALARM',
-    'END:VEVENT',
-    'END:VCALENDAR'
-  ].join('\r\n');
+
+  // Date à 9h00 heure de Paris
+  const dateStr = nextDate.replace(/-/g, '');
+  const dtstart = dateStr + 'T080000Z'; // 9h Paris = 8h UTC
+  const dtend = dateStr + 'T090000Z';
+
+  const ics = 'BEGIN:VCALENDAR\r\n'
+    + 'VERSION:2.0\r\n'
+    + 'PRODID:-//VetID//FR\r\n'
+    + 'CALSCALE:GREGORIAN\r\n'
+    + 'METHOD:PUBLISH\r\n'
+    + 'BEGIN:VEVENT\r\n'
+    + 'UID:' + uid + '\r\n'
+    + 'DTSTART:' + dtstart + '\r\n'
+    + 'DTEND:' + dtend + '\r\n'
+    + 'SUMMARY:' + title + '\r\n'
+    + 'DESCRIPTION:Rappel de traitement VetID pour ' + animalName + '\r\n'
+    + 'BEGIN:VALARM\r\n'
+    + 'TRIGGER:-PT0S\r\n'
+    + 'ACTION:DISPLAY\r\n'
+    + 'DESCRIPTION:' + title + '\r\n'
+    + 'END:VALARM\r\n'
+    + 'END:VEVENT\r\n'
+    + 'END:VCALENDAR';
+
   const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'vetid-' + animalName.toLowerCase() + '-' + treatType + '.ics';
+  a.download = 'vetid-rappel.ics';
+  document.body.appendChild(a);
   a.click();
+  document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showToast('Ouverture dans votre Calendrier… 📅');
+  showToast('Fichier calendrier téléchargé 📅');
 }
 
       card.appendChild(top);
