@@ -959,18 +959,6 @@ calBtn.onclick = function() {
   window.open(url, '_blank');
   showToast('Ouverture dans Google Calendar… 📅');
 };
-
-  const typeName = t.type === 'antipuces' ? 'Anti-puces / Tiques' : t.type === 'vermifuge' ? 'Vermifuge' : 'Vaccin';
-  const title = encodeURIComponent(a.name + ' — ' + typeName);
-  const desc = encodeURIComponent('Rappel VetID pour ' + a.name);
-  const date = t.nextDate.replace(/-/g, '');
-  const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
-    + '&text=' + title
-    + '&dates=' + date + 'T080000Z/' + date + 'T090000Z'
-    + '&details=' + desc;
-  window.open(url, '_blank');
-  showToast('Ouverture dans Google Calendar… 📅');
-};
 btns.appendChild(calBtn);
 
 
