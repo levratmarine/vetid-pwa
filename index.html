@@ -950,23 +950,10 @@ calBtn.textContent = '📅 Ajouter au calendrier';
 calBtn.onclick = function() { generateICS(a.name, t.type, t.nextDate); };
 btns.appendChild(calBtn);
 function generateICS(animalName, treatType, nextDate) {
-  const typeName = treatType === 'antipuces' ? 'Anti-puces / Tiques' : treatType === 'vermifuge' ? 'Vermifuge' : 'Vaccin';
-  const title = animalName + ' — ' + typeName;
-  const uid = Date.now() + '@vetid.app';
-  const dateStr = nextDate.replace(/-/g, '');
-  const dtstart = dateStr + 'T080000Z';
-  const dtend = dateStr + 'T090000Z';
-
-  const ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//VetID//FR\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nBEGIN:VEVENT\r\nUID:'
-    + uid + '\r\nDTSTART:' + dtstart + '\r\nDTEND:' + dtend
-    + '\r\nSUMMARY:' + title
-    + '\r\nDESCRIPTION:Rappel de traitement VetID pour ' + animalName
-    + '\r\nBEGIN:VALARM\r\nTRIGGER:-PT0S\r\nACTION:DISPLAY\r\nDESCRIPTION:' + title
-    + '\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR';
-
-  // Utiliser data: URI au lieu de blob pour iOS Safari
-  const dataUri = 'data:text/calendar;charset=utf8,' + encodeURIComponent(ics);
-  window.open(dataUri, '_blank');
+  const url = '/api/calendar?animal=' + encodeURIComponent(animalName)
+    + '&type=' + encodeURIComponent(treatType)
+    + '&date=' + encodeURIComponent(nextDate);
+  window.location.href = url;
   showToast('Ouverture dans Calendrier… 📅');
 }
 
