@@ -949,13 +949,28 @@ calBtn.style.cssText = 'width:100%;padding:10px;border-radius:10px;font-size:13p
 calBtn.textContent = '📅 Ajouter au calendrier';
 calBtn.onclick = function() { generateICS(a.name, t.type, t.nextDate); };
 btns.appendChild(calBtn);
+
 function generateICS(animalName, treatType, nextDate) {
-  const url = '/api/calendar?animal=' + encodeURIComponent(animalName)
-    + '&type=' + encodeURIComponent(treatType)
-    + '&date=' + encodeURIComponent(nextDate);
-  window.location.href = url;
-  showToast('Ouverture dans Calendrier… 📅');
+  const typeName = treatType === 'antipuces' ? 'Anti-puces / Tiques' : treatType === 'vermifuge' ? 'Vermifuge' : 'Vaccin';
+  const title = encodeURIComponent(animalName + ' — ' + typeName);
+  const desc = encodeURIComponent('Rappel VetID pour ' + animalName);
+  const date = nextDate.replace(/-/g, '');
+
+  const choice = confirm('Choisissez votre calendrier :\n\nOK → Google Calendar\nAnnuler → Calendrier Apple (iOS)');
+
+  if (choice) {
+    const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+      + '&text=' + title
+      + '&dates=' + date + 'T080000Z/' + date + 'T090000Z'
+      + '&details=' + desc;
+    window.open(url, '_blank');
+  } else {
+    window.location.href = '/api/calendar?animal='
+      + encodeURIComponent(animalName) + '&type=' + treatType + '&date=' + nextDate;
+  }
+  showToast('Ouverture du calendrier… 📅');
 }
+
 
       card.appendChild(top);
       card.appendChild(dates);
