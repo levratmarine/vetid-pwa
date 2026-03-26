@@ -960,7 +960,10 @@ calBtn.onclick = function() {
   showToast('Ouverture dans Google Calendar… 📅');
 };
 btns.appendChild(calBtn);
-
+const calNote = document.createElement('div');
+calNote.style.cssText = 'font-size:11px;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5';
+calNote.textContent = '📱 La synchronisation directe avec le calendrier de votre téléphone sera disponible en V2 !';
+card.appendChild(calNote);
 
       card.appendChild(top);
       card.appendChild(dates);
@@ -970,10 +973,7 @@ btns.appendChild(calBtn);
     });
   });
 }
-const calNote = document.createElement('div');
-calNote.style.cssText = 'font-size:11px;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5';
-calNote.textContent = '📱 La synchronisation directe avec le calendrier de votre téléphone sera disponible en V2 !';
-card.appendChild(calNote);
+
 
 
 function markDone(tid) {
