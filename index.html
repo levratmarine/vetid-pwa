@@ -954,7 +954,7 @@ calBtn.onclick = function() {
   const date = t.nextDate.replace(/-/g, '');
   const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
     + '&text=' + title
-    + '&dates=' + date + 'T080000Z/' + date + 'T090000Z'
++ '&dates=' + date + '/' + date
     + '&details=' + desc;
   window.open(url, '_blank');
   showToast('Ouverture dans Google Calendar… 📅');
@@ -970,6 +970,11 @@ btns.appendChild(calBtn);
     });
   });
 }
+const calNote = document.createElement('div');
+calNote.style.cssText = 'font-size:11px;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5';
+calNote.textContent = '📱 La synchronisation directe avec le calendrier de votre téléphone sera disponible en V2 !';
+card.appendChild(calNote);
+
 
 function markDone(tid) {
   const t = state.treatments.find(function(x) { return x.id === tid; });
