@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -10,6 +11,7 @@
 <link rel="manifest" href="/manifest.json">
 <title>VetID — Santé animale</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -44,106 +46,119 @@ onAuthStateChanged(auth, (user) => {
 });
 </script>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; }
-:root { --teal: #2A9D8F; --teal-light: #E1F5EE; --teal-dark: #1a6b60; --bg: #F8F9FA; --white: #FFFFFF; --text: #1a1a2e; --muted: #6B7280; --border: #E5E7EB; --green: #22c55e; --orange: #f97316; --red: #ef4444; }
-body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
-.screen { display: none; min-height: 100vh; flex-direction: column; }
-.screen.active { display: flex; }
-.btn-primary { background: var(--teal); color: #fff; border: none; border-radius: 14px; padding: 16px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: opacity .2s; }
-.btn-primary:active { opacity: .85; }
-.btn-ghost { background: transparent; color: var(--muted); border: none; font-size: 14px; cursor: pointer; padding: 8px; width: 100%; }
-.btn-outline { background: transparent; color: var(--teal); border: 1.5px solid var(--teal); border-radius: 14px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; }
-.field-input { border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; font-size: 16px; color: var(--text); outline: none; width: 100%; background: var(--white); transition: border-color .2s; }
-.field-input:focus { border-color: var(--teal); }
-.field-label { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 6px; display: block; }
-.form-row { display: flex; flex-direction: column; gap: 6px; }
-.section-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; margin-top: 16px; }
-.page-header { background: var(--teal); padding: 16px 20px; color: #fff; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.back-btn { font-size: 26px; cursor: pointer; line-height: 1; }
-.dash-header { background: var(--teal); padding: 20px 20px 24px; color: #fff; flex-shrink: 0; }
-.bottom-nav { height: 72px; background: var(--white); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-around; padding: 0 8px 8px; flex-shrink: 0; position: sticky; bottom: 0; }
-.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 8px 0; }
-.nav-icon { font-size: 22px; }
-.nav-label { font-size: 10px; color: var(--muted); font-weight: 500; }
-.nav-item.active .nav-label { color: var(--teal); }
-.animal-card { background: var(--white); border-radius: 16px; border: 1px solid var(--border); padding: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
-.animal-avatar { width: 52px; height: 52px; border-radius: 14px; background: var(--teal-light); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
-.badges { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
-.badge { font-size: 11px; padding: 3px 9px; border-radius: 8px; font-weight: 500; }
-.badge-green { background: #dcfce7; color: #166534; }
-.badge-orange { background: #fed7aa; color: #9a3412; }
-.badge-red { background: #fee2e2; color: #991b1b; }
-.fab { position: fixed; bottom: 90px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--teal); color: #fff; border: none; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(42,157,143,.4); z-index: 100; }
-.species-row { display: flex; gap: 8px; }
-.species-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 15px; font-weight: 500; cursor: pointer; background: var(--white); color: var(--muted); text-align: center; transition: all .2s; }
-.species-btn.active { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); }
-.toggle-row { display: flex; justify-content: space-between; align-items: center; }
-.toggle { width: 48px; height: 26px; border-radius: 13px; background: var(--border); position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; }
-.toggle.on { background: var(--teal); }
-.toggle::after { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: transform .2s; }
-.toggle.on::after { transform: translateX(22px); }
-.treat-card { background: var(--white); border-radius: 16px; border: 1px solid var(--border); padding: 14px; margin-bottom: 12px; }
-.treat-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.treat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-.status-badge { margin-left: auto; font-size: 11px; padding: 4px 10px; border-radius: 8px; font-weight: 500; }
-.treat-dates { display: flex; gap: 10px; margin-bottom: 10px; }
-.date-box { flex: 1; background: var(--bg); border-radius: 10px; padding: 9px 11px; }
-.date-label { font-size: 10px; color: var(--muted); font-weight: 500; text-transform: uppercase; }
-.date-val { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 2px; }
-.progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 12px; }
-.progress-fill { height: 100%; border-radius: 3px; }
-.notif-banner { background: var(--teal-light); border-radius: 12px; padding: 14px; margin-bottom: 16px; border-left: 4px solid var(--teal); }
-.notif-banner-title { font-size: 13px; font-weight: 600; color: var(--teal-dark); margin-bottom: 4px; }
-.notif-banner-text { font-size: 12px; color: var(--teal-dark); line-height: 1.6; }
-.cal-banner { background: #fef3c7; border-radius: 10px; padding: 8px 10px; font-size: 11px; color: #92400e; line-height: 1.5; text-align: center; margin-top: 8px; }
-.settings-group { background: var(--white); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 12px; }
-.settings-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
-.settings-row:last-child { border-bottom: none; }
-.settings-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.disabled-section { opacity: .45; pointer-events: none; }
-.coming-soon { background: #fef3c7; border-radius: 10px; padding: 10px 12px; font-size: 12px; color: #92400e; margin-bottom: 12px; line-height: 1.5; }
-.blog-article { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-.blog-thumb { width: 76px; height: 76px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0; }
-.sponsored-tag { font-size: 10px; background: #fef3c7; color: #92400e; padding: 2px 7px; border-radius: 6px; font-weight: 500; }
-.cat-pill { padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--muted); white-space: nowrap; flex-shrink: 0; }
-.cat-pill.active { background: var(--teal); color: #fff; border-color: var(--teal); }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; display: none; align-items: flex-end; }
-.modal-overlay.open { display: flex; }
-.modal-sheet { background: var(--white); border-radius: 24px 24px 0 0; padding: 20px; width: 100%; max-height: 88vh; overflow-y: auto; touch-action: pan-y; }
-.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 20px; cursor: grab; }
-.toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 14px; z-index: 300; opacity: 0; transition: opacity .3s; pointer-events: none; white-space: nowrap; }
-.toast.show { opacity: 1; }
-.onb-slide { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 32px; text-align: center; gap: 24px; opacity: 0; transition: opacity .4s; pointer-events: none; }
-.onb-slide.active { opacity: 1; pointer-events: all; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all .3s; }
-.dot.active { background: var(--teal); width: 24px; border-radius: 4px; }
-.tuto-step { display: flex; gap: 16px; padding: 16px; background: var(--bg); border-radius: 16px; margin-bottom: 12px; }
-.tuto-num { width: 36px; height: 36px; border-radius: 50%; background: var(--teal); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
-.os-tab { flex: 1; padding: 10px; border-radius: 12px; border: 2px solid var(--border); font-size: 14px; font-weight: 500; cursor: pointer; background: var(--white); color: var(--muted); text-align: center; }
-.os-tab.active { border-color: var(--teal); background: var(--teal-light); color: var(--teal-dark); }
-.os-content { display: none; }
-.os-content.active { display: block; }
-.tuto-visual { background: var(--teal-light); border-radius: 10px; padding: 10px 12px; margin-top: 8px; font-size: 13px; color: var(--teal-dark); line-height: 1.5; }
-.article-body { line-height: 1.8; font-size: 15px; color: var(--text); }
-.article-body h3 { font-size: 17px; font-weight: 700; margin: 20px 0 8px; color: var(--text); }
-.article-body p { margin-bottom: 12px; }
-.article-body ul { padding-left: 20px; margin-bottom: 12px; }
-.article-body li { margin-bottom: 6px; }
-.error-msg { color: var(--red); font-size: 13px; text-align: center; padding: 4px 0; display: none; }
-.error-msg.show { display: block; }
-.blog-preview-card { width: 120px; background: var(--white); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; cursor: pointer; flex-shrink: 0; }
-.blog-preview-img { height: 56px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-.blog-preview-info { padding: 6px; }
-@media (min-width: 480px) {
-  body { display: flex; justify-content: center; align-items: flex-start; background: #e8f5f3; min-height: 100vh; }
-  .screen { max-width: 430px; width: 100%; min-height: 100vh; box-shadow: 0 0 60px rgba(0,0,0,.12); }
-  .fab { right: calc(50% - 215px + 20px); }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
+:root{--teal:#2A9D8F;--teal-light:#E1F5EE;--teal-dark:#1a6b60;--bg:#F8F9FA;--white:#FFFFFF;--text:#1a1a2e;--muted:#6B7280;--border:#E5E7EB;--green:#22c55e;--orange:#f97316;--red:#ef4444}
+body{background:var(--bg);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+.btn-primary{background:var(--teal);color:#fff;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:600;cursor:pointer;width:100%;transition:opacity .2s}
+.btn-primary:active{opacity:.85}
+.btn-ghost{background:transparent;color:var(--muted);border:none;font-size:14px;cursor:pointer;padding:8px;width:100%}
+.btn-outline{background:transparent;color:var(--teal);border:1.5px solid var(--teal);border-radius:14px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;width:100%}
+.field-input{border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--text);outline:none;width:100%;background:var(--white);transition:border-color .2s}
+.field-input:focus{border-color:var(--teal)}
+.field-label{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block}
+.form-row{display:flex;flex-direction:column;gap:6px}
+.section-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;margin-top:16px}
+.page-header{background:var(--teal);padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.back-btn{font-size:26px;cursor:pointer;line-height:1}
+.dash-header{background:var(--teal);padding:20px 20px 24px;color:#fff;flex-shrink:0}
+.bottom-nav{height:72px;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 8px 8px;flex-shrink:0;position:sticky;bottom:0}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 0}
+.nav-icon{font-size:22px}
+.nav-label{font-size:10px;color:var(--muted);font-weight:500}
+.nav-item.active .nav-label{color:var(--teal)}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.dash-card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:14px;cursor:pointer;transition:transform .15s}
+.dash-card:active{transform:scale(.97)}
+.dash-card-icon{font-size:28px;margin-bottom:6px}
+.dash-card-title{font-size:14px;font-weight:600;color:var(--text)}
+.dash-card-sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+.dash-card-badge{font-size:10px;padding:3px 8px;border-radius:7px;font-weight:500;margin-top:6px;display:inline-block}
+.animal-section{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:14px}
+.animal-section-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.animal-avatar{width:44px;height:44px;border-radius:12px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.badges{display:flex;gap:4px;flex-wrap:wrap}
+.badge{font-size:11px;padding:3px 9px;border-radius:8px;font-weight:500}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-orange{background:#fed7aa;color:#9a3412}
+.badge-red{background:#fee2e2;color:#991b1b}
+.fab{position:fixed;bottom:90px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:100}
+.species-row{display:flex;gap:8px;flex-wrap:wrap}
+.species-btn{padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:14px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center;transition:all .2s}
+.species-btn.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark)}
+.toggle-row{display:flex;justify-content:space-between;align-items:center}
+.toggle{width:48px;height:26px;border-radius:13px;background:var(--border);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--teal)}
+.toggle::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s}
+.toggle.on::after{transform:translateX(22px)}
+.treat-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
+.treat-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.treat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.status-badge{margin-left:auto;font-size:11px;padding:4px 10px;border-radius:8px;font-weight:500}
+.treat-dates{display:flex;gap:10px;margin-bottom:10px}
+.date-box{flex:1;background:var(--bg);border-radius:10px;padding:9px 11px}
+.date-label{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase}
+.date-val{font-size:13px;font-weight:600;color:var(--text);margin-top:2px}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.progress-fill{height:100%;border-radius:3px}
+.notif-banner{background:var(--teal-light);border-radius:12px;padding:14px;margin-bottom:16px;border-left:4px solid var(--teal)}
+.notif-banner-title{font-size:13px;font-weight:600;color:var(--teal-dark);margin-bottom:4px}
+.notif-banner-text{font-size:12px;color:var(--teal-dark);line-height:1.6}
+.settings-group{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;margin-bottom:12px}
+.settings-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.settings-row:last-child{border-bottom:none}
+.settings-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.disabled-section{opacity:.45;pointer-events:none}
+.coming-soon{background:#fef3c7;border-radius:10px;padding:10px 12px;font-size:12px;color:#92400e;margin-bottom:12px;line-height:1.5}
+.blog-article{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.blog-thumb{width:76px;height:76px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
+.sponsored-tag{font-size:10px;background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:6px;font-weight:500}
+.cat-pill{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);white-space:nowrap;flex-shrink:0}
+.cat-pill.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
+.modal-overlay.open{display:flex}
+.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:88vh;overflow-y:auto;touch-action:pan-y}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;cursor:grab}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.onb-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center;gap:24px;opacity:0;transition:opacity .4s;pointer-events:none}
+.onb-slide.active{opacity:1;pointer-events:all}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s}
+.dot.active{background:var(--teal);width:24px;border-radius:4px}
+.tuto-step{display:flex;gap:16px;padding:16px;background:var(--bg);border-radius:16px;margin-bottom:12px}
+.tuto-num{width:36px;height:36px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.os-tab{flex:1;padding:10px;border-radius:12px;border:2px solid var(--border);font-size:14px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center}
+.os-tab.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark)}
+.os-content{display:none}
+.os-content.active{display:block}
+.tuto-visual{background:var(--teal-light);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:13px;color:var(--teal-dark);line-height:1.5}
+.article-body{line-height:1.8;font-size:15px;color:var(--text)}
+.article-body h3{font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--text)}
+.article-body p{margin-bottom:12px}
+.article-body ul{padding-left:20px;margin-bottom:12px}
+.article-body li{margin-bottom:6px}
+.error-msg{color:var(--red);font-size:13px;text-align:center;padding:4px 0;display:none}
+.error-msg.show{display:block}
+.blog-preview-card{width:120px;background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden;cursor:pointer;flex-shrink:0}
+.blog-preview-img{height:56px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.blog-preview-info{padding:6px}
+.vet-card{background:var(--teal-light);border-radius:12px;padding:14px;margin-bottom:12px}
+.vet-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(42,157,143,.15)}
+.vet-row:last-child{border-bottom:none}
+.weight-entry{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.croquette-card{background:#fef9ec;border-radius:12px;border:1px solid #fde68a;padding:14px;margin-bottom:10px}
+@media(min-width:480px){
+  body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
+  .screen{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.12)}
+  .fab{right:calc(50% - 215px + 20px)}
 }
 </style>
 </head>
 <body>
 
 <!-- ONBOARDING -->
+
 <div id="screen-onboarding" class="screen active">
   <div style="flex:1;background:var(--white);display:flex;flex-direction:column">
     <div style="flex:1;position:relative;overflow:hidden">
@@ -154,19 +169,17 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
       </div>
       <div class="onb-slide" id="slide-1">
         <div style="width:120px;height:120px;border-radius:36px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:56px">🔔</div>
-        <div style="font-size:26px;font-weight:700;color:var(--text)">Rappels intelligents</div>
-        <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:300px">Vaccins, vermifuges, anti-puces… VetID calcule les prochaines échéances et les affiche dans l'app.</div>
+        <div style="font-size:26px;font-weight:700;color:var(--text)">Tout au même endroit</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:300px">Soins, poids, croquettes, vétérinaire… VetID centralise toute la santé de votre animal.</div>
       </div>
       <div class="onb-slide" id="slide-2">
-        <div style="width:120px;height:120px;border-radius:36px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:56px">📖</div>
-        <div style="font-size:26px;font-weight:700;color:var(--text)">Contenu pédagogique</div>
-        <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:300px">Des articles de qualité sur la santé animale pour prendre les meilleures décisions pour votre compagnon.</div>
+        <div style="width:120px;height:120px;border-radius:36px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:56px">👥</div>
+        <div style="font-size:26px;font-weight:700;color:var(--text)">Une communauté arrive</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7;max-width:300px">Balades, magasins, conseils entre propriétaires… la communauté VetID arrive bientôt !</div>
       </div>
     </div>
     <div style="display:flex;gap:8px;justify-content:center;padding:16px 0">
-      <div class="dot active" id="dot-0"></div>
-      <div class="dot" id="dot-1"></div>
-      <div class="dot" id="dot-2"></div>
+      <div class="dot active" id="dot-0"></div><div class="dot" id="dot-1"></div><div class="dot" id="dot-2"></div>
     </div>
     <div style="padding:16px 24px 40px;display:flex;flex-direction:column;gap:12px">
       <button class="btn-primary" id="onb-btn" onclick="nextSlide()">Continuer</button>
@@ -176,6 +189,7 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
 </div>
 
 <!-- AUTH -->
+
 <div id="screen-auth" class="screen">
   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;background:var(--white)">
     <div style="text-align:center;padding:20px 0 4px">
@@ -184,81 +198,69 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
       <div style="font-size:14px;color:var(--muted);margin-top:4px">La santé de votre animal, simplifiée</div>
     </div>
     <div style="font-size:22px;font-weight:700;color:var(--text)" id="auth-title">Créer un compte</div>
-    <div id="prenom-group" class="form-row">
-      <label class="field-label">Prénom</label>
-      <input class="field-input" id="auth-prenom" type="text" placeholder="Sophie">
-    </div>
-    <div class="form-row">
-      <label class="field-label">Adresse email</label>
-      <input class="field-input" id="auth-email" type="email" placeholder="sophie@email.com">
-    </div>
+    <div id="prenom-group" class="form-row"><label class="field-label">Prénom</label><input class="field-input" id="auth-prenom" type="text" placeholder="Sophie"></div>
+    <div class="form-row"><label class="field-label">Adresse email</label><input class="field-input" id="auth-email" type="email" placeholder="sophie@email.com"></div>
     <div class="form-row">
       <label class="field-label">Mot de passe</label>
-<div style="position:relative">
-  <input class="field-input" id="auth-password" type="password" placeholder="•••••••• (6 caractères min.)" style="padding-right:48px">
-  <span onclick="togglePwd()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px" id="pwd-eye">👁</span>
-</div>    </div>
+      <div style="position:relative">
+        <input class="field-input" id="auth-password" type="password" placeholder="•••••••• (6 caractères min.)" style="padding-right:48px">
+        <span onclick="togglePwd()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px" id="pwd-eye">👁</span>
+      </div>
+    </div>
     <div class="error-msg" id="auth-error"></div>
     <div class="toggle-row" style="padding:4px 0">
       <div style="font-size:14px;color:var(--text)">Rester connecté</div>
       <div class="toggle on" id="stay-toggle" onclick="this.classList.toggle('on')"></div>
     </div>
     <button class="btn-primary" id="auth-btn" onclick="doAuth()">Créer mon compte</button>
-    <div style="text-align:center">
-      <span style="font-size:14px;color:var(--teal);cursor:pointer;font-weight:500;display:none" id="forgot-link" onclick="showScreen('forgot')">Mot de passe oublié ?</span>
-    </div>
-    <div style="text-align:center;font-size:14px;color:var(--muted)" id="auth-switch">
-      Déjà un compte ? <span style="color:var(--teal);font-weight:600;cursor:pointer" onclick="toggleAuth()">Se connecter</span>
-    </div>
-    <div style="text-align:center;font-size:11px;color:var(--muted);line-height:1.6">
-      En créant un compte, vous acceptez nos <span style="color:var(--teal);cursor:pointer" onclick="showScreen('privacy')">CGU</span> et notre <span style="color:var(--teal);cursor:pointer" onclick="showScreen('privacy')">politique de confidentialité</span>.
-    </div>
+    <div style="text-align:center"><span style="font-size:14px;color:var(--teal);cursor:pointer;font-weight:500;display:none" id="forgot-link" onclick="showScreen('forgot')">Mot de passe oublié ?</span></div>
+    <div style="text-align:center;font-size:14px;color:var(--muted)" id="auth-switch">Déjà un compte ? <span style="color:var(--teal);font-weight:600;cursor:pointer" onclick="toggleAuth()">Se connecter</span></div>
+    <div style="text-align:center;font-size:11px;color:var(--muted);line-height:1.6">En créant un compte, vous acceptez nos <span style="color:var(--teal);cursor:pointer" onclick="showScreen('privacy')">CGU</span> et notre <span style="color:var(--teal);cursor:pointer" onclick="showScreen('privacy')">politique de confidentialité</span>.</div>
   </div>
 </div>
 
 <!-- MOT DE PASSE OUBLIÉ -->
+
 <div id="screen-forgot" class="screen">
   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:16px;background:var(--white)">
     <div style="text-align:center;padding:20px 0">
       <div style="font-size:48px">🔑</div>
       <div style="font-size:22px;font-weight:700;color:var(--text);margin-top:12px">Mot de passe oublié</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6">Entrez votre email et nous vous enverrons un lien pour réinitialiser votre mot de passe.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6">Entrez votre email pour recevoir un lien de réinitialisation.</div>
     </div>
-    <div class="form-row">
-      <label class="field-label">Adresse email</label>
-      <input class="field-input" id="forgot-email" type="email" placeholder="sophie@email.com">
-    </div>
+    <div class="form-row"><label class="field-label">Adresse email</label><input class="field-input" id="forgot-email" type="email" placeholder="sophie@email.com"></div>
     <div class="error-msg" id="forgot-error"></div>
     <button class="btn-primary" onclick="doResetPassword()">Envoyer le lien</button>
     <button class="btn-ghost" onclick="showScreen('auth')">Retour à la connexion</button>
   </div>
 </div>
 
-<!-- TUTO INSTALL -->
+<!-- TUTO -->
+
 <div id="screen-tuto" class="screen">
   <div style="background:var(--teal);padding:20px;color:#fff;flex-shrink:0">
     <div style="font-size:20px;font-weight:700">📲 Installer VetID</div>
-    <div style="font-size:13px;opacity:.85;margin-top:4px">Pour une expérience optimale, comme une vraie app</div>
+    <div style="font-size:13px;opacity:.85;margin-top:4px">Pour une expérience optimale</div>
   </div>
   <div style="flex:1;padding:20px;overflow-y:auto;background:var(--white)">
     <div style="background:var(--teal-light);border-radius:16px;padding:16px;margin-bottom:20px;text-align:center">
       <div style="font-size:15px;font-weight:600;color:var(--teal-dark);margin-bottom:6px">VetID fonctionne comme une vraie app !</div>
-      <div style="font-size:13px;color:var(--teal-dark);line-height:1.6">Ajoutez-la à votre écran d'accueil pour l'ouvrir en plein écran, sans barre de navigateur.</div>
+      <div style="font-size:13px;color:var(--teal-dark);line-height:1.6">Ajoutez-la à votre écran d'accueil pour l'ouvrir en plein écran.</div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:20px">
-      <div class="os-tab active" onclick="switchOS('ios',this)">📱 iPhone (iOS)</div>
+      <div class="os-tab active" onclick="switchOS('ios',this)">📱 iPhone</div>
       <div class="os-tab" onclick="switchOS('android',this)">🤖 Android</div>
     </div>
     <div class="os-content active" id="os-ios">
-      <div class="tuto-step"><div class="tuto-num">1</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Ouvrez dans Safari</strong><span style="font-size:13px;color:var(--muted)">VetID doit être ouvert dans Safari, pas Chrome.</span></div></div>
-      <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur les 3 petits points •••</strong><span style="font-size:13px;color:var(--muted)">En bas à droite de Safari.</span><div class="tuto-visual">⬤ ⬤ ⬤ &nbsp; Barre du bas de Safari</div></div></div>
-      <div class="tuto-step"><div class="tuto-num">3</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Partager" ↑</strong><div class="tuto-visual">↑ Partager</div></div></div>
-      <div class="tuto-step"><div class="tuto-num">4</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Plus" puis "Sur l'écran d'accueil"</strong><div class="tuto-visual">⊕ Sur l'écran d'accueil</div></div></div>
-      <div class="tuto-step"><div class="tuto-num">5</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter"</strong><div class="tuto-visual">✅ L'icône 🐾 apparaît sur votre écran d'accueil !</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">1</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Ouvrez dans Safari</strong></div></div>
+      <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur ••• en bas à droite</strong><div class="tuto-visual">⬤ ⬤ ⬤ Barre du bas</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">3</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Partager" ↑</strong></div></div>
+      <div class="tuto-step"><div class="tuto-num">4</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">"Plus" → "Sur l'écran d'accueil"</strong><div class="tuto-visual">⊕ Sur l'écran d'accueil</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">5</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter"</strong><div class="tuto-visual">✅ L'icône 🐾 apparaît !</div></div></div>
     </div>
     <div class="os-content" id="os-android">
       <div class="tuto-step"><div class="tuto-num">1</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Ouvrez dans Chrome</strong></div></div>
-      <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur ⋮ puis "Ajouter à l'écran d'accueil"</strong><div class="tuto-visual">📲 L'icône VetID 🐾 s'installe automatiquement</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">⋮ → "Ajouter à l'écran d'accueil"</strong><div class="tuto-visual">📲 L'icône 🐾 s'installe</div></div></div>
     </div>
     <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
       <button class="btn-primary" onclick="doneTuto()">J'ai installé VetID ✓</button>
@@ -268,6 +270,7 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
 </div>
 
 <!-- DASHBOARD -->
+
 <div id="screen-dashboard" class="screen">
   <div class="dash-header">
     <div id="dash-greeting" style="font-size:14px;opacity:.85">Bonjour 👋</div>
@@ -277,53 +280,88 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
     <div id="empty-state" style="text-align:center;padding:48px 24px;color:var(--muted)">
       <div style="font-size:48px;margin-bottom:16px">🐾</div>
       <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Aucun animal pour l'instant</div>
-      <div style="font-size:14px;line-height:1.6">Ajoutez votre premier compagnon en appuyant sur le bouton + ci-dessous</div>
+      <div style="font-size:14px;line-height:1.6">Ajoutez votre premier compagnon en appuyant sur + ci-dessous</div>
     </div>
     <div id="animals-list"></div>
-    <div id="blog-preview">
+    <div id="blog-preview" style="display:none">
       <div class="section-title">Derniers articles</div>
-      <div id="blog-preview-list" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px">
-        <div class="blog-preview-card"><div class="blog-preview-img" style="background:var(--teal-light)">⏳</div><div class="blog-preview-info"><div style="font-size:10px;color:var(--muted)">Chargement…</div></div></div>
-      </div>
+      <div id="blog-preview-list" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px"></div>
     </div>
   </div>
   <button class="fab" onclick="openAddAnimal()">+</button>
   <div class="bottom-nav">
-    <div class="nav-item active" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item" onclick="goToTab('treat')"><div class="nav-icon">💊</div><div class="nav-label">Traitements</div></div>
-    <div class="nav-item" onclick="goToTab('blog')"><div class="nav-icon">📖</div><div class="nav-label">Blog</div></div>
-    <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
+    <div class="nav-item active" id="nav-home" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+    <div class="nav-item" id="nav-community" onclick="goToTab('community')"><div class="nav-icon">👥</div><div class="nav-label">Communauté</div></div>
+    <div class="nav-item" id="nav-settings" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
   </div>
 </div>
 
-<!-- TRAITEMENTS -->
-<div id="screen-treat" class="screen">
-  <div class="dash-header">
-    <div style="font-size:22px;font-weight:700">Traitements</div>
-    <div style="font-size:14px;opacity:.85;margin-top:2px">Suivi de vos animaux</div>
+<!-- SOINS -->
+
+<div id="screen-soins" class="screen">
+  <div class="page-header">
+    <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
+    <div><div id="soins-title" style="font-size:18px;font-weight:700">Soins</div><div style="font-size:12px;opacity:.8">Traitements & rappels</div></div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:16px">
     <div class="notif-banner">
       <div class="notif-banner-title">🔔 À propos des notifications</div>
-      <div class="notif-banner-text">Vous testez actuellement la version bêta de la future application. Il n'est donc pas possible de vous envoyer des notifications push ou de faire figurer des pastilles pour le moment. Cette option sera disponible dans la prochaine version.</div>
+      <div class="notif-banner-text">Vous testez la version bêta. Les notifications push arrivent en V2 !</div>
     </div>
-    <div id="treat-list"></div>
+    <div id="soins-list"></div>
   </div>
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item active"><div class="nav-icon">💊</div><div class="nav-label">Traitements</div></div>
-    <div class="nav-item" onclick="goToTab('blog')"><div class="nav-icon">📖</div><div class="nav-label">Blog</div></div>
-    <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
+</div>
+
+<!-- POIDS -->
+
+<div id="screen-poids" class="screen">
+  <div class="page-header">
+    <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
+    <div><div id="poids-title" style="font-size:18px;font-weight:700">Suivi du poids</div></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:16px">
+    <div style="background:var(--white);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:16px">
+      <canvas id="weightChart" height="200"></canvas>
+    </div>
+    <div id="weight-list"></div>
+    <button class="btn-primary" onclick="openAddWeight()" style="margin-top:8px">+ Ajouter une mesure</button>
+  </div>
+</div>
+
+<!-- CROQUETTES -->
+
+<div id="screen-croquettes" class="screen">
+  <div class="page-header">
+    <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
+    <div><div id="croquettes-title" style="font-size:18px;font-weight:700">Croquettes</div></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:16px">
+    <div id="croquettes-list"></div>
+    <button class="btn-primary" onclick="openAddCroquette()" style="margin-top:8px">+ Ajouter une commande</button>
+  </div>
+</div>
+
+<!-- VÉTÉRINAIRE -->
+
+<div id="screen-vet" class="screen">
+  <div class="page-header">
+    <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
+    <div><div id="vet-title" style="font-size:18px;font-weight:700">Mon vétérinaire</div></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:16px">
+    <div id="vet-content"></div>
+    <button class="btn-primary" onclick="openEditVet()" id="vet-edit-btn">✏️ Modifier les coordonnées</button>
   </div>
 </div>
 
 <!-- BLOG -->
+
 <div id="screen-blog" class="screen">
   <div class="dash-header">
     <div style="font-size:22px;font-weight:700">Blog santé</div>
     <div style="background:rgba(255,255,255,.2);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;margin-top:12px;color:rgba(255,255,255,.8);font-size:14px">🔍 Rechercher un article...</div>
   </div>
-  <div style="display:flex;gap:8px;padding:14px 16px 0;overflow-x:auto">
+  <div style="display:flex;gap:8px;padding:14px 16px 0;overflow-x:auto;flex-shrink:0">
     <div class="cat-pill active" onclick="filterBlog('',this)">Tous</div>
     <div class="cat-pill" onclick="filterBlog('Santé',this)">Santé</div>
     <div class="cat-pill" onclick="filterBlog('Nutrition',this)">Nutrition</div>
@@ -331,66 +369,102 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
     <div class="cat-pill" onclick="filterBlog('Conseils',this)">Conseils</div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:12px 16px" id="blog-list">
-    <div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Chargement des articles…</div>
+    <div style="text-align:center;padding:40px;color:var(--muted)">Chargement…</div>
   </div>
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item" onclick="goToTab('treat')"><div class="nav-icon">💊</div><div class="nav-label">Traitements</div></div>
-    <div class="nav-item active"><div class="nav-icon">📖</div><div class="nav-label">Blog</div></div>
-    <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
+  <div style="padding:12px 16px;flex-shrink:0">
+    <button class="btn-ghost" onclick="showScreen('dashboard')" style="color:var(--teal)">‹ Retour à l'accueil</button>
   </div>
 </div>
 
 <!-- ARTICLE -->
+
 <div id="screen-article" class="screen">
   <div class="page-header">
-    <div class="back-btn" onclick="goToTab('blog')">‹</div>
-    <div style="flex:1">
-      <div id="article-cat" style="font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.5px"></div>
-      <div id="article-title-header" style="font-size:16px;font-weight:700"></div>
-    </div>
+    <div class="back-btn" onclick="showScreen('blog')">‹</div>
+    <div style="flex:1"><div id="article-cat" style="font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.5px"></div><div id="article-title-header" style="font-size:16px;font-weight:700"></div></div>
   </div>
   <div style="flex:1;overflow-y:auto">
     <div style="padding:20px 20px 8px;display:flex;align-items:center;gap:12px">
       <div id="article-emoji" style="font-size:36px"></div>
-      <div>
-        <div id="article-title-big" style="font-size:20px;font-weight:700;color:var(--text)"></div>
-        <div id="article-meta" style="font-size:12px;color:var(--muted);margin-top:4px"></div>
-      </div>
+      <div><div id="article-title-big" style="font-size:20px;font-weight:700;color:var(--text)"></div><div id="article-meta" style="font-size:12px;color:var(--muted);margin-top:4px"></div></div>
     </div>
     <div class="article-body" style="padding:0 20px 40px" id="article-content"></div>
   </div>
 </div>
 
-<!-- REGLAGES -->
-<div id="screen-settings" class="screen">
+<!-- COMMUNAUTÉ -->
+
+<div id="screen-community" class="screen">
   <div class="dash-header">
-    <div style="font-size:22px;font-weight:700">Réglages</div>
-    <div id="settings-email" style="font-size:13px;opacity:.8;margin-top:2px"></div>
+    <div style="font-size:22px;font-weight:700">Communauté</div>
+    <div style="font-size:14px;opacity:.85;margin-top:2px">Bientôt disponible</div>
   </div>
+  <div style="flex:1;overflow-y:auto;padding:20px">
+    <div style="text-align:center;padding:24px 0 20px">
+      <div style="font-size:64px;margin-bottom:16px">👥</div>
+      <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">La communauté VetID arrive !</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7">En tant que bêta-testeur, vous serez parmi les premiers à y accéder.</div>
+    </div>
+    <div style="background:var(--white);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:16px">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px">Ce qui vous attend en V2 :</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:20px">🗺️</span><div><div style="font-size:14px;font-weight:500;color:var(--text)">Balades & spots</div><div style="font-size:12px;color:var(--muted)">Randonnées et parcs adaptés aux animaux près de chez vous</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:20px">🏪</span><div><div style="font-size:14px;font-weight:500;color:var(--text)">Magasins & services</div><div style="font-size:12px;color:var(--muted)">Toiletteurs, animaleries, vétérinaires recommandés</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:20px">💬</span><div><div style="font-size:14px;font-weight:500;color:var(--text)">Échanges entre propriétaires</div><div style="font-size:12px;color:var(--muted)">Conseils, questions, partage d'expériences</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:20px">🎉</span><div><div style="font-size:14px;font-weight:500;color:var(--text)">Événements & activités</div><div style="font-size:12px;color:var(--muted)">Expos, adoptions, journées bien-être pour animaux</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:20px">🤝</span><div><div style="font-size:14px;font-weight:500;color:var(--text)">Pet-sitting & garderie</div><div style="font-size:12px;color:var(--muted)">Trouvez des gardiens de confiance autour de vous</div></div></div>
+      </div>
+    </div>
+    <div style="background:var(--teal-light);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center">
+      <div style="font-size:14px;font-weight:600;color:var(--teal-dark);margin-bottom:6px">Vous avez des idées ?</div>
+      <div style="font-size:13px;color:var(--teal-dark);margin-bottom:12px;line-height:1.5">Dites-nous ce que vous aimeriez trouver dans la communauté VetID !</div>
+      <button onclick="openCommunityFeedback()" style="background:var(--teal);color:#fff;border:none;border-radius:12px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;width:100%">💡 Partager mes idées</button>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+    <div class="nav-item active"><div class="nav-icon">👥</div><div class="nav-label">Communauté</div></div>
+    <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
+  </div>
+</div>
+
+<!-- RÉGLAGES -->
+
+<div id="screen-settings" class="screen">
+  <div class="dash-header"><div style="font-size:22px;font-weight:700">Réglages</div><div id="settings-email" style="font-size:13px;opacity:.8;margin-top:2px"></div></div>
   <div style="flex:1;overflow-y:auto;padding:16px">
     <div class="section-title">Mon compte</div>
     <div class="settings-group">
       <div class="settings-row" style="cursor:default">
         <div class="settings-icon" style="background:var(--teal-light)">👤</div>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:500;color:var(--text)" id="settings-name"></div>
-          <div style="font-size:12px;color:var(--muted)" id="settings-mail-display"></div>
-        </div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)" id="settings-name"></div><div style="font-size:12px;color:var(--muted)" id="settings-mail-display"></div></div>
+      </div>
+    </div>
+    <div class="section-title">Nous suivre</div>
+    <div class="settings-group">
+      <div class="settings-row" onclick="window.open('https://www.instagram.com/vetid.app','_blank')">
+        <div class="settings-icon" style="background:#fce7f3">📸</div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)">Instagram @vetid.app</div><div style="font-size:12px;color:var(--muted)">Suivez nos actualités</div></div>
+        <span style="color:var(--muted)">›</span>
       </div>
     </div>
     <div class="section-title">Partage</div>
     <div class="settings-group disabled-section">
       <div class="settings-row">
         <div class="settings-icon" style="background:#f3f4f6">👥</div>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:500;color:var(--muted)">Partager avec un proche</div>
-          <div style="font-size:12px;color:var(--muted)">Invitez votre conjoint(e)</div>
-        </div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--muted)">Partager avec un proche</div><div style="font-size:12px;color:var(--muted)">Invitez votre conjoint(e)</div></div>
         <span style="color:var(--border)">›</span>
       </div>
     </div>
-    <div class="coming-soon">👥 Le partage avec un proche arrive en V2 de VetID. En tant que bêta-testeur, vous serez parmi les premiers à en profiter !</div>
+    <div class="coming-soon">👥 Le partage avec un proche arrive en V2 !</div>
+    <div class="section-title">Nous contacter</div>
+    <div class="settings-group">
+      <div class="settings-row" onclick="openFeedback()">
+        <div class="settings-icon" style="background:var(--teal-light)">💬</div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)">Envoyer un retour</div><div style="font-size:12px;color:var(--muted)">Votre avis nous aide à améliorer VetID</div></div>
+        <span style="color:var(--muted)">›</span>
+      </div>
+    </div>
     <div class="section-title">Confidentialité & RGPD</div>
     <div class="settings-group">
       <div class="settings-row" onclick="showScreen('privacy')">
@@ -400,58 +474,35 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
       </div>
       <div class="settings-row" onclick="exportData()">
         <div class="settings-icon" style="background:#E6F1FB">📦</div>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:500;color:var(--text)">Exporter mes données</div>
-          <div style="font-size:12px;color:var(--muted)">Droit à la portabilité (RGPD)</div>
-        </div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)">Exporter mes données</div><div style="font-size:12px;color:var(--muted)">Droit à la portabilité (RGPD)</div></div>
         <span style="color:var(--muted)">›</span>
       </div>
       <div class="settings-row" onclick="deleteAccount()">
         <div class="settings-icon" style="background:#fee2e2">🗑</div>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:500;color:var(--red)">Supprimer mon compte</div>
-          <div style="font-size:12px;color:var(--muted)">Suppression définitive</div>
-        </div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--red)">Supprimer mon compte</div><div style="font-size:12px;color:var(--muted)">Suppression définitive</div></div>
         <span style="color:var(--red)">›</span>
       </div>
     </div>
-   <div class="section-title">Nous contacter</div>
-<div class="settings-group">
-  <div class="settings-row" onclick="openFeedback()">
-    <div class="settings-icon" style="background:#E1F5EE">💬</div>
-    <div style="flex:1">
-      <div style="font-size:15px;font-weight:500;color:var(--text)">Envoyer un retour</div>
-      <div style="font-size:12px;color:var(--muted)">Votre avis nous aide à améliorer VetID</div>
-    </div>
-    <span style="color:var(--muted)">›</span>
-  </div>
-</div>
-<div class="section-title">Version</div>
+    <div class="section-title">Version</div>
     <div class="settings-group">
       <div class="settings-row" style="cursor:default">
         <div class="settings-icon" style="background:var(--teal-light)">🐾</div>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:500;color:var(--text)">VetID V1 — Bêta</div>
-          <div style="font-size:12px;color:var(--muted)">Version de test — vos retours comptent !</div>
-        </div>
+        <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--text)">VetID V1 — Bêta</div><div style="font-size:12px;color:var(--muted)">Version de test — vos retours comptent !</div></div>
       </div>
     </div>
     <button class="btn-outline" style="margin-top:8px;margin-bottom:32px" onclick="logout()">Se déconnecter</button>
   </div>
   <div class="bottom-nav">
     <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item" onclick="goToTab('treat')"><div class="nav-icon">💊</div><div class="nav-label">Traitements</div></div>
-    <div class="nav-item" onclick="goToTab('blog')"><div class="nav-icon">📖</div><div class="nav-label">Blog</div></div>
+    <div class="nav-item" onclick="goToTab('community')"><div class="nav-icon">👥</div><div class="nav-label">Communauté</div></div>
     <div class="nav-item active"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
   </div>
 </div>
 
 <!-- PRIVACY -->
+
 <div id="screen-privacy" class="screen">
-  <div class="page-header">
-    <div class="back-btn" onclick="showScreen('settings')">‹</div>
-    <div style="font-size:18px;font-weight:700">Politique de confidentialité</div>
-  </div>
+  <div class="page-header"><div class="back-btn" onclick="showScreen('settings')">‹</div><div style="font-size:18px;font-weight:700">Politique de confidentialité</div></div>
   <div style="flex:1;overflow-y:auto;padding:20px;font-size:14px;line-height:1.8;color:var(--text)">
     <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Dernière mise à jour : juin 2026</p>
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">1. Qui sommes-nous ?</h2>
@@ -459,22 +510,41 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">2. Données collectées</h2>
     <p style="margin-bottom:12px;color:var(--muted)">Nous collectons votre prénom, email et mot de passe (chiffré) via Firebase. Les données de vos animaux sont stockées localement sur votre appareil.</p>
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">3. Utilisation</h2>
-    <p style="margin-bottom:12px;color:var(--muted)">Votre email est utilisé uniquement pour l'authentification et les communications liées au programme bêta. Il ne sera jamais vendu ni transmis à des tiers.</p>
+    <p style="margin-bottom:12px;color:var(--muted)">Votre email est utilisé uniquement pour l'authentification et les communications bêta. Il ne sera jamais vendu ni transmis à des tiers.</p>
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">4. Vos droits (RGPD)</h2>
-    <p style="margin-bottom:12px;color:var(--muted)">Vous disposez des droits d'accès, rectification, effacement et portabilité. Pour exercer ces droits, utilisez les options dans Réglages.</p>
+    <p style="margin-bottom:12px;color:var(--muted)">Vous disposez des droits d'accès, rectification, effacement et portabilité. Utilisez les options dans Réglages.</p>
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">5. Sécurité</h2>
     <p style="margin-bottom:12px;color:var(--muted)">Votre mot de passe est chiffré par Firebase. Les données animaux restent sur votre appareil.</p>
   </div>
 </div>
 
 <!-- MODAL ANIMAL -->
+
 <div class="modal-overlay" id="modal-animal">
   <div class="modal-sheet" id="sheet-animal">
     <div class="modal-handle" id="handle-animal"></div>
     <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px" id="modal-animal-title">🐾 Ajouter un animal</div>
     <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="form-row">
+        <label class="field-label">Emoji de l'animal</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span id="emoji-preview" style="font-size:40px;margin-right:8px">🐶</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐶')">🐶</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐱')">🐱</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐈⬛')">🐈⬛</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐩')">🐩</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🦮')">🦮</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐕')">🐕</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐈')">🐈</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐇')">🐇</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐾')">🐾</span>
+            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🦜')">🦜</span>
+          </div>
+        </div>
+      </div>
       <div class="form-row"><label class="field-label">Nom</label><input class="field-input" id="a-name" type="text" placeholder="Milo"></div>
-      <div class="form-row"><label class="field-label">Espèce</label><div class="species-row"><div class="species-btn active" id="sp-dog" onclick="selectSpecies('dog')">🐶 Chien</div><div class="species-btn" id="sp-cat" onclick="selectSpecies('cat')">🐱 Chat</div></div></div>
+      <div class="form-row"><label class="field-label">Espèce</label><div class="species-row"><div class="species-btn active" id="sp-dog" onclick="selectSpecies('dog')">🐶 Chien</div><div class="species-btn" id="sp-cat" onclick="selectSpecies('cat')">🐱 Chat</div><div class="species-btn" id="sp-other" onclick="selectSpecies('other')">🐾 Autre</div></div></div>
       <div class="form-row"><label class="field-label">Race</label><input class="field-input" id="a-breed" type="text" placeholder="Labrador Retriever"></div>
       <div class="form-row"><label class="field-label">Date de naissance</label><input class="field-input" id="a-birth" type="date"></div>
       <div class="form-row"><label class="field-label">Sexe</label><div class="species-row"><div class="species-btn active" id="sx-m" onclick="selectSex('m')">♂ Mâle</div><div class="species-btn" id="sx-f" onclick="selectSex('f')">♀ Femelle</div></div></div>
@@ -482,7 +552,8 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
       <div class="form-row"><label class="field-label">Identification</label><div class="species-row"><div class="species-btn active" id="id-puce" onclick="selectIdType('puce')">📡 Puce</div><div class="species-btn" id="id-tat" onclick="selectIdType('tatouage')">🖊 Tatouage</div></div></div>
       <div class="form-row">
         <label class="field-label">Numéro d'identification</label>
-<input class="field-input" id="a-idnum" type="tel" placeholder="250268731456789" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'')">        <div style="font-size:11px;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 10px;line-height:1.5;margin-top:4px">Le numéro de puce (15 chiffres) se trouve sur le carnet de santé ou auprès de votre vétérinaire.</div>
+        <input class="field-input" id="a-idnum" type="tel" placeholder="250268731456789" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        <div style="font-size:11px;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 10px;line-height:1.5;margin-top:4px">15 chiffres — sur le carnet de santé ou auprès de votre vétérinaire.</div>
       </div>
       <button class="btn-primary" onclick="saveAnimal()">Enregistrer</button>
       <button class="btn-ghost" onclick="closeModal('modal-animal')">Annuler</button>
@@ -490,25 +561,27 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
   </div>
 </div>
 
-<!-- MODAL TRAITEMENT -->
-<div class="modal-overlay" id="modal-treat">
-  <div class="modal-sheet" id="sheet-treat">
-    <div class="modal-handle" id="handle-treat"></div>
-    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">💊 Ajouter un traitement</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:20px" id="modal-treat-animal"></div>
+<!-- MODAL SOINS -->
+
+<div class="modal-overlay" id="modal-soin">
+  <div class="modal-sheet" id="sheet-soin">
+    <div class="modal-handle" id="handle-soin"></div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">💊 Ajouter un soin</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px" id="modal-soin-animal"></div>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div class="form-row">
         <label class="field-label">Type</label>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <div class="species-btn active" id="tt-antipuces" onclick="selectTreatType('antipuces')" style="flex:none;padding:10px 16px">🦟 Anti-puces</div>
-          <div class="species-btn" id="tt-vermifuge" onclick="selectTreatType('vermifuge')" style="flex:none;padding:10px 16px">💊 Vermifuge</div>
-          <div class="species-btn" id="tt-vaccin" onclick="selectTreatType('vaccin')" style="flex:none;padding:10px 16px">💉 Vaccin</div>
+          <div class="species-btn active" id="tt-antipuces" onclick="selectTreatType('antipuces')" style="flex:none;padding:10px 14px">🦟 Anti-puces</div>
+          <div class="species-btn" id="tt-vermifuge" onclick="selectTreatType('vermifuge')" style="flex:none;padding:10px 14px">💊 Vermifuge</div>
+          <div class="species-btn" id="tt-vaccin" onclick="selectTreatType('vaccin')" style="flex:none;padding:10px 14px">💉 Vaccin</div>
+          <div class="species-btn" id="tt-autre" onclick="selectTreatType('autre')" style="flex:none;padding:10px 14px">➕ Autre</div>
         </div>
       </div>
+      <div class="form-row" id="autre-name-group" style="display:none"><label class="field-label">Nom du traitement</label><input class="field-input" id="t-autre-name" type="text" placeholder="Ex: Antibiotique, Vermifuge spécial…"></div>
       <div class="form-row"><label class="field-label">Nom du produit (optionnel)</label><input class="field-input" id="t-product" type="text" placeholder="Ex: Frontline, Milbemax…"></div>
       <div class="form-row"><label class="field-label">Date de la dernière prise</label><input class="field-input" id="t-lastdate" type="date"></div>
-      <div class="form-row">
-        <label class="field-label">Fréquence</label>
+      <div class="form-row"><label class="field-label">Fréquence</label>
         <select class="field-input" id="t-freq">
           <option value="1">Tous les mois</option>
           <option value="3" selected>Tous les 3 mois</option>
@@ -516,92 +589,116 @@ body { background: var(--bg); min-height: 100vh; overflow-x: hidden; }
           <option value="12">Tous les ans</option>
         </select>
       </div>
-      <div class="notif-banner">
-        <div class="notif-banner-title">🔔 À propos des notifications</div>
-        <div class="notif-banner-text">Vous testez la version bêta. Les notifications push arrivent en V2 !</div>
+      <div class="notif-banner" style="margin-bottom:0">
+        <div class="notif-banner-title">🔔 Notifications en V2</div>
+        <div class="notif-banner-text">Les rappels automatiques arrivent dans la prochaine version !</div>
       </div>
       <button class="btn-primary" onclick="saveTreatment()">Enregistrer</button>
-      <button class="btn-ghost" onclick="closeModal('modal-treat')">Annuler</button>
+      <button class="btn-ghost" onclick="closeModal('modal-soin')">Annuler</button>
     </div>
   </div>
 </div>
+
+<!-- MODAL POIDS -->
+
+<div class="modal-overlay" id="modal-poids">
+  <div class="modal-sheet" id="sheet-poids">
+    <div class="modal-handle" id="handle-poids"></div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px">⚖️ Ajouter une mesure</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="form-row"><label class="field-label">Poids (kg)</label><input class="field-input" id="w-value" type="number" step="0.1" placeholder="12.4"></div>
+      <div class="form-row"><label class="field-label">Date</label><input class="field-input" id="w-date" type="date"></div>
+      <div class="form-row"><label class="field-label">Notes (optionnel)</label><input class="field-input" id="w-notes" type="text" placeholder="Visite vétérinaire, pesée à domicile…"></div>
+      <button class="btn-primary" onclick="saveWeight()">Enregistrer</button>
+      <button class="btn-ghost" onclick="closeModal('modal-poids')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CROQUETTES -->
+
+<div class="modal-overlay" id="modal-croquette">
+  <div class="modal-sheet" id="sheet-croquette">
+    <div class="modal-handle" id="handle-croquette"></div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px">🍗 Ajouter une commande</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="form-row"><label class="field-label">Marque</label><input class="field-input" id="c-brand" type="text" placeholder="Royal Canin"></div>
+      <div class="form-row"><label class="field-label">Nom du produit</label><input class="field-input" id="c-product" type="text" placeholder="Medium Adult 15kg"></div>
+      <div class="form-row"><label class="field-label">Quantité (kg)</label><input class="field-input" id="c-qty" type="number" step="0.5" placeholder="10"></div>
+      <div class="form-row"><label class="field-label">Date d'achat</label><input class="field-input" id="c-date" type="date"></div>
+      <div class="form-row"><label class="field-label">Rappel dans (jours)</label><input class="field-input" id="c-reminder" type="number" placeholder="30"></div>
+      <button class="btn-primary" onclick="saveCroquette()">Enregistrer</button>
+      <button class="btn-ghost" onclick="closeModal('modal-croquette')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VÉTÉRINAIRE -->
+
+<div class="modal-overlay" id="modal-vet">
+  <div class="modal-sheet" id="sheet-vet">
+    <div class="modal-handle" id="handle-vet"></div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px">🏥 Coordonnées vétérinaire</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="form-row"><label class="field-label">Nom du vétérinaire</label><input class="field-input" id="v-name" type="text" placeholder="Dr Martin"></div>
+      <div class="form-row"><label class="field-label">Nom de la clinique</label><input class="field-input" id="v-clinic" type="text" placeholder="Clinique Vétérinaire du Parc"></div>
+      <div class="form-row"><label class="field-label">Adresse</label><input class="field-input" id="v-address" type="text" placeholder="12 rue des Lilas, 75001 Paris"></div>
+      <div class="form-row"><label class="field-label">Téléphone</label><input class="field-input" id="v-phone" type="tel" placeholder="01 23 45 67 89"></div>
+      <div class="form-row"><label class="field-label">Email</label><input class="field-input" id="v-email" type="email" placeholder="contact@clinique.fr"></div>
+      <button class="btn-primary" onclick="saveVet()">Enregistrer</button>
+      <button class="btn-ghost" onclick="closeModal('modal-vet')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FEEDBACK -->
+
 <div class="modal-overlay" id="modal-feedback">
   <div class="modal-sheet" id="sheet-feedback">
     <div class="modal-handle" id="handle-feedback"></div>
-    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">💬 Envoyer un retour</div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px" id="feedback-title">💬 Envoyer un retour</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Votre avis nous aide à améliorer VetID !</div>
     <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="form-row">
-        <label class="field-label">Votre message</label>
-        <textarea class="field-input" id="feedback-msg" rows="5" placeholder="Dites-nous ce que vous pensez, ce qui manque, ce qui est bien…" style="resize:none;line-height:1.5"></textarea>
-      </div>
-      <div id="feedback-success" style="display:none;background:var(--teal-light);border-radius:10px;padding:12px;font-size:13px;color:var(--teal-dark);text-align:center">
-        ✅ Merci pour votre retour ! Nous vous lisons avec attention.
-      </div>
+      <div class="form-row"><label class="field-label">Votre message</label><textarea class="field-input" id="feedback-msg" rows="5" placeholder="Dites-nous ce que vous pensez…" style="resize:none;line-height:1.5"></textarea></div>
+      <div id="feedback-success" style="display:none;background:var(--teal-light);border-radius:10px;padding:12px;font-size:13px;color:var(--teal-dark);text-align:center">✅ Merci pour votre retour !</div>
       <button class="btn-primary" id="feedback-btn" onclick="sendFeedback()">Envoyer ✓</button>
       <button class="btn-ghost" onclick="closeModal('modal-feedback')">Annuler</button>
     </div>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-  function openFeedback() {
-  document.getElementById('feedback-msg').value = '';
-  document.getElementById('feedback-success').style.display = 'none';
-  document.getElementById('feedback-btn').style.display = 'block';
-  document.getElementById('modal-feedback').classList.add('open');
-}
-
-async function sendFeedback() {
-  const msg = document.getElementById('feedback-msg').value.trim();
-  if (!msg) { showToast('Écrivez votre message d\'abord'); return; }
-  const btn = document.getElementById('feedback-btn');
-  btn.textContent = 'Envoi…'; btn.disabled = true;
-  try {
-    await fetch('https://formspree.io/f/xjganpkz', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: state.user?.email || 'anonyme',
-        prenom: state.user?.prenom || '',
-        message: msg
-      })
-    });
-    document.getElementById('feedback-success').style.display = 'block';
-    btn.style.display = 'none';
-    setTimeout(() => closeModal('modal-feedback'), 2500);
-  } catch (e) {
-    showToast('Erreur d\'envoi, réessayez');
-    btn.textContent = 'Envoyer ✓'; btn.disabled = false;
-  }
-}
-  function togglePwd() {
-  const input = document.getElementById('auth-password');
-  const eye = document.getElementById('pwd-eye');
-  if (input.type === 'password') { input.type = 'text'; eye.textContent = '🙈'; }
-  else { input.type = 'password'; eye.textContent = '👁'; }
-}
 // STATE
 let state = {
-  user: null, animals: [], treatments: [],
+  user: null, animals: [], treatments: [], weights: {}, croquettes: {}, vets: {},
   currentAnimalId: null, editingAnimalId: null,
-  selectedSpecies: 'dog', selectedSex: 'm',
-  selectedIdType: 'puce', selectedTreatType: 'antipuces',
-  isLogin: false
+  selectedSpecies: 'dog', selectedSex: 'm', selectedIdType: 'puce',
+  selectedTreatType: 'antipuces', selectedEmoji: '🐶', isLogin: false
 };
 let allArticles = [];
+let weightChart = null;
 
-function getStorageKey() {
-  return state.user ? 'vetid_' + state.user.uid : 'vetid_guest';
-}
 function loadState(uid) {
   const key = uid ? 'vetid_' + uid : 'vetid_guest';
   const s = localStorage.getItem(key);
-  if (s) { const p = JSON.parse(s); state.animals = p.animals || []; state.treatments = p.treatments || []; }
+  if (s) {
+    const p = JSON.parse(s);
+    state.animals = p.animals || [];
+    state.treatments = p.treatments || [];
+    state.weights = p.weights || {};
+    state.croquettes = p.croquettes || {};
+    state.vets = p.vets || {};
+  }
 }
 function saveState() {
-  if (state.user) localStorage.setItem('vetid_' + state.user.uid, JSON.stringify({ animals: state.animals, treatments: state.treatments }));
+  if (state.user) {
+    localStorage.setItem('vetid_' + state.user.uid, JSON.stringify({
+      animals: state.animals, treatments: state.treatments,
+      weights: state.weights, croquettes: state.croquettes, vets: state.vets
+    }));
+  }
 }
 
 // NAVIGATION
@@ -610,8 +707,6 @@ function showScreen(id) {
   document.getElementById('screen-' + id).classList.add('active');
   window.scrollTo(0, 0);
 }
-
-// TUTO
 function doneTuto() { localStorage.setItem('vetid_tuto_seen', '1'); goToDashboard(); }
 function switchOS(os, el) {
   document.querySelectorAll('.os-tab').forEach(t => t.classList.remove('active'));
@@ -639,6 +734,12 @@ function nextSlide() {
 function goToAuth() { showScreen('auth'); }
 
 // AUTH
+function togglePwd() {
+  const i = document.getElementById('auth-password');
+  const e = document.getElementById('pwd-eye');
+  i.type = i.type === 'password' ? 'text' : 'password';
+  e.textContent = i.type === 'password' ? '👁' : '🙈';
+}
 function toggleAuth() {
   state.isLogin = !state.isLogin;
   const t = state.isLogin;
@@ -651,10 +752,8 @@ function toggleAuth() {
   document.getElementById('forgot-link').style.display = t ? 'inline' : 'none';
   hideError('auth-error');
 }
-
 function showError(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.add('show'); }
 function hideError(id) { document.getElementById(id).classList.remove('show'); }
-
 function getFirebaseError(code) {
   const e = {
     'auth/email-already-in-use': 'Cette adresse email est déjà utilisée.',
@@ -663,11 +762,10 @@ function getFirebaseError(code) {
     'auth/user-not-found': 'Aucun compte trouvé avec cet email.',
     'auth/wrong-password': 'Mot de passe incorrect.',
     'auth/invalid-credential': 'Email ou mot de passe incorrect.',
-    'auth/too-many-requests': 'Trop de tentatives. Réessayez dans quelques minutes.'
+    'auth/too-many-requests': 'Trop de tentatives. Réessayez.'
   };
-  return e[code] || 'Une erreur est survenue. Réessayez.';
+  return e[code] || 'Une erreur est survenue.';
 }
-
 async function doAuth() {
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value;
@@ -692,36 +790,31 @@ async function doAuth() {
     btn.disabled = false;
   }
 }
-
 async function registerToBrevo(email, prenom) {
   try {
-    await fetch('https://api.brevo.com/v3/contacts', {
+    await fetch('/api/register', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'api-key': 'VOTRE_CLE_BREVO_ICI' },
-      body: JSON.stringify({ email, attributes: { PRENOM: prenom, SOURCE: 'VetID Beta' }, listIds: [2], updateEnabled: true })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, prenom })
     });
   } catch (e) { console.log('Brevo:', e); }
 }
-
 async function doResetPassword() {
   const email = document.getElementById('forgot-email').value.trim();
   hideError('forgot-error');
-  if (!email) { showError('forgot-error', 'Veuillez entrer votre adresse email.'); return; }
+  if (!email) { showError('forgot-error', 'Veuillez entrer votre email.'); return; }
   try {
     await window._resetPassword(window._auth, email);
     showToast('Email envoyé ! Vérifiez votre boîte mail.');
     setTimeout(() => showScreen('auth'), 2000);
   } catch (e) { showError('forgot-error', getFirebaseError(e.code)); }
 }
-
 function goToDashboard() { updateDashboard(); loadBlogPreview(); showScreen('dashboard'); }
 
 // TABS
 function goToTab(tab) {
-  const map = { home: 'dashboard', treat: 'treat', blog: 'blog', settings: 'settings' };
+  const map = { home: 'dashboard', community: 'community', settings: 'settings' };
   showScreen(map[tab] || tab);
-  if (tab === 'treat') renderTreatments();
-  if (tab === 'blog') loadBlog();
   if (tab === 'settings') {
     document.getElementById('settings-email').textContent = state.user?.email || '';
     document.getElementById('settings-name').textContent = state.user?.prenom || '';
@@ -734,37 +827,84 @@ function updateDashboard() {
   if (state.user) document.getElementById('dash-greeting').textContent = 'Bonjour ' + state.user.prenom + ' 👋';
   const list = document.getElementById('animals-list');
   const empty = document.getElementById('empty-state');
-  if (state.animals.length === 0) { empty.style.display = 'block'; list.innerHTML = ''; return; }
-  empty.style.display = 'none'; list.innerHTML = '';
-  const delayed = state.animals.filter(a => getAnimalStatus(a.id) === 'red');
-  if (delayed.length > 0) {
-    const b = document.createElement('div');
-    b.style.cssText = 'background:#fee2e2;border:1px solid #fca5a5;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px;color:#991b1b';
-    b.innerHTML = '⚠️ <span><strong>' + delayed[0].name + '</strong> — traitement en retard</span>';
-    list.appendChild(b);
-  }
-  const t = document.createElement('div'); t.className = 'section-title'; t.textContent = 'Mes compagnons'; list.appendChild(t);
+  const blogPreview = document.getElementById('blog-preview');
+  if (state.animals.length === 0) { empty.style.display = 'block'; list.innerHTML = ''; blogPreview.style.display = 'none'; return; }
+  empty.style.display = 'none';
+  blogPreview.style.display = 'block';
+  list.innerHTML = '';
   state.animals.forEach(function(a) {
-    const treats = state.treatments.filter(function(t) { return t.animalId === a.id; });
-    const badgesHtml = treats.map(function(t) {
-      const s = getTreatStatus(t);
-      const cls = s === 'red' ? 'badge-red' : s === 'orange' ? 'badge-orange' : 'badge-green';
-      const lbl = s === 'red' ? 'En retard' : s === 'orange' ? 'Bientôt' : 'À jour';
-      const n = t.type === 'antipuces' ? 'Anti-puces' : t.type === 'vermifuge' ? 'Vermifuge' : 'Vaccin';
-      return '<span class="badge ' + cls + '">' + n + ' — ' + lbl + '</span>';
-    }).join('');
-    const card = document.createElement('div'); card.className = 'animal-card';
-    const avatar = a.species === 'dog' ? '🐶' : '🐱';
-    card.innerHTML = '<div class="animal-avatar">' + avatar + '</div>'
-      + '<div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">' + a.name + '</div>'
-      + '<div style="font-size:12px;color:var(--muted)">' + (a.breed || '') + ' · ' + calcAge(a.birth) + '</div>'
-      + '<div class="badges">' + (badgesHtml || '<span class="badge" style="background:var(--bg);color:var(--muted)">Aucun traitement</span>') + '</div></div>'
-      + '<div style="display:flex;flex-direction:column;align-items:center;gap:8px">'
-      + '<span style="font-size:22px;color:var(--muted)">›</span>'
-      + '<span style="font-size:18px;cursor:pointer;padding:4px" onclick="event.stopPropagation();openEditAnimal(\'' + a.id + '\')">✏️</span></div>';
-    card.onclick = function() { openTreatModal(a.id); };
-    list.appendChild(card);
+    const treats = state.treatments.filter(t => t.animalId === a.id);
+    const weights = state.weights[a.id] || [];
+    const croquettes = state.croquettes[a.id] || [];
+    const vet = state.vets[a.id];
+    const treatStatus = getAnimalTreatStatus(a.id);
+    const lastWeight = weights.length ? weights[weights.length - 1] : null;
+    const lastCroquette = croquettes.length ? croquettes[croquettes.length - 1] : null;
+
+    const section = document.createElement('div');
+    section.className = 'animal-section';
+
+    const header = document.createElement('div');
+    header.className = 'animal-section-header';
+    header.innerHTML = '<div class="animal-avatar">' + (a.emoji || '🐾') + '</div>'
+      + '<div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">' + a.name + '</div>'
+      + '<div style="font-size:12px;color:var(--muted)">' + (a.breed || '') + ' · ' + calcAge(a.birth) + '</div></div>'
+      + '<span style="font-size:18px;cursor:pointer" onclick="event.stopPropagation();openEditAnimal(\'' + a.id + '\')">✏️</span>';
+    section.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'card-grid';
+
+    // Soins
+    const soinsCard = createDashCard('💊', 'Soins',
+      treats.length ? treats.length + ' traitement' + (treats.length > 1 ? 's' : '') : 'Aucun soin',
+      treatStatus === 'red' ? { text: 'En retard', bg: '#fee2e2', color: '#991b1b' } :
+      treatStatus === 'orange' ? { text: 'Bientôt', bg: '#fed7aa', color: '#9a3412' } :
+      treats.length ? { text: 'À jour', bg: '#dcfce7', color: '#166534' } : null,
+      function() { openSoins(a.id); }
+    );
+    grid.appendChild(soinsCard);
+
+    // Poids
+    const poidsCard = createDashCard('⚖️', 'Poids',
+      lastWeight ? lastWeight.value + ' kg' : 'Non renseigné',
+      lastWeight ? { text: 'Suivi actif', bg: 'var(--teal-light)', color: 'var(--teal-dark)' } : null,
+      function() { openPoids(a.id); }
+    );
+    grid.appendChild(poidsCard);
+
+    // Croquettes
+    const croquetteStatus = getCroquetteStatus(a.id);
+    const croqCard = createDashCard('🍗', 'Croquettes',
+      lastCroquette ? lastCroquette.brand : 'Non renseigné',
+      croquetteStatus === 'soon' ? { text: 'Bientôt', bg: '#fef3c7', color: '#92400e' } :
+      lastCroquette ? { text: 'OK', bg: '#dcfce7', color: '#166534' } : null,
+      function() { openCroquettes(a.id); }
+    );
+    grid.appendChild(croqCard);
+
+    // Vétérinaire
+    const vetCard = createDashCard('🏥', 'Vétérinaire',
+      vet ? vet.name || vet.clinic : 'Non renseigné',
+      vet ? { text: 'Enregistré', bg: '#E6F1FB', color: '#185FA5' } : null,
+      function() { openVet(a.id); }
+    );
+    grid.appendChild(vetCard);
+
+    section.appendChild(grid);
+    list.appendChild(section);
   });
+}
+
+function createDashCard(icon, title, sub, badge, onClick) {
+  const card = document.createElement('div');
+  card.className = 'dash-card';
+  card.innerHTML = '<div class="dash-card-icon">' + icon + '</div>'
+    + '<div class="dash-card-title">' + title + '</div>'
+    + '<div class="dash-card-sub">' + sub + '</div>'
+    + (badge ? '<div class="dash-card-badge" style="background:' + badge.bg + ';color:' + badge.color + '">' + badge.text + '</div>' : '');
+  card.onclick = onClick;
+  return card;
 }
 
 function calcAge(b) {
@@ -774,16 +914,24 @@ function calcAge(b) {
   if (m < 0) { y--; m += 12; }
   return y > 0 ? (y + ' an' + (y > 1 ? 's' : '')) : (m + ' mois');
 }
-function getAnimalStatus(aid) {
-  const ts = state.treatments.filter(function(t) { return t.animalId === aid; });
-  if (ts.some(function(t) { return getTreatStatus(t) === 'red'; })) return 'red';
-  if (ts.some(function(t) { return getTreatStatus(t) === 'orange'; })) return 'orange';
+function getAnimalTreatStatus(aid) {
+  const ts = state.treatments.filter(t => t.animalId === aid);
+  if (ts.some(t => getTreatStatus(t) === 'red')) return 'red';
+  if (ts.some(t => getTreatStatus(t) === 'orange')) return 'orange';
   return 'green';
 }
 function getTreatStatus(t) {
   if (!t.nextDate) return 'green';
   const d = (new Date(t.nextDate) - new Date()) / 86400000;
   return d < 0 ? 'red' : d <= 14 ? 'orange' : 'green';
+}
+function getCroquetteStatus(aid) {
+  const croquettes = state.croquettes[aid] || [];
+  if (!croquettes.length) return 'none';
+  const last = croquettes[croquettes.length - 1];
+  if (!last.reminderDate) return 'ok';
+  const d = (new Date(last.reminderDate) - new Date()) / 86400000;
+  return d <= 7 ? 'soon' : 'ok';
 }
 function formatDate(d) {
   if (!d) return '—';
@@ -793,43 +941,56 @@ function formatDate(d) {
 // ANIMAL
 function openAddAnimal() {
   state.editingAnimalId = null;
+  state.selectedEmoji = '🐶';
   document.getElementById('modal-animal-title').textContent = '🐾 Ajouter un animal';
-  ['a-name', 'a-breed', 'a-birth', 'a-idnum'].forEach(function(id) { document.getElementById(id).value = ''; });
+  document.getElementById('emoji-preview').textContent = '🐶';
+  ['a-name', 'a-breed', 'a-birth', 'a-idnum'].forEach(id => document.getElementById(id).value = '');
   selectSpecies('dog'); selectSex('m'); selectIdType('puce');
   document.getElementById('steril-toggle').classList.remove('on');
   document.getElementById('modal-animal').classList.add('open');
 }
-
 function openEditAnimal(aid) {
-  const a = state.animals.find(function(x) { return x.id === aid; });
+  const a = state.animals.find(x => x.id === aid);
   if (!a) return;
   state.editingAnimalId = aid;
+  state.selectedEmoji = a.emoji || '🐶';
   document.getElementById('modal-animal-title').textContent = '✏️ Modifier ' + a.name;
+  document.getElementById('emoji-preview').textContent = a.emoji || '🐶';
   document.getElementById('a-name').value = a.name;
   document.getElementById('a-breed').value = a.breed || '';
   document.getElementById('a-birth').value = a.birth || '';
   document.getElementById('a-idnum').value = a.idNum || '';
-  selectSpecies(a.species);
-  selectSex(a.sex || 'm');
-  selectIdType(a.idType || 'puce');
+  selectSpecies(a.species); selectSex(a.sex || 'm'); selectIdType(a.idType || 'puce');
   if (a.sterilized) document.getElementById('steril-toggle').classList.add('on');
   else document.getElementById('steril-toggle').classList.remove('on');
   document.getElementById('modal-animal').classList.add('open');
 }
-
+function selectEmoji(e) {
+  state.selectedEmoji = e;
+  document.getElementById('emoji-preview').textContent = e;
+}
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function selectSpecies(s) { state.selectedSpecies = s; document.getElementById('sp-dog').classList.toggle('active', s === 'dog'); document.getElementById('sp-cat').classList.toggle('active', s === 'cat'); }
-function selectSex(s) { state.selectedSex = s; document.getElementById('sx-m').classList.toggle('active', s === 'm'); document.getElementById('sx-f').classList.toggle('active', s === 'f'); }
-function selectIdType(t) { state.selectedIdType = t; document.getElementById('id-puce').classList.toggle('active', t === 'puce'); document.getElementById('id-tat').classList.toggle('active', t === 'tatouage'); }
-
+function selectSpecies(s) {
+  state.selectedSpecies = s;
+  ['dog', 'cat', 'other'].forEach(x => document.getElementById('sp-' + x)?.classList.toggle('active', x === s));
+}
+function selectSex(s) {
+  state.selectedSex = s;
+  document.getElementById('sx-m').classList.toggle('active', s === 'm');
+  document.getElementById('sx-f').classList.toggle('active', s === 'f');
+}
+function selectIdType(t) {
+  state.selectedIdType = t;
+  document.getElementById('id-puce').classList.toggle('active', t === 'puce');
+  document.getElementById('id-tat').classList.toggle('active', t === 'tatouage');
+}
 function saveAnimal() {
   const name = document.getElementById('a-name').value.trim();
   if (!name) { showToast('Donnez un nom à votre animal'); return; }
   const isEdit = !!state.editingAnimalId;
   const animal = {
     id: isEdit ? state.editingAnimalId : Date.now().toString(),
-    name: name,
-    species: state.selectedSpecies,
+    name, emoji: state.selectedEmoji, species: state.selectedSpecies,
     breed: document.getElementById('a-breed').value.trim(),
     birth: document.getElementById('a-birth').value,
     sex: state.selectedSex,
@@ -838,286 +999,468 @@ function saveAnimal() {
     idNum: document.getElementById('a-idnum').value.trim()
   };
   if (isEdit) {
-    const idx = state.animals.findIndex(function(x) { return x.id === state.editingAnimalId; });
+    const idx = state.animals.findIndex(x => x.id === state.editingAnimalId);
     if (idx > -1) state.animals[idx] = animal;
   } else {
     state.animals.push(animal);
   }
   state.editingAnimalId = null;
-  saveState();
-  closeModal('modal-animal');
-  updateDashboard();
-  showToast(isEdit ? (animal.name + ' modifié ✓') : (animal.name + ' ajouté ! 🐾'));
+  saveState(); closeModal('modal-animal'); updateDashboard();
+  showToast(isEdit ? animal.name + ' modifié ✓' : animal.name + ' ajouté ! 🐾');
 }
 
-// TRAITEMENTS
-function openTreatModal(aid) {
+// SOINS
+function openSoins(aid) {
   state.currentAnimalId = aid;
-  const a = state.animals.find(function(x) { return x.id === aid; });
-  document.getElementById('modal-treat-animal').textContent = 'Pour ' + a.name;
-  document.getElementById('modal-treat').classList.add('open');
+  const a = state.animals.find(x => x.id === aid);
+  document.getElementById('soins-title').textContent = (a.emoji || '🐾') + ' ' + a.name + ' — Soins';
+  renderSoins(aid);
+  showScreen('soins');
+}
+function renderSoins(aid) {
+  const body = document.getElementById('soins-list');
+  const a = state.animals.find(x => x.id === aid);
+  const treats = state.treatments.filter(t => t.animalId === aid);
+  body.innerHTML = '';
+  if (!treats.length) {
+    const e = document.createElement('div');
+    e.style.cssText = 'text-align:center;padding:40px;color:var(--muted);font-size:14px';
+    e.textContent = 'Aucun soin enregistré';
+    body.appendChild(e);
+  } else {
+    treats.forEach(function(t) {
+      const s = getTreatStatus(t);
+      const bgColor = { red: '#fee2e2', orange: '#fed7aa', green: '#dcfce7' };
+      const txtColor = { red: '#991b1b', orange: '#9a3412', green: '#166534' };
+      const lbls = { red: 'En retard', orange: 'Bientôt', green: 'À jour' };
+      const icons = { antipuces: '🦟', vermifuge: '💊', vaccin: '💉', autre: '➕' };
+      const next = new Date(t.nextDate), last = new Date(t.lastDate);
+      const pct = Math.min(100, Math.max(0, Math.round((Date.now() - last) / (next - last) * 100)));
+      const tname = t.type === 'antipuces' ? 'Anti-puces / Tiques' : t.type === 'vermifuge' ? 'Vermifuge' : t.type === 'vaccin' ? 'Vaccin' : (t.autreName || 'Autre');
+      const card = document.createElement('div');
+      card.className = 'treat-card';
+      card.innerHTML = '<div class="treat-top">'
+        + '<div class="treat-icon" style="background:' + bgColor[s] + '">' + (icons[t.type] || '➕') + '</div>'
+        + '<div><div style="font-size:15px;font-weight:600;color:var(--text)">' + tname + '</div>'
+        + '<div style="font-size:12px;color:var(--muted)">' + (t.product || '—') + ' · tous les ' + t.freqMonths + ' mois</div></div>'
+        + '<div class="status-badge" style="background:' + bgColor[s] + ';color:' + txtColor[s] + '">' + lbls[s] + '</div></div>'
+        + '<div class="treat-dates"><div class="date-box"><div class="date-label">Dernière</div><div class="date-val">' + formatDate(t.lastDate) + '</div></div>'
+        + '<div class="date-box"><div class="date-label">Prochaine</div><div class="date-val" style="color:' + (s === 'red' ? 'var(--red)' : s === 'orange' ? 'var(--orange)' : 'var(--green)') + '">' + formatDate(t.nextDate) + '</div></div></div>'
+        + '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%;background:' + (s === 'red' ? 'var(--red)' : s === 'orange' ? 'var(--orange)' : 'var(--green)') + '"></div></div>'
+        + '<div style="display:flex;gap:8px">'
+        + '<button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--teal);background:var(--white);color:var(--teal)" onclick="openEditSoin(\'' + t.id + '\')">Modifier</button>'
+        + '<button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:var(--teal);color:#fff;border:none" onclick="markDone(\'' + t.id + '\')">Effectué ✓</button>'
+        + '</div>'
+        + '<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.5">'
+        + '<button onclick="addToGoogleCalendar(\'' + a.name + '\',\'' + t.type + '\',\'' + (t.autreName||'') + '\',\'' + t.nextDate + '\')" style="background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;color:var(--muted)">📅 Ajouter à Google Calendar</button>'
+        + '</div>'
+        + '<div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px">📱 Synchro calendrier téléphone disponible en V2</div>';
+      body.appendChild(card);
+    });
+  }
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn-primary';
+  addBtn.style.marginTop = '12px';
+  addBtn.textContent = '+ Ajouter un soin';
+  addBtn.onclick = function() { openAddSoin(aid); };
+  body.appendChild(addBtn);
+}
+function openAddSoin(aid) {
+  state.currentAnimalId = aid;
+  const a = state.animals.find(x => x.id === aid);
+  document.getElementById('modal-soin-animal').textContent = 'Pour ' + a.name;
+  selectTreatType('antipuces');
+  document.getElementById('t-product').value = '';
+  document.getElementById('t-lastdate').value = '';
+  document.getElementById('modal-soin').classList.add('open');
+}
+function openEditSoin(tid) {
+  const t = state.treatments.find(x => x.id === tid);
+  if (!t) return;
+  state.currentAnimalId = t.animalId;
+  const a = state.animals.find(x => x.id === t.animalId);
+  document.getElementById('modal-soin-animal').textContent = 'Pour ' + a.name;
+  selectTreatType(t.type);
+  document.getElementById('t-product').value = t.product || '';
+  document.getElementById('t-lastdate').value = t.lastDate || '';
+  document.getElementById('t-freq').value = t.freqMonths || 3;
+  if (t.type === 'autre') document.getElementById('t-autre-name').value = t.autreName || '';
+  document.getElementById('modal-soin').classList.add('open');
 }
 function selectTreatType(t) {
   state.selectedTreatType = t;
-  ['antipuces', 'vermifuge', 'vaccin'].forEach(function(x) { document.getElementById('tt-' + x).classList.toggle('active', x === t); });
+  ['antipuces', 'vermifuge', 'vaccin', 'autre'].forEach(x => {
+    const el = document.getElementById('tt-' + x);
+    if (el) el.classList.toggle('active', x === t);
+  });
+  document.getElementById('autre-name-group').style.display = t === 'autre' ? 'flex' : 'none';
 }
-
 function saveTreatment() {
   const lastDate = document.getElementById('t-lastdate').value;
   if (!lastDate) { showToast('Indiquez la date de la dernière prise'); return; }
   const freq = parseInt(document.getElementById('t-freq').value);
-  const next = new Date(lastDate);
-  next.setMonth(next.getMonth() + freq);
+  const next = new Date(lastDate); next.setMonth(next.getMonth() + freq);
+  const autreName = state.selectedTreatType === 'autre' ? document.getElementById('t-autre-name').value.trim() : '';
+  if (state.selectedTreatType === 'autre' && !autreName) { showToast('Donnez un nom au traitement'); return; }
   const treat = {
-    id: Date.now().toString(),
-    animalId: state.currentAnimalId,
-    type: state.selectedTreatType,
+    id: Date.now().toString(), animalId: state.currentAnimalId,
+    type: state.selectedTreatType, autreName,
     product: document.getElementById('t-product').value.trim(),
-    lastDate: lastDate,
-    freqMonths: freq,
-    nextDate: next.toISOString().split('T')[0]
+    lastDate, freqMonths: freq, nextDate: next.toISOString().split('T')[0]
   };
-  state.treatments = state.treatments.filter(function(t) { return !(t.animalId === state.currentAnimalId && t.type === state.selectedTreatType); });
+  state.treatments = state.treatments.filter(t => !(t.animalId === state.currentAnimalId && t.type === state.selectedTreatType && (state.selectedTreatType !== 'autre' || t.autreName === autreName)));
   state.treatments.push(treat);
-  saveState();
-  closeModal('modal-treat');
-  document.getElementById('t-product').value = '';
-  document.getElementById('t-lastdate').value = '';
-  updateDashboard();
-  showToast('Traitement enregistré ✓');
+  saveState(); closeModal('modal-soin');
+  renderSoins(state.currentAnimalId); updateDashboard();
+  showToast('Soin enregistré ✓');
 }
-
-function renderTreatments() {
-  const body = document.getElementById('treat-list');
-  if (state.animals.length === 0) {
-    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Ajoutez d\'abord un animal depuis l\'accueil</div>';
-    return;
-  }
-  body.innerHTML = '';
-  state.animals.forEach(function(a) {
-    const treats = state.treatments.filter(function(t) { return t.animalId === a.id; });
-    const sec = document.createElement('div');
-    sec.innerHTML = '<div class="section-title">' + (a.species === 'dog' ? '🐶' : '🐱') + ' ' + a.name + '</div>';
-    body.appendChild(sec);
-    if (!treats.length) {
-      const e = document.createElement('div');
-      e.style.cssText = 'background:var(--white);border-radius:12px;border:1px solid var(--border);padding:16px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:12px;cursor:pointer';
-      e.textContent = 'Appuyez pour ajouter un traitement';
-      e.onclick = function() { openTreatModal(a.id); };
-      body.appendChild(e);
-      return;
-    }
-    treats.forEach(function(t) {
-      const s = getTreatStatus(t);
-      const icons = { antipuces: '🦟', vermifuge: '💊', vaccin: '💉' };
-      const bgColor = { red: '#fee2e2', orange: '#fed7aa', green: '#dcfce7' };
-      const txtColor = { red: '#991b1b', orange: '#9a3412', green: '#166534' };
-      const lbls = { red: 'En retard', orange: 'Bientôt', green: 'À jour' };
-      const progressColor = s === 'red' ? 'var(--red)' : s === 'orange' ? 'var(--orange)' : 'var(--green)';
-      const dateColor = s === 'red' ? 'var(--red)' : s === 'orange' ? 'var(--orange)' : 'var(--green)';
-      const nextDate = new Date(t.nextDate);
-      const lastDate = new Date(t.lastDate);
-      const pct = Math.min(100, Math.max(0, Math.round((Date.now() - lastDate) / (nextDate - lastDate) * 100)));
-      const tname = t.type === 'antipuces' ? 'Anti-puces / Tiques' : t.type === 'vermifuge' ? 'Vermifuge' : 'Vaccin';
-
-      const card = document.createElement('div');
-      card.className = 'treat-card';
-
-      const top = document.createElement('div');
-      top.className = 'treat-top';
-      top.innerHTML = '<div class="treat-icon" style="background:' + bgColor[s] + '">' + icons[t.type] + '</div>'
-        + '<div><div style="font-size:15px;font-weight:600;color:var(--text)">' + tname + '</div>'
-        + '<div style="font-size:12px;color:var(--muted)">' + (t.product || '—') + ' · tous les ' + t.freqMonths + ' mois</div></div>'
-        + '<div class="status-badge" style="background:' + bgColor[s] + ';color:' + txtColor[s] + '">' + lbls[s] + '</div>';
-
-      const dates = document.createElement('div');
-      dates.className = 'treat-dates';
-      dates.innerHTML = '<div class="date-box"><div class="date-label">Dernière</div><div class="date-val">' + formatDate(t.lastDate) + '</div></div>'
-        + '<div class="date-box"><div class="date-label">Prochaine</div><div class="date-val" style="color:' + dateColor + '">' + formatDate(t.nextDate) + '</div></div>';
-
-      const progress = document.createElement('div');
-      progress.className = 'progress-bar';
-      progress.innerHTML = '<div class="progress-fill" style="width:' + pct + '%;background:' + progressColor + '"></div>';
-
-      const btns = document.createElement('div');
-      btns.style.cssText = 'display:flex;gap:8px';
-     btns.innerHTML = '<button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--teal);background:var(--white);color:var(--teal)" onclick="openTreatModal(\'' + a.id + '\')">Modifier</button>'
-  + '<button style="flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:var(--teal);color:#fff;border:none" onclick="markDone(\'' + t.id + '\')">Effectué ✓</button>';
-
-const calBtn = document.createElement('button');
-calBtn.style.cssText = 'width:100%;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--text);margin-top:8px';
-calBtn.textContent = '📅 Ajouter à Google Calendar';
-calBtn.onclick = function() {
-  const typeName = t.type === 'antipuces' ? 'Anti-puces / Tiques' : t.type === 'vermifuge' ? 'Vermifuge' : 'Vaccin';
-  const title = encodeURIComponent(a.name + ' — ' + typeName);
-  const desc = encodeURIComponent('Rappel VetID pour ' + a.name);
-  const date = t.nextDate.replace(/-/g, '');
-  const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
-    + '&text=' + title
-+ '&dates=' + date + '/' + date
-    + '&details=' + desc;
-  window.open(url, '_blank');
-  showToast('Ouverture dans Google Calendar… 📅');
-};
-btns.appendChild(calBtn);
-
-      card.appendChild(top);
-      card.appendChild(dates);
-      card.appendChild(progress);
-      card.appendChild(btns);
-      body.appendChild(card);
-      
-const calNote = document.createElement('div');
-calNote.style.cssText = 'font-size:11px;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5';
-calNote.textContent = '📱 La synchronisation directe avec le calendrier de votre téléphone sera disponible en V2 !';
-card.appendChild(calNote);
-    });
-  });
-}
-
-
-
 function markDone(tid) {
-  const t = state.treatments.find(function(x) { return x.id === tid; });
-  if (!t) return;
+  const t = state.treatments.find(x => x.id === tid); if (!t) return;
   const today = new Date().toISOString().split('T')[0];
   const next = new Date(); next.setMonth(next.getMonth() + t.freqMonths);
   t.lastDate = today; t.nextDate = next.toISOString().split('T')[0];
-  saveState(); renderTreatments(); updateDashboard(); showToast('Traitement marqué effectué ✓');
+  saveState(); renderSoins(t.animalId); updateDashboard(); showToast('Soin marqué effectué ✓');
+}
+function addToGoogleCalendar(animalName, type, autreName, nextDate) {
+  const typeName = type === 'antipuces' ? 'Anti-puces' : type === 'vermifuge' ? 'Vermifuge' : type === 'vaccin' ? 'Vaccin' : autreName;
+  const title = encodeURIComponent(animalName + ' — ' + typeName);
+  const date = nextDate.replace(/-/g, '');
+  const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + title + '&dates=' + date + '/' + date;
+  window.open(url, '_blank');
+}
+
+// POIDS
+function openPoids(aid) {
+  state.currentAnimalId = aid;
+  const a = state.animals.find(x => x.id === aid);
+  document.getElementById('poids-title').textContent = (a.emoji || '🐾') + ' ' + a.name + ' — Poids';
+  renderPoids(aid);
+  showScreen('poids');
+}
+function openAddWeight() {
+  document.getElementById('w-value').value = '';
+  document.getElementById('w-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('w-notes').value = '';
+  document.getElementById('modal-poids').classList.add('open');
+}
+function saveWeight() {
+  const value = parseFloat(document.getElementById('w-value').value);
+  const date = document.getElementById('w-date').value;
+  if (!value || !date) { showToast('Renseignez le poids et la date'); return; }
+  if (!state.weights[state.currentAnimalId]) state.weights[state.currentAnimalId] = [];
+  state.weights[state.currentAnimalId].push({ value, date, notes: document.getElementById('w-notes').value.trim() });
+  state.weights[state.currentAnimalId].sort((a, b) => new Date(a.date) - new Date(b.date));
+  saveState(); closeModal('modal-poids'); renderPoids(state.currentAnimalId);
+  updateDashboard(); showToast('Poids enregistré ✓');
+}
+function renderPoids(aid) {
+  const weights = state.weights[aid] || [];
+  const list = document.getElementById('weight-list');
+  if (weightChart) { weightChart.destroy(); weightChart = null; }
+  if (weights.length > 1) {
+    const ctx = document.getElementById('weightChart').getContext('2d');
+    weightChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: weights.map(w => new Date(w.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })),
+        datasets: [{ label: 'Poids (kg)', data: weights.map(w => w.value), borderColor: '#2A9D8F', backgroundColor: 'rgba(42,157,143,.1)', tension: 0.4, fill: true, pointBackgroundColor: '#2A9D8F', pointRadius: 5 }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
+    });
+  } else {
+    document.getElementById('weightChart').style.display = weights.length === 0 ? 'none' : 'block';
+  }
+  list.innerHTML = '';
+  if (!weights.length) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Aucune mesure enregistrée</div>';
+    return;
+  }
+  [...weights].reverse().forEach(function(w) {
+    const div = document.createElement('div');
+    div.className = 'weight-entry';
+    div.innerHTML = '<span style="font-size:24px">⚖️</span>'
+      + '<div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">' + w.value + ' kg</div>'
+      + '<div style="font-size:12px;color:var(--muted)">' + formatDate(w.date) + (w.notes ? ' · ' + w.notes : '') + '</div></div>';
+    list.appendChild(div);
+  });
+}
+
+// CROQUETTES
+function openCroquettes(aid) {
+  state.currentAnimalId = aid;
+  const a = state.animals.find(x => x.id === aid);
+  document.getElementById('croquettes-title').textContent = (a.emoji || '🐾') + ' ' + a.name + ' — Croquettes';
+  renderCroquettes(aid);
+  showScreen('croquettes');
+}
+function openAddCroquette() {
+  ['c-brand', 'c-product', 'c-qty', 'c-reminder'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('modal-croquette').classList.add('open');
+}
+function saveCroquette() {
+  const brand = document.getElementById('c-brand').value.trim();
+  if (!brand) { showToast('Indiquez la marque'); return; }
+  const date = document.getElementById('c-date').value;
+  const reminder = parseInt(document.getElementById('c-reminder').value) || 30;
+  const reminderDate = new Date(date); reminderDate.setDate(reminderDate.getDate() + reminder);
+  const entry = {
+    id: Date.now().toString(), brand,
+    product: document.getElementById('c-product').value.trim(),
+    qty: document.getElementById('c-qty').value,
+    date, reminderDate: reminderDate.toISOString().split('T')[0]
+  };
+  if (!state.croquettes[state.currentAnimalId]) state.croquettes[state.currentAnimalId] = [];
+  state.croquettes[state.currentAnimalId].push(entry);
+  saveState(); closeModal('modal-croquette'); renderCroquettes(state.currentAnimalId);
+  updateDashboard(); showToast('Commande enregistrée ✓');
+}
+function renderCroquettes(aid) {
+  const list = document.getElementById('croquettes-list');
+  const croquettes = (state.croquettes[aid] || []).slice().reverse();
+  list.innerHTML = '';
+  if (!croquettes.length) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Aucune commande enregistrée</div>';
+    return;
+  }
+  croquettes.forEach(function(c) {
+    const daysLeft = Math.round((new Date(c.reminderDate) - new Date()) / 86400000);
+    const urgent = daysLeft <= 7;
+    const div = document.createElement('div');
+    div.className = 'croquette-card';
+    div.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+      + '<span style="font-size:24px">🍗</span>'
+      + '<div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">' + c.brand + (c.product ? ' — ' + c.product : '') + '</div>'
+      + '<div style="font-size:12px;color:var(--muted)">' + (c.qty ? c.qty + ' kg · ' : '') + 'Acheté le ' + formatDate(c.date) + '</div></div>'
+      + '<div style="font-size:11px;padding:4px 8px;border-radius:8px;font-weight:500;background:' + (urgent ? '#fee2e2' : '#dcfce7') + ';color:' + (urgent ? '#991b1b' : '#166534') + '">'
+      + (daysLeft <= 0 ? 'À commander !' : 'J-' + daysLeft) + '</div></div>'
+      + '<div style="font-size:12px;color:var(--muted)">Rappel : ' + formatDate(c.reminderDate) + '</div>';
+    list.appendChild(div);
+  });
+}
+
+// VÉTÉRINAIRE
+function openVet(aid) {
+  state.currentAnimalId = aid;
+  const a = state.animals.find(x => x.id === aid);
+  document.getElementById('vet-title').textContent = (a.emoji || '🐾') + ' ' + a.name + ' — Vétérinaire';
+  renderVet(aid);
+  showScreen('vet');
+}
+function openEditVet() {
+  const vet = state.vets[state.currentAnimalId] || {};
+  document.getElementById('v-name').value = vet.name || '';
+  document.getElementById('v-clinic').value = vet.clinic || '';
+  document.getElementById('v-address').value = vet.address || '';
+  document.getElementById('v-phone').value = vet.phone || '';
+  document.getElementById('v-email').value = vet.email || '';
+  document.getElementById('modal-vet').classList.add('open');
+}
+function saveVet() {
+  state.vets[state.currentAnimalId] = {
+    name: document.getElementById('v-name').value.trim(),
+    clinic: document.getElementById('v-clinic').value.trim(),
+    address: document.getElementById('v-address').value.trim(),
+    phone: document.getElementById('v-phone').value.trim(),
+    email: document.getElementById('v-email').value.trim()
+  };
+  saveState(); closeModal('modal-vet'); renderVet(state.currentAnimalId);
+  updateDashboard(); showToast('Vétérinaire enregistré ✓');
+}
+function renderVet(aid) {
+  const vet = state.vets[aid];
+  const content = document.getElementById('vet-content');
+  if (!vet || !vet.name) {
+    content.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Aucun vétérinaire enregistré</div>';
+    return;
+  }
+  content.innerHTML = '<div class="vet-card">'
+    + (vet.name ? '<div class="vet-row"><span style="font-size:18px">👨‍⚕️</span><div><div style="font-size:11px;color:var(--teal-dark)">Vétérinaire</div><div style="font-size:14px;font-weight:600;color:var(--teal-dark)">' + vet.name + '</div></div></div>' : '')
+    + (vet.clinic ? '<div class="vet-row"><span style="font-size:18px">🏥</span><div><div style="font-size:11px;color:var(--teal-dark)">Clinique</div><div style="font-size:14px;font-weight:600;color:var(--teal-dark)">' + vet.clinic + '</div></div></div>' : '')
+    + (vet.address ? '<div class="vet-row"><span style="font-size:18px">📍</span><div><div style="font-size:11px;color:var(--teal-dark)">Adresse</div><div style="font-size:14px;color:var(--teal-dark)">' + vet.address + '</div></div></div>' : '')
+    + (vet.phone ? '<div class="vet-row"><span style="font-size:18px">📞</span><div><div style="font-size:11px;color:var(--teal-dark)">Téléphone</div><a href="tel:' + vet.phone + '" style="font-size:14px;font-weight:600;color:var(--teal);text-decoration:none">' + vet.phone + '</a></div></div>' : '')
+    + (vet.email ? '<div class="vet-row"><span style="font-size:18px">✉️</span><div><div style="font-size:11px;color:var(--teal-dark)">Email</div><a href="mailto:' + vet.email + '" style="font-size:14px;font-weight:600;color:var(--teal);text-decoration:none">' + vet.email + '</a></div></div>' : '')
+    + '</div>';
 }
 
 // BLOG
 async function fetchNotionArticles() {
-  try { const res = await fetch('/api/articles', {
-  headers: { 'x-vetid-token': 'vetid2026beta' }
-}); const data = await res.json(); return data.results; }
-  catch (e) { return getFallbackArticles(); }
+  try {
+    const res = await fetch('/api/articles', { headers: { 'x-vetid-token': 'vetid2026beta' } });
+    const data = await res.json();
+    return data.results;
+  } catch (e) { return getFallbackArticles(); }
 }
-
 function getFallbackArticles() {
   return [
-    { id: '1', title: "L'hygiène dentaire de votre chien", category: 'Santé', resume: 'Les maladies dentaires touchent plus de 80% des chiens.', content: "### Les bons gestes\n\nBrossez les dents 3 fois par semaine avec un dentifrice spécial animal.\n\n### Le détartrage\n\nUn détartrage professionnel est recommandé tous les 1 à 2 ans.", duration: 4, sponsored: false, emoji: '🦷' },
-    { id: '2', title: "Alimentation du chien senior", category: 'Nutrition', resume: 'À partir de 7 ans, les besoins nutritionnels évoluent.', content: "### Ce qui change\n\nMoins de calories, plus de protéines de qualité, des oméga-3 pour les articulations.", duration: 5, sponsored: false, emoji: '🍗' },
-    { id: '3', title: "Comprendre les miaulements", category: 'Comportement', resume: 'Votre chat communique avec vous par les miaulements.', content: "### Les types\n\n- Court : salutation\n- Long : demande\n- Plaintif : inconfort", duration: 5, sponsored: false, emoji: '😺' },
-    { id: '4', title: "Préparer son animal pour l'été", category: 'Conseils', resume: 'Le coup de chaleur peut être fatal.', content: "### Les règles d'or\n\nNe jamais laisser un animal dans une voiture. Hydratez en permanence.", duration: 4, sponsored: false, emoji: '☀️' },
-    { id: '5', title: "Calendrier vaccinal du chiot", category: 'Santé', resume: 'Les premiers mois sont décisifs.', content: "### Le calendrier\n\n- 8-12 semaines : primo-vaccination CDHP\n- 12-16 semaines : rappel\n- 12 semaines minimum : vaccin antirabique", duration: 6, sponsored: false, emoji: '💉' }
+    { id: '1', title: "L'hygiène dentaire de votre chien", category: 'Santé', resume: 'Les maladies dentaires touchent plus de 80% des chiens.', content: "### Les bons gestes\n\nBrossez les dents 3 fois par semaine.", duration: 4, sponsored: false, emoji: '🦷' },
+    { id: '2', title: "Alimentation du chien senior", category: 'Nutrition', resume: 'À partir de 7 ans, les besoins nutritionnels évoluent.', content: "### Ce qui change\n\nMoins de calories, plus de protéines de qualité.", duration: 5, sponsored: false, emoji: '🍗' },
+    { id: '3', title: "Comprendre les miaulements", category: 'Comportement', resume: 'Votre chat communique avec vous.', content: "### Les types\n\n- Court : salutation\n- Long : demande", duration: 5, sponsored: false, emoji: '😺' },
+    { id: '4', title: "Préparer son animal pour l'été", category: 'Conseils', resume: 'Le coup de chaleur peut être fatal.', content: "### Les règles d'or\n\nNe jamais laisser un animal dans une voiture.", duration: 4, sponsored: false, emoji: '☀️' },
+    { id: '5', title: "Calendrier vaccinal du chiot", category: 'Santé', resume: 'Les premiers mois sont décisifs.', content: "### Le calendrier\n\n- 8-12 semaines : primo-vaccination CDHP", duration: 6, sponsored: false, emoji: '💉' }
   ];
 }
-
 async function loadBlog() {
   document.getElementById('blog-list').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Chargement…</div>';
   allArticles = await fetchNotionArticles();
   renderBlog(allArticles);
 }
-
 async function loadBlogPreview() {
   allArticles = await fetchNotionArticles();
   const preview = document.getElementById('blog-preview-list');
   const catColors = { 'Santé': 'var(--teal-light)', 'Nutrition': '#FAECE7', 'Comportement': '#EAF3DE', 'Conseils': '#fef3c7' };
-  preview.innerHTML = allArticles.slice(0, 5).map(function(a, i) {
-    return '<div class="blog-preview-card" onclick="openArticle(' + i + ')">'
-      + '<div class="blog-preview-img" style="background:' + (catColors[a.category] || 'var(--teal-light)') + '">' + a.emoji + '</div>'
-      + '<div class="blog-preview-info">'
-      + '<div style="font-size:9px;color:var(--teal);font-weight:600">' + (a.category || '').toUpperCase() + '</div>'
-      + '<div style="font-size:11px;font-weight:600;color:var(--text);line-height:1.3;margin-top:2px">' + a.title + '</div>'
-      + '<div style="font-size:9px;color:var(--muted);margin-top:3px">' + a.duration + ' min</div>'
-      + '</div></div>';
-  }).join('');
+  preview.innerHTML = allArticles.slice(0, 5).map((a, i) =>
+    '<div class="blog-preview-card" onclick="openArticle(' + i + ')">'
+    + '<div class="blog-preview-img" style="background:' + (catColors[a.category] || 'var(--teal-light)') + '">' + a.emoji + '</div>'
+    + '<div class="blog-preview-info"><div style="font-size:9px;color:var(--teal);font-weight:600">' + (a.category || '').toUpperCase() + '</div>'
+    + '<div style="font-size:11px;font-weight:600;color:var(--text);line-height:1.3;margin-top:2px">' + a.title + '</div>'
+    + '<div style="font-size:9px;color:var(--muted);margin-top:3px">' + a.duration + ' min</div></div></div>'
+  ).join('');
+  const blogPreview = document.getElementById('blog-preview');
+  if (blogPreview) blogPreview.style.display = 'block';
 }
-
 function renderBlog(articles) {
   const catColors = { 'Santé': 'var(--teal-light)', 'Nutrition': '#FAECE7', 'Comportement': '#EAF3DE', 'Conseils': '#fef3c7' };
   const list = document.getElementById('blog-list');
-  if (!articles.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Aucun article trouvé</div>'; return; }
-  list.innerHTML = articles.map(function(a) {
+  if (!articles.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Aucun article</div>'; return; }
+  list.innerHTML = articles.map((a) => {
     const idx = allArticles.indexOf(a);
     return '<div class="blog-article" onclick="openArticle(' + idx + ')">'
       + '<div class="blog-thumb" style="background:' + (catColors[a.category] || 'var(--teal-light)') + '">' + a.emoji + '</div>'
-      + '<div style="flex:1">'
-      + '<div style="font-size:10px;color:var(--teal);font-weight:600">' + (a.category || '').toUpperCase() + '</div>'
+      + '<div style="flex:1"><div style="font-size:10px;color:var(--teal);font-weight:600">' + (a.category || '').toUpperCase() + '</div>'
       + '<div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-top:2px">' + a.title + '</div>'
       + '<div style="font-size:12px;color:var(--muted);line-height:1.4;margin-top:4px">' + a.resume + '</div>'
-      + '<div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">' + a.duration + ' min de lecture</span>'
-      + (a.sponsored ? '<span class="sponsored-tag">Sponsorisé</span>' : '') + '</div>'
-      + '</div></div>';
+      + '<div style="display:flex;gap:8px;align-items:center;margin-top:6px"><span style="font-size:11px;color:var(--muted)">' + a.duration + ' min</span>'
+      + (a.sponsored ? '<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:6px;font-weight:500">Sponsorisé</span>' : '') + '</div></div></div>';
   }).join('');
 }
-
 function filterBlog(cat, el) {
-  document.querySelectorAll('.cat-pill').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
-  renderBlog(cat ? allArticles.filter(function(a) { return a.category === cat; }) : allArticles);
+  renderBlog(cat ? allArticles.filter(a => a.category === cat) : allArticles);
 }
-
 function openArticle(idx) {
   const a = allArticles[idx]; if (!a) return;
   document.getElementById('article-cat').textContent = a.category;
   document.getElementById('article-title-header').textContent = a.title;
   document.getElementById('article-emoji').textContent = a.emoji;
   document.getElementById('article-title-big').textContent = a.title;
-  document.getElementById('article-meta').textContent = a.category + ' · ' + a.duration + ' min de lecture' + (a.sponsored ? ' · Sponsorisé' : '');
+  document.getElementById('article-meta').textContent = a.category + ' · ' + a.duration + ' min' + (a.sponsored ? ' · Sponsorisé' : '');
   const html = a.content
-    .replace(/### (.+)/g, '<h3>$1</h3>')
-    .replace(/## (.+)/g, '<h3>$1</h3>')
-    .replace(/# (.+)/g, '<h3>$1</h3>')
-    .replace(/- (.+)/g, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-    .split('\n\n').map(function(p) { return p.startsWith('<') ? p : '<p>' + p + '</p>'; }).join('');
+    .replace(/### (.+)/g, '<h3>$1</h3>').replace(/## (.+)/g, '<h3>$1</h3>').replace(/# (.+)/g, '<h3>$1</h3>')
+    .replace(/- (.+)/g, '<li>$1</li>').replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+    .split('\n\n').map(p => p.startsWith('<') ? p : '<p>' + p + '</p>').join('');
   document.getElementById('article-content').innerHTML = html;
   showScreen('article');
 }
 
+// COMMUNAUTÉ FEEDBACK
+function openCommunityFeedback() {
+  document.getElementById('feedback-title').textContent = '💡 Mes idées pour la communauté';
+  document.getElementById('feedback-msg').placeholder = 'Dites-nous ce que vous aimeriez trouver dans la communauté VetID…';
+  document.getElementById('feedback-msg').value = '';
+  document.getElementById('feedback-success').style.display = 'none';
+  document.getElementById('feedback-btn').style.display = 'block';
+  document.getElementById('modal-feedback').classList.add('open');
+}
+function openFeedback() {
+  document.getElementById('feedback-title').textContent = '💬 Envoyer un retour';
+  document.getElementById('feedback-msg').placeholder = 'Dites-nous ce que vous pensez…';
+  document.getElementById('feedback-msg').value = '';
+  document.getElementById('feedback-success').style.display = 'none';
+  document.getElementById('feedback-btn').style.display = 'block';
+  document.getElementById('modal-feedback').classList.add('open');
+}
+async function sendFeedback() {
+  const msg = document.getElementById('feedback-msg').value.trim();
+  if (!msg) { showToast('Écrivez votre message d\'abord'); return; }
+  const btn = document.getElementById('feedback-btn');
+  btn.textContent = 'Envoi…'; btn.disabled = true;
+  try {
+    await fetch('https://formspree.io/f/xjganpkz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: state.user?.email || 'anonyme', prenom: state.user?.prenom || '', message: msg })
+    });
+    document.getElementById('feedback-success').style.display = 'block';
+    btn.style.display = 'none';
+    setTimeout(() => closeModal('modal-feedback'), 2500);
+  } catch (e) {
+    showToast('Erreur d\'envoi, réessayez');
+    btn.textContent = 'Envoyer ✓'; btn.disabled = false;
+  }
+}
+
 // RGPD
 function exportData() {
-  const data = { user: { prenom: state.user?.prenom, email: state.user?.email }, animals: state.animals, treatments: state.treatments, exportDate: new Date().toISOString() };
+  const data = { user: { prenom: state.user?.prenom, email: state.user?.email }, animals: state.animals, treatments: state.treatments, weights: state.weights, croquettes: state.croquettes, vets: state.vets, exportDate: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url; a.download = 'vetid-mes-donnees.json'; a.click();
   showToast('Données exportées ✓');
 }
-
 function deleteAccount() {
-  if (confirm('Supprimer définitivement votre compte et toutes vos données ?')) {
+  if (confirm('Supprimer définitivement votre compte ?')) {
     localStorage.clear();
     if (window._auth?.currentUser) window._signOut(window._auth);
     location.reload();
   }
 }
-
 function logout() {
-  localStorage.removeItem('vetid_v5');
   if (window._auth?.currentUser) window._signOut(window._auth);
   state.user = null; state.animals = []; state.treatments = [];
   showScreen('auth');
 }
 
 // TOAST
-function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 2800); }
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2800); }
 
-// SWIPE TO CLOSE
+// SWIPE CLOSE MODALS
 function initSwipeClose(handleId, overlayId) {
   const handle = document.getElementById(handleId);
   const overlay = document.getElementById(overlayId);
   if (!handle || !overlay) return;
   const sheet = handle.parentElement;
   let startY = 0, isDragging = false;
-  handle.addEventListener('touchstart', function(e) { startY = e.touches[0].clientY; isDragging = true; }, { passive: true });
-  document.addEventListener('touchmove', function(e) { if (!isDragging) return; const dy = e.touches[0].clientY - startY; if (dy > 0) sheet.style.transform = 'translateY(' + dy + 'px)'; }, { passive: true });
-  document.addEventListener('touchend', function(e) {
+  handle.addEventListener('touchstart', e => { startY = e.touches[0].clientY; isDragging = true; }, { passive: true });
+  document.addEventListener('touchmove', e => { if (!isDragging) return; const dy = e.touches[0].clientY - startY; if (dy > 0) sheet.style.transform = 'translateY(' + dy + 'px)'; }, { passive: true });
+  document.addEventListener('touchend', e => {
     if (!isDragging) return; isDragging = false;
     const dy = e.changedTouches[0].clientY - startY;
     if (dy > 100) { overlay.classList.remove('open'); sheet.style.transform = ''; }
-    else { sheet.style.transition = 'transform .3s'; sheet.style.transform = ''; setTimeout(function() { sheet.style.transition = ''; }, 300); }
+    else { sheet.style.transition = 'transform .3s'; sheet.style.transform = ''; setTimeout(() => sheet.style.transition = '', 300); }
   });
-  overlay.addEventListener('click', function(e) { if (e.target === overlay) { overlay.classList.remove('open'); sheet.style.transform = ''; } });
+  overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.classList.remove('open'); sheet.style.transform = ''; } });
+}
+
+// SWIPE NAV
+function initSwipeNav() {
+  const screens = ['dashboard', 'community', 'settings'];
+  let startX = 0, startY = 0;
+  document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dy) > Math.abs(dx) || Math.abs(dx) < 60) return;
+    if (document.querySelector('.modal-overlay.open')) return;
+    const active = document.querySelector('.screen.active');
+    if (!active) return;
+    const activeId = active.id.replace('screen-', '');
+    const idx = screens.indexOf(activeId);
+    if (idx === -1) return;
+    if (dx < 0 && idx < screens.length - 1) goToTab(screens[idx + 1]);
+    else if (dx > 0 && idx > 0) goToTab(screens[idx - 1]);
+  }, { passive: true });
 }
 
 // INIT
 loadState();
 showScreen('onboarding');
-initSwipeClose('handle-animal', 'modal-animal');
-initSwipeClose('handle-treat', 'modal-treat');
-initSwipeClose('handle-feedback', 'modal-feedback');
+['animal', 'soin', 'poids', 'croquette', 'vet', 'feedback'].forEach(id => {
+  initSwipeClose('handle-' + id, 'modal-' + id);
+});
+initSwipeNav();
 </script>
+
 </body>
 </html>
