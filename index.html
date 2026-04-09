@@ -148,16 +148,14 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .weight-entry{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .croquette-card{background:#fef9ec;border-radius:12px;border:1px solid #fde68a;padding:14px;margin-bottom:10px}
 
-/* ── Sélecteur d'emoji ── */
-.emoji-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:4px}
-.emoji-cell{height:52px;border-radius:12px;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;transition:all .15s;user-select:none}
-.emoji-cell:active{transform:scale(.9)}
-.emoji-cell.selected{border-color:var(--teal);background:var(--teal-light);box-shadow:0 0 0 3px rgba(42,157,143,.15)}
-.emoji-tab-content{display:none}
-.emoji-tab-content.active{display:block}
-.emoji-preview-box{display:flex;align-items:center;gap:14px;background:var(--bg);border-radius:14px;padding:14px 16px;margin-bottom:12px}
-.emoji-preview-bubble{width:64px;height:64px;border-radius:18px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;transition:transform .2s}
-.emoji-preview-bubble.pop{transform:scale(1.18)}
+/* ── Sélecteur d'apparence ── */
+.emoji-preview-box{display:flex;align-items:center;gap:16px;background:var(--bg);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.emoji-preview-bubble{width:68px;height:68px;border-radius:20px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:38px;flex-shrink:0;transition:transform .2s}
+.emoji-preview-bubble.pop{transform:scale(1.2)}
+.color-swatches{display:flex;gap:8px;flex-wrap:wrap}
+.color-swatch{width:40px;height:40px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;position:relative;flex-shrink:0}
+.color-swatch:active{transform:scale(.9)}
+.color-swatch.selected{border-color:var(--teal);box-shadow:0 0 0 2px var(--white),0 0 0 4px var(--teal)}
 
 @media(min-width:480px){
   body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
@@ -516,7 +514,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- ══════════════════════════════════════
-     MODAL ANIMAL — avec nouveau sélecteur
+     MODAL ANIMAL
      ══════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-animal">
   <div class="modal-sheet" id="sheet-animal">
@@ -524,65 +522,58 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px" id="modal-animal-title">🐾 Ajouter un animal</div>
     <div style="display:flex;flex-direction:column;gap:14px">
 
-      <!-- ── NOUVEAU SÉLECTEUR D'EMOJI ── -->
+      <!-- 1. ESPÈCE — détermine les options d'apparence -->
       <div class="form-row">
-        <label class="field-label">Apparence de l'animal</label>
+        <label class="field-label">Espèce</label>
+        <div class="species-row">
+          <div class="species-btn active" id="sp-dog" onclick="selectSpecies('dog')">🐶 Chien</div>
+          <div class="species-btn" id="sp-cat" onclick="selectSpecies('cat')">🐱 Chat</div>
+          <div class="species-btn" id="sp-other" onclick="selectSpecies('other')">🐾 Autre</div>
+        </div>
+      </div>
+
+      <!-- 2. APPARENCE — s'affiche selon l'espèce choisie -->
+      <div class="form-row" id="appearance-section">
+        <label class="field-label">Couleur de robe</label>
 
         <!-- Aperçu -->
         <div class="emoji-preview-box">
           <div class="emoji-preview-bubble" id="emoji-preview-bubble">🐶</div>
           <div>
-            <div id="emoji-preview-label" style="font-size:14px;font-weight:600;color:var(--text)">Chien — Générique</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px">Choisis une variante ci-dessous</div>
+            <div id="emoji-preview-label" style="font-size:15px;font-weight:700;color:var(--text)">Chien — Générique</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">Choisis une couleur de robe</div>
           </div>
         </div>
 
-        <!-- Tabs Chien / Chat -->
-        <div style="display:flex;gap:8px;margin-bottom:12px">
-          <div id="etab-dog" class="os-tab active" onclick="switchEmojiTab('dog')" style="flex:1;text-align:center">🐶 Chien</div>
-          <div id="etab-cat" class="os-tab" onclick="switchEmojiTab('cat')" style="flex:1;text-align:center">🐱 Chat</div>
+        <!-- Palette chien -->
+        <div id="swatches-dog" class="color-swatches">
+          <div class="color-swatch selected" style="background:#C9A96E" data-emoji="🐶" data-label="Chien — Fauve" onclick="selectSwatch(this)" title="Fauve"></div>
+          <div class="color-swatch" style="background:#F5E6C8" data-emoji="🦮" data-label="Chien — Crème / blanc" onclick="selectSwatch(this)" title="Crème"></div>
+          <div class="color-swatch" style="background:#8B5E3C" data-emoji="🐕" data-label="Chien — Marron" onclick="selectSwatch(this)" title="Marron"></div>
+          <div class="color-swatch" style="background:#2C2C2C" data-emoji="🐕‍🦺" data-label="Chien — Noir & feu" onclick="selectSwatch(this)" title="Noir"></div>
+          <div class="color-swatch" style="background:#E8E8E8;border:2px solid var(--border)" data-emoji="🐩" data-label="Caniche" onclick="selectSwatch(this)" title="Blanc"></div>
         </div>
 
-        <!-- Grille Chiens -->
-        <div id="emoji-grid-dog" class="emoji-tab-content active">
-          <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Choisir une variante</div>
-          <div class="emoji-grid">
-            <div class="emoji-cell selected" data-emoji="🐶" data-label="Chien — Générique" onclick="selectEmoji(this)">🐶</div>
-            <div class="emoji-cell" data-emoji="🐕" data-label="Chien — Beige / fauve" onclick="selectEmoji(this)">🐕</div>
-            <div class="emoji-cell" data-emoji="🦮" data-label="Chien — Blanc / crème" onclick="selectEmoji(this)">🦮</div>
-            <div class="emoji-cell" data-emoji="🐕‍🦺" data-label="Chien — Marron" onclick="selectEmoji(this)">🐕‍🦺</div>
-            <div class="emoji-cell" data-emoji="🐩" data-label="Caniche" onclick="selectEmoji(this)">🐩</div>
-          </div>
+        <!-- Palette chat -->
+        <div id="swatches-cat" class="color-swatches" style="display:none">
+          <div class="color-swatch selected" style="background:#F4A460" data-emoji="🐱" data-label="Chat — Roux / tigré" onclick="selectSwatch(this)" title="Roux"></div>
+          <div class="color-swatch" style="background:#2C2C2C" data-emoji="🐈‍⬛" data-label="Chat — Noir" onclick="selectSwatch(this)" title="Noir"></div>
+          <div class="color-swatch" style="background:#D3D3D3;border:2px solid var(--border)" data-emoji="🐈" data-label="Chat — Gris / tigré" onclick="selectSwatch(this)" title="Gris"></div>
+          <div class="color-swatch" style="background:#F9F2E7;border:2px solid var(--border)" data-emoji="😺" data-label="Chat — Blanc" onclick="selectSwatch(this)" title="Blanc"></div>
+          <div class="color-swatch" style="background:#C4956A" data-emoji="🙀" data-label="Chat — Écaille" onclick="selectSwatch(this)" title="Écaille"></div>
         </div>
 
-        <!-- Grille Chats -->
-        <div id="emoji-grid-cat" class="emoji-tab-content">
-          <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Choisir une variante</div>
-          <div class="emoji-grid">
-            <div class="emoji-cell" data-emoji="🐱" data-label="Chat — Générique" onclick="selectEmoji(this)">🐱</div>
-            <div class="emoji-cell" data-emoji="🐈" data-label="Chat — Tigré / roux" onclick="selectEmoji(this)">🐈</div>
-            <div class="emoji-cell" data-emoji="🐈‍⬛" data-label="Chat — Noir" onclick="selectEmoji(this)">🐈‍⬛</div>
-            <div class="emoji-cell" data-emoji="😺" data-label="Chat — Souriant" onclick="selectEmoji(this)">😺</div>
-            <div class="emoji-cell" data-emoji="🙀" data-label="Chat — Surpris" onclick="selectEmoji(this)">🙀</div>
-          </div>
-        </div>
-
-        <!-- Champ libre -->
-        <div style="margin-top:12px">
-          <input id="emoji-custom-input" class="field-input" type="text"
-            placeholder="Ou colle un emoji personnalisé ici…"
-            style="font-size:22px;text-align:center;padding:10px"
-            oninput="onCustomEmoji(this.value)">
-          <div style="font-size:11px;color:var(--muted);margin-top:4px;text-align:center">Tu peux coller n'importe quel emoji depuis ton clavier 🐾</div>
+        <!-- Palette autre (neutre) -->
+        <div id="swatches-other" class="color-swatches" style="display:none">
+          <div class="color-swatch selected" style="background:#C9A96E" data-emoji="🐾" data-label="Animal — Générique" onclick="selectSwatch(this)" title="Générique"></div>
+          <div class="color-swatch" style="background:#7EC8A4" data-emoji="🐇" data-label="Lapin" onclick="selectSwatch(this)" title="Lapin">🐇</div>
+          <div class="color-swatch" style="background:#FFD166" data-emoji="🦜" data-label="Oiseau" onclick="selectSwatch(this)" title="Oiseau">🦜</div>
+          <div class="color-swatch" style="background:#B5A7D5" data-emoji="🐹" data-label="Rongeur" onclick="selectSwatch(this)" title="Rongeur">🐹</div>
         </div>
       </div>
-      <!-- ── FIN SÉLECTEUR ── -->
 
-      <!-- Champ caché pour compatibilité (mis à jour par selectEmoji) -->
+      <!-- Champ caché pour compatibilité avec saveAnimal() -->
       <span id="emoji-preview" style="display:none">🐶</span>
-
-      <div class="form-row"><label class="field-label">Nom</label><input class="field-input" id="a-name" type="text" placeholder="Milo"></div>
-      <div class="form-row"><label class="field-label">Espèce</label><div class="species-row"><div class="species-btn active" id="sp-dog" onclick="selectSpecies('dog')">🐶 Chien</div><div class="species-btn" id="sp-cat" onclick="selectSpecies('cat')">🐱 Chat</div><div class="species-btn" id="sp-other" onclick="selectSpecies('other')">🐾 Autre</div></div></div>
       <div class="form-row"><label class="field-label">Race</label><input class="field-input" id="a-breed" type="text" placeholder="Labrador Retriever"></div>
       <div class="form-row"><label class="field-label">Date de naissance</label><input class="field-input" id="a-birth" type="date"></div>
       <div class="form-row"><label class="field-label">Sexe</label><div class="species-row"><div class="species-btn active" id="sx-m" onclick="selectSex('m')">♂ Mâle</div><div class="species-btn" id="sx-f" onclick="selectSex('f')">♀ Femelle</div></div></div>
@@ -957,71 +948,59 @@ function formatDate(d) {
   return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-// ─── NOUVEAU SÉLECTEUR D'EMOJI ────────────────────────────────────────────────
+// ─── SÉLECTEUR D'APPARENCE (palette couleur → emoji) ─────────────────────────
 
-function switchEmojiTab(tab) {
-  ['dog', 'cat'].forEach(t => {
-    document.getElementById('etab-' + t).classList.toggle('active', t === tab);
-    document.getElementById('emoji-grid-' + t).classList.toggle('active', t === tab);
-  });
-}
+// Première swatch de chaque espèce — utilisée au reset
+const SPECIES_DEFAULT = {
+  dog: { emoji: '🐶', label: 'Chien — Fauve' },
+  cat: { emoji: '🐱', label: 'Chat — Roux / tigré' },
+  other: { emoji: '🐾', label: 'Animal — Générique' }
+};
 
-function selectEmoji(cellEl) {
-  const emoji = cellEl.dataset.emoji;
-  const label = cellEl.dataset.label;
-  // Retire la sélection précédente
-  document.querySelectorAll('.emoji-cell.selected').forEach(el => el.classList.remove('selected'));
-  cellEl.classList.add('selected');
-  // Met à jour l'état
+function selectSwatch(swatchEl) {
+  const emoji = swatchEl.dataset.emoji;
+  const label = swatchEl.dataset.label;
+  // Retire la sélection précédente dans la palette active
+  swatchEl.closest('.color-swatches').querySelectorAll('.color-swatch.selected')
+    .forEach(el => el.classList.remove('selected'));
+  swatchEl.classList.add('selected');
+  // Met à jour l'état et l'aperçu
   state.selectedEmoji = emoji;
-  // Met à jour l'aperçu
+  document.getElementById('emoji-preview').textContent = emoji;
   const bubble = document.getElementById('emoji-preview-bubble');
   bubble.textContent = emoji;
   bubble.classList.add('pop');
   setTimeout(() => bubble.classList.remove('pop'), 200);
   document.getElementById('emoji-preview-label').textContent = label;
-  // Vide le champ libre
-  document.getElementById('emoji-custom-input').value = '';
-  // Met à jour le span caché (compatibilité saveAnimal)
-  document.getElementById('emoji-preview').textContent = emoji;
 }
 
-function onCustomEmoji(val) {
-  // Extrait le premier caractère emoji valide
-  const chars = [...val];
-  const match = chars.find(c => /\p{Emoji_Presentation}/u.test(c));
-  if (match) {
-    state.selectedEmoji = match;
-    const bubble = document.getElementById('emoji-preview-bubble');
-    bubble.textContent = match;
-    bubble.classList.add('pop');
-    setTimeout(() => bubble.classList.remove('pop'), 200);
-    document.getElementById('emoji-preview-label').textContent = 'Personnalisé';
-    document.querySelectorAll('.emoji-cell.selected').forEach(el => el.classList.remove('selected'));
-    document.getElementById('emoji-preview').textContent = match;
+function updateSwatchesForSpecies(species) {
+  // Affiche uniquement la palette de l'espèce choisie
+  ['dog', 'cat', 'other'].forEach(s => {
+    document.getElementById('swatches-' + s).style.display = s === species ? 'flex' : 'none';
+  });
+  // Sélectionne la première swatch et met à jour l'aperçu
+  const palette = document.getElementById('swatches-' + species);
+  palette.querySelectorAll('.color-swatch.selected').forEach(el => el.classList.remove('selected'));
+  const first = palette.querySelector('.color-swatch');
+  if (first) {
+    first.classList.add('selected');
+    state.selectedEmoji = first.dataset.emoji;
+    document.getElementById('emoji-preview').textContent = first.dataset.emoji;
+    document.getElementById('emoji-preview-bubble').textContent = first.dataset.emoji;
+    document.getElementById('emoji-preview-label').textContent = first.dataset.label;
   }
 }
 
 // ─── ANIMAL ───────────────────────────────────────────────────────────────────
 function openAddAnimal() {
   state.editingAnimalId = null;
-  state.selectedEmoji = '🐶';
   document.getElementById('modal-animal-title').textContent = '🐾 Ajouter un animal';
-  // Reset aperçu
-  document.getElementById('emoji-preview-bubble').textContent = '🐶';
-  document.getElementById('emoji-preview-label').textContent = 'Chien — Générique';
-  document.getElementById('emoji-preview').textContent = '🐶';
-  document.getElementById('emoji-custom-input').value = '';
-  // Reset sélection grille
-  document.querySelectorAll('.emoji-cell.selected').forEach(el => el.classList.remove('selected'));
-  const firstCell = document.querySelector('[data-emoji="🐶"]');
-  if (firstCell) firstCell.classList.add('selected');
-  // Tab chien par défaut
-  switchEmojiTab('dog');
-  // Reset champs
-  ['a-name', 'a-breed', 'a-birth', 'a-idnum'].forEach(id => document.getElementById(id).value = '');
-  selectSpecies('dog'); selectSex('m'); selectIdType('puce');
+  // Reset espèce → chien par défaut, ce qui déclenche la palette
+  selectSpecies('dog');
+  selectSex('m'); selectIdType('puce');
   document.getElementById('steril-toggle').classList.remove('on');
+  ['a-name', 'a-breed', 'a-birth', 'a-idnum'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('modal-animal').classList.add('open');
 }
 
@@ -1029,30 +1008,29 @@ function openEditAnimal(aid) {
   const a = state.animals.find(x => x.id === aid);
   if (!a) return;
   state.editingAnimalId = aid;
-  state.selectedEmoji = a.emoji || '🐶';
   document.getElementById('modal-animal-title').textContent = '✏️ Modifier ' + a.name;
-  // Aperçu
-  document.getElementById('emoji-preview-bubble').textContent = a.emoji || '🐶';
-  document.getElementById('emoji-preview').textContent = a.emoji || '🐶';
-  document.getElementById('emoji-custom-input').value = '';
-  // Essaie de retrouver la cellule correspondante
-  document.querySelectorAll('.emoji-cell.selected').forEach(el => el.classList.remove('selected'));
-  const matchCell = document.querySelector('[data-emoji="' + a.emoji + '"]');
-  if (matchCell) {
-    matchCell.classList.add('selected');
-    document.getElementById('emoji-preview-label').textContent = matchCell.dataset.label;
-    // Active le bon tab
-    switchEmojiTab(matchCell.closest('#emoji-grid-dog') ? 'dog' : 'cat');
-  } else {
-    document.getElementById('emoji-preview-label').textContent = 'Personnalisé';
-    switchEmojiTab('dog');
+  // Espèce en premier — déclenche updateSwatchesForSpecies via selectSpecies
+  selectSpecies(a.species || 'dog');
+  // Essaie de retrouver la swatch correspondant à l'emoji sauvegardé
+  if (a.emoji) {
+    const matchSwatch = document.querySelector('[data-emoji="' + CSS.escape(a.emoji) + '"]');
+    if (matchSwatch) {
+      // Désélectionne la swatch auto-sélectionnée par updateSwatchesForSpecies
+      matchSwatch.closest('.color-swatches')
+        .querySelectorAll('.color-swatch.selected').forEach(el => el.classList.remove('selected'));
+      matchSwatch.classList.add('selected');
+      state.selectedEmoji = a.emoji;
+      document.getElementById('emoji-preview-bubble').textContent = a.emoji;
+      document.getElementById('emoji-preview').textContent = a.emoji;
+      document.getElementById('emoji-preview-label').textContent = matchSwatch.dataset.label;
+    }
   }
-  // Champs
+  // Champs texte
   document.getElementById('a-name').value = a.name;
   document.getElementById('a-breed').value = a.breed || '';
   document.getElementById('a-birth').value = a.birth || '';
   document.getElementById('a-idnum').value = a.idNum || '';
-  selectSpecies(a.species); selectSex(a.sex || 'm'); selectIdType(a.idType || 'puce');
+  selectSex(a.sex || 'm'); selectIdType(a.idType || 'puce');
   if (a.sterilized) document.getElementById('steril-toggle').classList.add('on');
   else document.getElementById('steril-toggle').classList.remove('on');
   document.getElementById('modal-animal').classList.add('open');
@@ -1062,6 +1040,8 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 function selectSpecies(s) {
   state.selectedSpecies = s;
   ['dog', 'cat', 'other'].forEach(x => document.getElementById('sp-' + x)?.classList.toggle('active', x === s));
+  // Met à jour la palette de couleurs si le modal animal est ouvert
+  if (document.getElementById('swatches-dog')) updateSwatchesForSpecies(s);
 }
 function selectSex(s) {
   state.selectedSex = s;
