@@ -975,20 +975,25 @@ function selectSwatch(swatchEl) {
 }
 
 function updateSwatchesForSpecies(species) {
-  // Affiche uniquement la palette de l'espèce choisie
+  const dogEl = document.getElementById('swatches-dog');
+  if (!dogEl) return; // modal pas encore dans le DOM actif
   ['dog', 'cat', 'other'].forEach(s => {
-    document.getElementById('swatches-' + s).style.display = s === species ? 'flex' : 'none';
+    const el = document.getElementById('swatches-' + s);
+    if (el) el.style.display = s === species ? 'flex' : 'none';
   });
-  // Sélectionne la première swatch et met à jour l'aperçu
   const palette = document.getElementById('swatches-' + species);
+  if (!palette) return;
   palette.querySelectorAll('.color-swatch.selected').forEach(el => el.classList.remove('selected'));
   const first = palette.querySelector('.color-swatch');
   if (first) {
     first.classList.add('selected');
     state.selectedEmoji = first.dataset.emoji;
-    document.getElementById('emoji-preview').textContent = first.dataset.emoji;
-    document.getElementById('emoji-preview-bubble').textContent = first.dataset.emoji;
-    document.getElementById('emoji-preview-label').textContent = first.dataset.label;
+    const preview = document.getElementById('emoji-preview');
+    const bubble = document.getElementById('emoji-preview-bubble');
+    const lbl = document.getElementById('emoji-preview-label');
+    if (preview) preview.textContent = first.dataset.emoji;
+    if (bubble) bubble.textContent = first.dataset.emoji;
+    if (lbl) lbl.textContent = first.dataset.label;
   }
 }
 
