@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -148,6 +147,18 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .vet-row:last-child{border-bottom:none}
 .weight-entry{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .croquette-card{background:#fef9ec;border-radius:12px;border:1px solid #fde68a;padding:14px;margin-bottom:10px}
+
+/* ── Sélecteur d'emoji ── */
+.emoji-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:4px}
+.emoji-cell{height:52px;border-radius:12px;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;transition:all .15s;user-select:none}
+.emoji-cell:active{transform:scale(.9)}
+.emoji-cell.selected{border-color:var(--teal);background:var(--teal-light);box-shadow:0 0 0 3px rgba(42,157,143,.15)}
+.emoji-tab-content{display:none}
+.emoji-tab-content.active{display:block}
+.emoji-preview-box{display:flex;align-items:center;gap:14px;background:var(--bg);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.emoji-preview-bubble{width:64px;height:64px;border-radius:18px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;transition:transform .2s}
+.emoji-preview-bubble.pop{transform:scale(1.18)}
+
 @media(min-width:480px){
   body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
   .screen{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.12)}
@@ -158,7 +169,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <body>
 
 <!-- ONBOARDING -->
-
 <div id="screen-onboarding" class="screen active">
   <div style="flex:1;background:var(--white);display:flex;flex-direction:column">
     <div style="flex:1;position:relative;overflow:hidden">
@@ -189,7 +199,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- AUTH -->
-
 <div id="screen-auth" class="screen">
   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;background:var(--white)">
     <div style="text-align:center;padding:20px 0 4px">
@@ -220,7 +229,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MOT DE PASSE OUBLIÉ -->
-
 <div id="screen-forgot" class="screen">
   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:16px;background:var(--white)">
     <div style="text-align:center;padding:20px 0">
@@ -236,7 +244,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- TUTO -->
-
 <div id="screen-tuto" class="screen">
   <div style="background:var(--teal);padding:20px;color:#fff;flex-shrink:0">
     <div style="font-size:20px;font-weight:700">📲 Installer VetID</div>
@@ -270,7 +277,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- DASHBOARD -->
-
 <div id="screen-dashboard" class="screen">
   <div class="dash-header">
     <div id="dash-greeting" style="font-size:14px;opacity:.85">Bonjour 👋</div>
@@ -297,7 +303,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- SOINS -->
-
 <div id="screen-soins" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -313,7 +318,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- POIDS -->
-
 <div id="screen-poids" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -329,7 +333,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- CROQUETTES -->
-
 <div id="screen-croquettes" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -342,7 +345,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- VÉTÉRINAIRE -->
-
 <div id="screen-vet" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -355,7 +357,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- BLOG -->
-
 <div id="screen-blog" class="screen">
   <div class="dash-header">
     <div style="font-size:22px;font-weight:700">Blog santé</div>
@@ -377,7 +378,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- ARTICLE -->
-
 <div id="screen-article" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('blog')">‹</div>
@@ -393,7 +393,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- COMMUNAUTÉ -->
-
 <div id="screen-community" class="screen">
   <div class="dash-header">
     <div style="font-size:22px;font-weight:700">Communauté</div>
@@ -429,7 +428,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- RÉGLAGES -->
-
 <div id="screen-settings" class="screen">
   <div class="dash-header"><div style="font-size:22px;font-weight:700">Réglages</div><div id="settings-email" style="font-size:13px;opacity:.8;margin-top:2px"></div></div>
   <div style="flex:1;overflow-y:auto;padding:16px">
@@ -500,7 +498,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- PRIVACY -->
-
 <div id="screen-privacy" class="screen">
   <div class="page-header"><div class="back-btn" onclick="showScreen('settings')">‹</div><div style="font-size:18px;font-weight:700">Politique de confidentialité</div></div>
   <div style="flex:1;overflow-y:auto;padding:20px;font-size:14px;line-height:1.8;color:var(--text)">
@@ -518,31 +515,72 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- MODAL ANIMAL -->
-
+<!-- ══════════════════════════════════════
+     MODAL ANIMAL — avec nouveau sélecteur
+     ══════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-animal">
   <div class="modal-sheet" id="sheet-animal">
     <div class="modal-handle" id="handle-animal"></div>
     <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px" id="modal-animal-title">🐾 Ajouter un animal</div>
     <div style="display:flex;flex-direction:column;gap:14px">
+
+      <!-- ── NOUVEAU SÉLECTEUR D'EMOJI ── -->
       <div class="form-row">
-        <label class="field-label">Emoji de l'animal</label>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <span id="emoji-preview" style="font-size:40px;margin-right:8px">🐶</span>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐶')">🐶</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐱')">🐱</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐈⬛')">🐈⬛</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐩')">🐩</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🦮')">🦮</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐕')">🐕</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐈')">🐈</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐇')">🐇</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🐾')">🐾</span>
-            <span style="font-size:24px;cursor:pointer;padding:4px" onclick="selectEmoji('🦜')">🦜</span>
+        <label class="field-label">Apparence de l'animal</label>
+
+        <!-- Aperçu -->
+        <div class="emoji-preview-box">
+          <div class="emoji-preview-bubble" id="emoji-preview-bubble">🐶</div>
+          <div>
+            <div id="emoji-preview-label" style="font-size:14px;font-weight:600;color:var(--text)">Chien — Générique</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">Choisis une variante ci-dessous</div>
           </div>
         </div>
+
+        <!-- Tabs Chien / Chat -->
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <div id="etab-dog" class="os-tab active" onclick="switchEmojiTab('dog')" style="flex:1;text-align:center">🐶 Chien</div>
+          <div id="etab-cat" class="os-tab" onclick="switchEmojiTab('cat')" style="flex:1;text-align:center">🐱 Chat</div>
+        </div>
+
+        <!-- Grille Chiens -->
+        <div id="emoji-grid-dog" class="emoji-tab-content active">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Choisir une variante</div>
+          <div class="emoji-grid">
+            <div class="emoji-cell selected" data-emoji="🐶" data-label="Chien — Générique" onclick="selectEmoji(this)">🐶</div>
+            <div class="emoji-cell" data-emoji="🐕" data-label="Chien — Beige / fauve" onclick="selectEmoji(this)">🐕</div>
+            <div class="emoji-cell" data-emoji="🦮" data-label="Chien — Blanc / crème" onclick="selectEmoji(this)">🦮</div>
+            <div class="emoji-cell" data-emoji="🐕‍🦺" data-label="Chien — Marron" onclick="selectEmoji(this)">🐕‍🦺</div>
+            <div class="emoji-cell" data-emoji="🐩" data-label="Caniche" onclick="selectEmoji(this)">🐩</div>
+          </div>
+        </div>
+
+        <!-- Grille Chats -->
+        <div id="emoji-grid-cat" class="emoji-tab-content">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Choisir une variante</div>
+          <div class="emoji-grid">
+            <div class="emoji-cell" data-emoji="🐱" data-label="Chat — Générique" onclick="selectEmoji(this)">🐱</div>
+            <div class="emoji-cell" data-emoji="🐈" data-label="Chat — Tigré / roux" onclick="selectEmoji(this)">🐈</div>
+            <div class="emoji-cell" data-emoji="🐈‍⬛" data-label="Chat — Noir" onclick="selectEmoji(this)">🐈‍⬛</div>
+            <div class="emoji-cell" data-emoji="😺" data-label="Chat — Souriant" onclick="selectEmoji(this)">😺</div>
+            <div class="emoji-cell" data-emoji="🙀" data-label="Chat — Surpris" onclick="selectEmoji(this)">🙀</div>
+          </div>
+        </div>
+
+        <!-- Champ libre -->
+        <div style="margin-top:12px">
+          <input id="emoji-custom-input" class="field-input" type="text"
+            placeholder="Ou colle un emoji personnalisé ici…"
+            style="font-size:22px;text-align:center;padding:10px"
+            oninput="onCustomEmoji(this.value)">
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;text-align:center">Tu peux coller n'importe quel emoji depuis ton clavier 🐾</div>
+        </div>
       </div>
+      <!-- ── FIN SÉLECTEUR ── -->
+
+      <!-- Champ caché pour compatibilité (mis à jour par selectEmoji) -->
+      <span id="emoji-preview" style="display:none">🐶</span>
+
       <div class="form-row"><label class="field-label">Nom</label><input class="field-input" id="a-name" type="text" placeholder="Milo"></div>
       <div class="form-row"><label class="field-label">Espèce</label><div class="species-row"><div class="species-btn active" id="sp-dog" onclick="selectSpecies('dog')">🐶 Chien</div><div class="species-btn" id="sp-cat" onclick="selectSpecies('cat')">🐱 Chat</div><div class="species-btn" id="sp-other" onclick="selectSpecies('other')">🐾 Autre</div></div></div>
       <div class="form-row"><label class="field-label">Race</label><input class="field-input" id="a-breed" type="text" placeholder="Labrador Retriever"></div>
@@ -562,7 +600,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL SOINS -->
-
 <div class="modal-overlay" id="modal-soin">
   <div class="modal-sheet" id="sheet-soin">
     <div class="modal-handle" id="handle-soin"></div>
@@ -600,7 +637,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL POIDS -->
-
 <div class="modal-overlay" id="modal-poids">
   <div class="modal-sheet" id="sheet-poids">
     <div class="modal-handle" id="handle-poids"></div>
@@ -616,7 +652,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL CROQUETTES -->
-
 <div class="modal-overlay" id="modal-croquette">
   <div class="modal-sheet" id="sheet-croquette">
     <div class="modal-handle" id="handle-croquette"></div>
@@ -634,7 +669,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL VÉTÉRINAIRE -->
-
 <div class="modal-overlay" id="modal-vet">
   <div class="modal-sheet" id="sheet-vet">
     <div class="modal-handle" id="handle-vet"></div>
@@ -652,7 +686,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL FEEDBACK -->
-
 <div class="modal-overlay" id="modal-feedback">
   <div class="modal-sheet" id="sheet-feedback">
     <div class="modal-handle" id="handle-feedback"></div>
@@ -670,7 +703,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <div class="toast" id="toast"></div>
 
 <script>
-// STATE
+// ─── STATE ───────────────────────────────────────────────────────────────────
 let state = {
   user: null, animals: [], treatments: [], weights: {}, croquettes: {}, vets: {},
   currentAnimalId: null, editingAnimalId: null,
@@ -701,7 +734,7 @@ function saveState() {
   }
 }
 
-// NAVIGATION
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
@@ -715,7 +748,7 @@ function switchOS(os, el) {
   document.getElementById('os-' + os).classList.add('active');
 }
 
-// ONBOARDING
+// ─── ONBOARDING ───────────────────────────────────────────────────────────────
 let onbStep = 0;
 function nextSlide() {
   if (onbStep < 2) {
@@ -733,7 +766,7 @@ function nextSlide() {
 }
 function goToAuth() { showScreen('auth'); }
 
-// AUTH
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
 function togglePwd() {
   const i = document.getElementById('auth-password');
   const e = document.getElementById('pwd-eye');
@@ -811,7 +844,7 @@ async function doResetPassword() {
 }
 function goToDashboard() { updateDashboard(); loadBlogPreview(); showScreen('dashboard'); }
 
-// TABS
+// ─── TABS ─────────────────────────────────────────────────────────────────────
 function goToTab(tab) {
   const map = { home: 'dashboard', community: 'community', settings: 'settings' };
   showScreen(map[tab] || tab);
@@ -822,7 +855,7 @@ function goToTab(tab) {
   }
 }
 
-// DASHBOARD
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
 function updateDashboard() {
   if (state.user) document.getElementById('dash-greeting').textContent = 'Bonjour ' + state.user.prenom + ' 👋';
   const list = document.getElementById('animals-list');
@@ -840,10 +873,8 @@ function updateDashboard() {
     const treatStatus = getAnimalTreatStatus(a.id);
     const lastWeight = weights.length ? weights[weights.length - 1] : null;
     const lastCroquette = croquettes.length ? croquettes[croquettes.length - 1] : null;
-
     const section = document.createElement('div');
     section.className = 'animal-section';
-
     const header = document.createElement('div');
     header.className = 'animal-section-header';
     header.innerHTML = '<div class="animal-avatar">' + (a.emoji || '🐾') + '</div>'
@@ -851,11 +882,8 @@ function updateDashboard() {
       + '<div style="font-size:12px;color:var(--muted)">' + (a.breed || '') + ' · ' + calcAge(a.birth) + '</div></div>'
       + '<span style="font-size:18px;cursor:pointer" onclick="event.stopPropagation();openEditAnimal(\'' + a.id + '\')">✏️</span>';
     section.appendChild(header);
-
     const grid = document.createElement('div');
     grid.className = 'card-grid';
-
-    // Soins
     const soinsCard = createDashCard('💊', 'Soins',
       treats.length ? treats.length + ' traitement' + (treats.length > 1 ? 's' : '') : 'Aucun soin',
       treatStatus === 'red' ? { text: 'En retard', bg: '#fee2e2', color: '#991b1b' } :
@@ -864,16 +892,12 @@ function updateDashboard() {
       function() { openSoins(a.id); }
     );
     grid.appendChild(soinsCard);
-
-    // Poids
     const poidsCard = createDashCard('⚖️', 'Poids',
       lastWeight ? lastWeight.value + ' kg' : 'Non renseigné',
       lastWeight ? { text: 'Suivi actif', bg: 'var(--teal-light)', color: 'var(--teal-dark)' } : null,
       function() { openPoids(a.id); }
     );
     grid.appendChild(poidsCard);
-
-    // Croquettes
     const croquetteStatus = getCroquetteStatus(a.id);
     const croqCard = createDashCard('🍗', 'Croquettes',
       lastCroquette ? lastCroquette.brand : 'Non renseigné',
@@ -882,20 +906,16 @@ function updateDashboard() {
       function() { openCroquettes(a.id); }
     );
     grid.appendChild(croqCard);
-
-    // Vétérinaire
     const vetCard = createDashCard('🏥', 'Vétérinaire',
       vet ? vet.name || vet.clinic : 'Non renseigné',
       vet ? { text: 'Enregistré', bg: '#E6F1FB', color: '#185FA5' } : null,
       function() { openVet(a.id); }
     );
     grid.appendChild(vetCard);
-
     section.appendChild(grid);
     list.appendChild(section);
   });
 }
-
 function createDashCard(icon, title, sub, badge, onClick) {
   const card = document.createElement('div');
   card.className = 'dash-card';
@@ -906,7 +926,6 @@ function createDashCard(icon, title, sub, badge, onClick) {
   card.onclick = onClick;
   return card;
 }
-
 function calcAge(b) {
   if (!b) return '';
   const d = new Date(b), n = new Date();
@@ -938,24 +957,97 @@ function formatDate(d) {
   return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-// ANIMAL
+// ─── NOUVEAU SÉLECTEUR D'EMOJI ────────────────────────────────────────────────
+
+function switchEmojiTab(tab) {
+  ['dog', 'cat'].forEach(t => {
+    document.getElementById('etab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('emoji-grid-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+function selectEmoji(cellEl) {
+  const emoji = cellEl.dataset.emoji;
+  const label = cellEl.dataset.label;
+  // Retire la sélection précédente
+  document.querySelectorAll('.emoji-cell.selected').forEach(el => el.classList.remove('selected'));
+  cellEl.classList.add('selected');
+  // Met à jour l'état
+  state.selectedEmoji = emoji;
+  // Met à jour l'aperçu
+  const bubble = document.getElementById('emoji-preview-bubble');
+  bubble.textContent = emoji;
+  bubble.classList.add('pop');
+  setTimeout(() => bubble.classList.remove('pop'), 200);
+  document.getElementById('emoji-preview-label').textContent = label;
+  // Vide le champ libre
+  document.getElementById('emoji-custom-input').value = '';
+  // Met à jour le span caché (compatibilité saveAnimal)
+  document.getElementById('emoji-preview').textContent = emoji;
+}
+
+function onCustomEmoji(val) {
+  // Extrait le premier caractère emoji valide
+  const chars = [...val];
+  const match = chars.find(c => /\p{Emoji_Presentation}/u.test(c));
+  if (match) {
+    state.selectedEmoji = match;
+    const bubble = document.getElementById('emoji-preview-bubble');
+    bubble.textContent = match;
+    bubble.classList.add('pop');
+    setTimeout(() => bubble.classList.remove('pop'), 200);
+    document.getElementById('emoji-preview-label').textContent = 'Personnalisé';
+    document.querySelectorAll('.emoji-cell.selected').forEach(el => el.classList.remove('selected'));
+    document.getElementById('emoji-preview').textContent = match;
+  }
+}
+
+// ─── ANIMAL ───────────────────────────────────────────────────────────────────
 function openAddAnimal() {
   state.editingAnimalId = null;
   state.selectedEmoji = '🐶';
   document.getElementById('modal-animal-title').textContent = '🐾 Ajouter un animal';
+  // Reset aperçu
+  document.getElementById('emoji-preview-bubble').textContent = '🐶';
+  document.getElementById('emoji-preview-label').textContent = 'Chien — Générique';
   document.getElementById('emoji-preview').textContent = '🐶';
+  document.getElementById('emoji-custom-input').value = '';
+  // Reset sélection grille
+  document.querySelectorAll('.emoji-cell.selected').forEach(el => el.classList.remove('selected'));
+  const firstCell = document.querySelector('[data-emoji="🐶"]');
+  if (firstCell) firstCell.classList.add('selected');
+  // Tab chien par défaut
+  switchEmojiTab('dog');
+  // Reset champs
   ['a-name', 'a-breed', 'a-birth', 'a-idnum'].forEach(id => document.getElementById(id).value = '');
   selectSpecies('dog'); selectSex('m'); selectIdType('puce');
   document.getElementById('steril-toggle').classList.remove('on');
   document.getElementById('modal-animal').classList.add('open');
 }
+
 function openEditAnimal(aid) {
   const a = state.animals.find(x => x.id === aid);
   if (!a) return;
   state.editingAnimalId = aid;
   state.selectedEmoji = a.emoji || '🐶';
   document.getElementById('modal-animal-title').textContent = '✏️ Modifier ' + a.name;
+  // Aperçu
+  document.getElementById('emoji-preview-bubble').textContent = a.emoji || '🐶';
   document.getElementById('emoji-preview').textContent = a.emoji || '🐶';
+  document.getElementById('emoji-custom-input').value = '';
+  // Essaie de retrouver la cellule correspondante
+  document.querySelectorAll('.emoji-cell.selected').forEach(el => el.classList.remove('selected'));
+  const matchCell = document.querySelector('[data-emoji="' + a.emoji + '"]');
+  if (matchCell) {
+    matchCell.classList.add('selected');
+    document.getElementById('emoji-preview-label').textContent = matchCell.dataset.label;
+    // Active le bon tab
+    switchEmojiTab(matchCell.closest('#emoji-grid-dog') ? 'dog' : 'cat');
+  } else {
+    document.getElementById('emoji-preview-label').textContent = 'Personnalisé';
+    switchEmojiTab('dog');
+  }
+  // Champs
   document.getElementById('a-name').value = a.name;
   document.getElementById('a-breed').value = a.breed || '';
   document.getElementById('a-birth').value = a.birth || '';
@@ -965,10 +1057,7 @@ function openEditAnimal(aid) {
   else document.getElementById('steril-toggle').classList.remove('on');
   document.getElementById('modal-animal').classList.add('open');
 }
-function selectEmoji(e) {
-  state.selectedEmoji = e;
-  document.getElementById('emoji-preview').textContent = e;
-}
+
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function selectSpecies(s) {
   state.selectedSpecies = s;
@@ -1009,7 +1098,7 @@ function saveAnimal() {
   showToast(isEdit ? animal.name + ' modifié ✓' : animal.name + ' ajouté ! 🐾');
 }
 
-// SOINS
+// ─── SOINS ────────────────────────────────────────────────────────────────────
 function openSoins(aid) {
   state.currentAnimalId = aid;
   const a = state.animals.find(x => x.id === aid);
@@ -1129,7 +1218,7 @@ function addToGoogleCalendar(animalName, type, autreName, nextDate) {
   window.open(url, '_blank');
 }
 
-// POIDS
+// ─── POIDS ────────────────────────────────────────────────────────────────────
 function openPoids(aid) {
   state.currentAnimalId = aid;
   const a = state.animals.find(x => x.id === aid);
@@ -1185,7 +1274,7 @@ function renderPoids(aid) {
   });
 }
 
-// CROQUETTES
+// ─── CROQUETTES ───────────────────────────────────────────────────────────────
 function openCroquettes(aid) {
   state.currentAnimalId = aid;
   const a = state.animals.find(x => x.id === aid);
@@ -1239,7 +1328,7 @@ function renderCroquettes(aid) {
   });
 }
 
-// VÉTÉRINAIRE
+// ─── VÉTÉRINAIRE ──────────────────────────────────────────────────────────────
 function openVet(aid) {
   state.currentAnimalId = aid;
   const a = state.animals.find(x => x.id === aid);
@@ -1283,7 +1372,7 @@ function renderVet(aid) {
     + '</div>';
 }
 
-// BLOG
+// ─── BLOG ─────────────────────────────────────────────────────────────────────
 async function fetchNotionArticles() {
   try {
     const res = await fetch('/api/articles', { headers: { 'x-vetid-token': 'vetid2026beta' } });
@@ -1354,7 +1443,7 @@ function openArticle(idx) {
   showScreen('article');
 }
 
-// COMMUNAUTÉ FEEDBACK
+// ─── FEEDBACK ─────────────────────────────────────────────────────────────────
 function openCommunityFeedback() {
   document.getElementById('feedback-title').textContent = '💡 Mes idées pour la communauté';
   document.getElementById('feedback-msg').placeholder = 'Dites-nous ce que vous aimeriez trouver dans la communauté VetID…';
@@ -1391,7 +1480,7 @@ async function sendFeedback() {
   }
 }
 
-// RGPD
+// ─── RGPD ─────────────────────────────────────────────────────────────────────
 function exportData() {
   const data = { user: { prenom: state.user?.prenom, email: state.user?.email }, animals: state.animals, treatments: state.treatments, weights: state.weights, croquettes: state.croquettes, vets: state.vets, exportDate: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -1412,10 +1501,10 @@ function logout() {
   showScreen('auth');
 }
 
-// TOAST
+// ─── TOAST ────────────────────────────────────────────────────────────────────
 function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2800); }
 
-// SWIPE CLOSE MODALS
+// ─── SWIPE MODALS ─────────────────────────────────────────────────────────────
 function initSwipeClose(handleId, overlayId) {
   const handle = document.getElementById(handleId);
   const overlay = document.getElementById(overlayId);
@@ -1433,7 +1522,7 @@ function initSwipeClose(handleId, overlayId) {
   overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.classList.remove('open'); sheet.style.transform = ''; } });
 }
 
-// SWIPE NAV
+// ─── SWIPE NAV ────────────────────────────────────────────────────────────────
 function initSwipeNav() {
   const screens = ['dashboard', 'community', 'settings'];
   let startX = 0, startY = 0;
@@ -1453,7 +1542,7 @@ function initSwipeNav() {
   }, { passive: true });
 }
 
-// INIT
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 loadState();
 showScreen('onboarding');
 ['animal', 'soin', 'poids', 'croquette', 'vet', 'feedback'].forEach(id => {
@@ -1461,6 +1550,5 @@ showScreen('onboarding');
 });
 initSwipeNav();
 </script>
-
 </body>
 </html>
