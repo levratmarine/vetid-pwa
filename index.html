@@ -67,16 +67,25 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .nav-icon{font-size:22px}
 .nav-label{font-size:10px;color:var(--muted);font-weight:500}
 .nav-item.active .nav-label{color:var(--teal)}
-.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.dash-card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:14px;cursor:pointer;transition:transform .15s}
-.dash-card:active{transform:scale(.97)}
-.dash-card-icon{font-size:28px;margin-bottom:6px}
-.dash-card-title{font-size:14px;font-weight:600;color:var(--text)}
-.dash-card-sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
-.dash-card-badge{font-size:10px;padding:3px 8px;border-radius:7px;font-weight:500;margin-top:6px;display:inline-block}
-.animal-section{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:14px}
-.animal-section-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.animal-section{background:var(--white);border-radius:16px;border:1px solid var(--border);margin-bottom:12px;overflow:hidden}
+.animal-section-header{display:flex;align-items:center;gap:10px;padding:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .animal-avatar{width:44px;height:44px;border-radius:12px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+/* Icônes rapides sur une ligne */
+.quick-icons{display:flex;gap:6px;margin-left:auto;margin-right:8px}
+.quick-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:transform .15s;flex-shrink:0}
+.quick-icon:active{transform:scale(.88)}
+.chevron{font-size:18px;color:var(--muted);transition:transform .3s;flex-shrink:0;line-height:1}
+.chevron.open{transform:rotate(180deg)}
+/* Panneau déroulant */
+.animal-detail{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 14px}
+.animal-detail.open{max-height:700px;padding:0 14px 14px}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dash-card{background:var(--bg);border-radius:14px;border:1px solid var(--border);padding:12px;cursor:pointer;transition:transform .15s}
+.dash-card:active{transform:scale(.97)}
+.dash-card-icon{font-size:24px;margin-bottom:4px}
+.dash-card-title{font-size:13px;font-weight:600;color:var(--text)}
+.dash-card-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.dash-card-badge{font-size:10px;padding:3px 8px;border-radius:7px;font-weight:500;margin-top:5px;display:inline-block}
 .badges{display:flex;gap:4px;flex-wrap:wrap}
 .badge{font-size:11px;padding:3px 9px;border-radius:8px;font-weight:500}
 .badge-green{background:#dcfce7;color:#166534}
@@ -288,8 +297,14 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     </div>
     <div id="animals-list"></div>
     <div id="blog-preview" style="display:none">
-      <div class="section-title">Derniers articles</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:16px">
+        <div class="section-title" style="margin:0">Derniers articles</div>
+        <span onclick="loadBlog();showScreen('blog')" style="font-size:12px;color:var(--teal);font-weight:600;cursor:pointer">Voir tous →</span>
+      </div>
       <div id="blog-preview-list" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px"></div>
+      <div style="margin-top:12px;text-align:center;padding-bottom:8px">
+        <span onclick="loadBlog();showScreen('blog')" style="font-size:13px;color:var(--teal);font-weight:600;cursor:pointer;border:1.5px solid var(--teal);border-radius:20px;padding:8px 20px;display:inline-block">📖 Voir tous les articles</span>
+      </div>
     </div>
   </div>
   <button class="fab" onclick="openAddAnimal()">+</button>
@@ -547,28 +562,28 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 
         <!-- Palette chien -->
         <div id="swatches-dog" class="color-swatches">
-          <div class="color-swatch selected" style="background:#C9A96E" data-emoji="🐶" data-label="Fauve" onclick="selectSwatch(this)" title="Fauve"></div>
-          <div class="color-swatch" style="background:#F5E6C8" data-emoji="🦮" data-label="Crème / sable " onclick="selectSwatch(this)" title="Crème"></div>
-          <div class="color-swatch" style="background:#8B5E3C" data-emoji="🐕" data-label="Marron" onclick="selectSwatch(this)" title="Marron"></div>
-          <div class="color-swatch" style="background:#2C2C2C" data-emoji="🐕‍🦺" data-label="Noir" onclick="selectSwatch(this)" title="Noir"></div>
-          <div class="color-swatch" style="background:#E8E8E8;border:2px solid var(--border)" data-emoji="🐩" data-label="Blanc" onclick="selectSwatch(this)" title="Blanc"></div>
+          <div class="color-swatch selected" style="background:#C9A96E" data-emoji="🐶" data-label="Chien — Fauve" onclick="selectSwatch(this)" title="Fauve"></div>
+          <div class="color-swatch" style="background:#F5E6C8" data-emoji="🦮" data-label="Chien — Crème / blanc" onclick="selectSwatch(this)" title="Crème"></div>
+          <div class="color-swatch" style="background:#8B5E3C" data-emoji="🐕" data-label="Chien — Marron" onclick="selectSwatch(this)" title="Marron"></div>
+          <div class="color-swatch" style="background:#2C2C2C" data-emoji="🐕‍🦺" data-label="Chien — Noir & feu" onclick="selectSwatch(this)" title="Noir"></div>
+          <div class="color-swatch" style="background:#E8E8E8;border:2px solid var(--border)" data-emoji="🐩" data-label="Caniche" onclick="selectSwatch(this)" title="Blanc"></div>
         </div>
 
         <!-- Palette chat -->
         <div id="swatches-cat" class="color-swatches" style="display:none">
-          <div class="color-swatch selected" style="background:#F4A460" data-emoji="🐱" data-label="Roux / marron" onclick="selectSwatch(this)" title="Roux"></div>
-          <div class="color-swatch" style="background:#2C2C2C" data-emoji="🐈‍⬛" data-label="Noir" onclick="selectSwatch(this)" title="Noir"></div>
-          <div class="color-swatch" style="background:#D3D3D3;border:2px solid var(--border)" data-emoji="🐈" data-label="Tigré / gris" onclick="selectSwatch(this)" title="Gris"></div>
-          <div class="color-swatch" style="background:#F9F2E7;border:2px solid var(--border)" data-emoji="😺" data-label="Blanc / autre" onclick="selectSwatch(this)" title="Blanc"></div>
+          <div class="color-swatch selected" style="background:#F4A460" data-emoji="🐱" data-label="Chat — Roux / tigré" onclick="selectSwatch(this)" title="Roux"></div>
+          <div class="color-swatch" style="background:#2C2C2C" data-emoji="🐈‍⬛" data-label="Chat — Noir" onclick="selectSwatch(this)" title="Noir"></div>
+          <div class="color-swatch" style="background:#D3D3D3;border:2px solid var(--border)" data-emoji="🐈" data-label="Chat — Gris / tigré" onclick="selectSwatch(this)" title="Gris"></div>
+          <div class="color-swatch" style="background:#F9F2E7;border:2px solid var(--border)" data-emoji="😺" data-label="Chat — Blanc" onclick="selectSwatch(this)" title="Blanc"></div>
+          <div class="color-swatch" style="background:#C4956A" data-emoji="🙀" data-label="Chat — Écaille" onclick="selectSwatch(this)" title="Écaille"></div>
         </div>
 
         <!-- Palette autre (neutre) -->
         <div id="swatches-other" class="color-swatches" style="display:none">
+          <div class="color-swatch selected" style="background:#C9A96E" data-emoji="🐾" data-label="Animal — Générique" onclick="selectSwatch(this)" title="Générique"></div>
           <div class="color-swatch" style="background:#7EC8A4" data-emoji="🐇" data-label="Lapin" onclick="selectSwatch(this)" title="Lapin">🐇</div>
           <div class="color-swatch" style="background:#FFD166" data-emoji="🦜" data-label="Oiseau" onclick="selectSwatch(this)" title="Oiseau">🦜</div>
           <div class="color-swatch" style="background:#B5A7D5" data-emoji="🐹" data-label="Rongeur" onclick="selectSwatch(this)" title="Rongeur">🐹</div>
-          <div class="color-swatch selected" style="background:#C9A96E" data-emoji="🐾" data-label="Autre animal" onclick="selectSwatch(this)" title="Autre animal"></div>
-
         </div>
       </div>
 
@@ -848,6 +863,15 @@ function goToTab(tab) {
 }
 
 // ─── DASHBOARD ────────────────────────────────────────────────────────────────
+function toggleAnimalDetail(aid) {
+  const detail = document.getElementById('detail-' + aid);
+  const chevron = document.getElementById('chevron-' + aid);
+  if (!detail) return;
+  const isOpen = detail.classList.contains('open');
+  detail.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
 function updateDashboard() {
   if (state.user) document.getElementById('dash-greeting').textContent = 'Bonjour ' + state.user.prenom + ' 👋';
   const list = document.getElementById('animals-list');
@@ -865,46 +889,77 @@ function updateDashboard() {
     const treatStatus = getAnimalTreatStatus(a.id);
     const lastWeight = weights.length ? weights[weights.length - 1] : null;
     const lastCroquette = croquettes.length ? croquettes[croquettes.length - 1] : null;
+
+    // Couleur badge soins
+    const soinsBg = treatStatus === 'red' ? '#fee2e2' : treatStatus === 'orange' ? '#fed7aa' : '#dcfce7';
+
     const section = document.createElement('div');
     section.className = 'animal-section';
+
+    // ── Ligne compacte (toujours visible) ──
     const header = document.createElement('div');
     header.className = 'animal-section-header';
-    header.innerHTML = '<div class="animal-avatar">' + (a.emoji || '🐾') + '</div>'
-      + '<div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">' + a.name + '</div>'
-      + '<div style="font-size:12px;color:var(--muted)">' + (a.breed || '') + ' · ' + calcAge(a.birth) + '</div></div>'
-      + '<span style="font-size:18px;cursor:pointer" onclick="event.stopPropagation();openEditAnimal(\'' + a.id + '\')">✏️</span>';
+    header.onclick = function() { toggleAnimalDetail(a.id); };
+    header.innerHTML =
+      '<div class="animal-avatar">' + (a.emoji || '🐾') + '</div>'
+      + '<div style="flex:0 1 auto;min-width:0">'
+      +   '<div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + a.name + '</div>'
+      +   '<div style="font-size:11px;color:var(--muted)">' + calcAge(a.birth) + '</div>'
+      + '</div>'
+      // 4 icônes rapides cliquables
+      + '<div class="quick-icons">'
+      +   '<div class="quick-icon" style="background:' + soinsBg + '" onclick="event.stopPropagation();openSoins(\'' + a.id + '\')" title="Soins">💊</div>'
+      +   '<div class="quick-icon" style="background:var(--teal-light)" onclick="event.stopPropagation();openPoids(\'' + a.id + '\')" title="Poids">⚖️</div>'
+      +   '<div class="quick-icon" style="background:#fef9ec" onclick="event.stopPropagation();openCroquettes(\'' + a.id + '\')" title="Croquettes">🍗</div>'
+      +   '<div class="quick-icon" style="background:#E6F1FB" onclick="event.stopPropagation();openVet(\'' + a.id + '\')" title="Vétérinaire">🏥</div>'
+      + '</div>'
+      + '<div class="chevron" id="chevron-' + a.id + '">⌄</div>';
     section.appendChild(header);
+
+    // ── Panneau déroulant (masqué par défaut) ──
+    const detail = document.createElement('div');
+    detail.className = 'animal-detail';
+    detail.id = 'detail-' + a.id;
+
+    // Séparateur
+    detail.innerHTML = '<div style="height:1px;background:var(--border);margin-bottom:12px"></div>';
+
     const grid = document.createElement('div');
     grid.className = 'card-grid';
-    const soinsCard = createDashCard('💊', 'Soins',
+
+    grid.appendChild(createDashCard('💊', 'Soins',
       treats.length ? treats.length + ' traitement' + (treats.length > 1 ? 's' : '') : 'Aucun soin',
       treatStatus === 'red' ? { text: 'En retard', bg: '#fee2e2', color: '#991b1b' } :
       treatStatus === 'orange' ? { text: 'Bientôt', bg: '#fed7aa', color: '#9a3412' } :
       treats.length ? { text: 'À jour', bg: '#dcfce7', color: '#166534' } : null,
       function() { openSoins(a.id); }
-    );
-    grid.appendChild(soinsCard);
-    const poidsCard = createDashCard('⚖️', 'Poids',
+    ));
+    grid.appendChild(createDashCard('⚖️', 'Poids',
       lastWeight ? lastWeight.value + ' kg' : 'Non renseigné',
       lastWeight ? { text: 'Suivi actif', bg: 'var(--teal-light)', color: 'var(--teal-dark)' } : null,
       function() { openPoids(a.id); }
-    );
-    grid.appendChild(poidsCard);
-    const croquetteStatus = getCroquetteStatus(a.id);
-    const croqCard = createDashCard('🍗', 'Croquettes',
+    ));
+    grid.appendChild(createDashCard('🍗', 'Croquettes',
       lastCroquette ? lastCroquette.brand : 'Non renseigné',
-      croquetteStatus === 'soon' ? { text: 'Bientôt', bg: '#fef3c7', color: '#92400e' } :
+      getCroquetteStatus(a.id) === 'soon' ? { text: 'Bientôt', bg: '#fef3c7', color: '#92400e' } :
       lastCroquette ? { text: 'OK', bg: '#dcfce7', color: '#166534' } : null,
       function() { openCroquettes(a.id); }
-    );
-    grid.appendChild(croqCard);
-    const vetCard = createDashCard('🏥', 'Vétérinaire',
+    ));
+    grid.appendChild(createDashCard('🏥', 'Vétérinaire',
       vet ? vet.name || vet.clinic : 'Non renseigné',
       vet ? { text: 'Enregistré', bg: '#E6F1FB', color: '#185FA5' } : null,
       function() { openVet(a.id); }
-    );
-    grid.appendChild(vetCard);
-    section.appendChild(grid);
+    ));
+    detail.appendChild(grid);
+
+    // Bouton modifier dans le panneau
+    const editBtn = document.createElement('button');
+    editBtn.style.cssText = 'margin-top:10px;width:100%;padding:9px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;color:var(--muted);cursor:pointer';
+    editBtn.innerHTML = '✏️ Modifier le profil de ' + a.name;
+    editBtn.onclick = function() { openEditAnimal(a.id); };
+    detail.appendChild(editBtn);
+
+    section.appendChild(detail);
     list.appendChild(section);
   });
 }
