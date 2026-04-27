@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -166,76 +167,78 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .journal-header-animal{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.15);border-radius:14px;padding:10px 14px;margin-top:12px}
 .journal-animal-avatar{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .journal-stats-band{display:flex;gap:8px;margin-bottom:14px}
-.journal-stat{flex:1;background:var(--white);border-radius:12px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.journal-stat{flex:1;background:var(–white);border-radius:12px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .journal-stat-val{font-size:18px;font-weight:800}
-.journal-stat-label{font-size:9px;color:var(--muted);font-weight:500;text-align:center}
+.journal-stat-label{font-size:9px;color:var(–muted);font-weight:500;text-align:center}
 .journal-filter-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
 .journal-filter-row::-webkit-scrollbar{display:none}
 .jchip{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;cursor:pointer}
-.jchip.active{background:var(--text);color:#fff}
-.jchip.inactive{background:var(--white);color:var(--muted);box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.month-divider{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;padding:4px 0 8px}
-.journal-card{background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px;cursor:pointer;transition:transform .15s}
+.jchip.active{background:var(–text);color:#fff}
+.jchip.inactive{background:var(–white);color:var(–muted);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.month-divider{font-size:11px;font-weight:700;color:var(–muted);text-transform:uppercase;letter-spacing:.8px;padding:4px 0 8px}
+.journal-card{background:var(–white);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px;cursor:pointer;transition:transform .15s}
 .journal-card:active{transform:scale(.98)}
 .journal-card-header{display:flex;align-items:center;gap:10px;padding:11px 12px 8px}
 .jtype-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .jtype-meta{flex:1}
 .jtype-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.jtype-date{font-size:10px;color:var(--muted)}
+.jtype-date{font-size:10px;color:var(–muted)}
 .jcard-mood{font-size:18px}
-.jcard-body{padding:4px 12px 12px;font-size:12px;color:var(--text);line-height:1.5}
+.jcard-body{padding:4px 12px 12px;font-size:12px;color:var(–text);line-height:1.5}
 .jcard-tags{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
 .jtag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px}
 .jcard-weight-big{display:flex;align-items:flex-end;gap:6px;padding:8px 12px 12px}
-.jcard-weight-num{font-size:26px;font-weight:800;color:var(--text)}
-.jcard-weight-unit{font-size:12px;color:var(--muted);margin-bottom:3px}
+.jcard-weight-num{font-size:26px;font-weight:800;color:var(–text)}
+.jcard-weight-unit{font-size:12px;color:var(–muted);margin-bottom:3px}
 .jcard-weight-diff{font-size:11px;font-weight:700;padding:2px 7px;border-radius:7px}
 .diff-up{background:#FEF3C7;color:#D97706}
 .diff-down{background:#ECFDF5;color:#16A34A}
-.diff-same{background:var(--bg);color:var(--muted)}
+.diff-same{background:var(–bg);color:var(–muted)}
 .jcard-vet-row{display:flex;align-items:center;gap:8px;padding:8px 12px 12px}
 .jcard-badge{font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px}
 .jcard-treat-row{display:flex;align-items:center;gap:8px;padding:8px 12px 12px}
-.jcard-note{padding:8px 12px 12px;font-size:12px;color:var(--text);line-height:1.5;font-style:italic}
+.jcard-note{padding:8px 12px 12px;font-size:12px;color:var(–text);line-height:1.5;font-style:italic}
 
 /* Type selector (add entry) */
 .jtype-selector{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px}
 .jtype-selector::-webkit-scrollbar{display:none}
 .jtype-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 10px;border-radius:12px;flex-shrink:0;min-width:58px;cursor:pointer;border:2px solid transparent}
-.jtype-btn.selected{background:var(--teal-light);border-color:var(--teal)}
-.jtype-btn.unsel{background:var(--bg)}
+.jtype-btn.selected{background:var(–teal-light);border-color:var(–teal)}
+.jtype-btn.unsel{background:var(–bg)}
 .jtype-btn .jt-icon{font-size:20px}
-.jtype-btn .jt-label{font-size:9px;font-weight:600;color:var(--text)}
-.compose-section{background:var(--white);border-radius:14px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
-.compose-section-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.jtype-btn .jt-label{font-size:9px;font-weight:600;color:var(–text)}
+.compose-section{background:var(–white);border-radius:14px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.compose-section-title{font-size:10px;font-weight:700;color:var(–muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
 .mood-row{display:flex;gap:8px;justify-content:space-around}
 .mood-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px;border-radius:10px;flex:1;cursor:pointer;border:2px solid transparent}
-.mood-btn.sel{background:var(--teal-light);border-color:var(--teal)}
-.mood-btn.unsel{background:var(--bg)}
+.mood-btn.sel{background:var(–teal-light);border-color:var(–teal)}
+.mood-btn.unsel{background:var(–bg)}
 .mood-emoji{font-size:22px}
-.mood-label{font-size:9px;color:var(--muted);font-weight:500}
-.photo-zone{height:80px;background:var(--bg);border-radius:12px;border:2px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(--muted);cursor:pointer;position:relative;overflow:hidden}
+.mood-label{font-size:9px;color:var(–muted);font-weight:500}
+.photo-zone{height:80px;background:var(–bg);border-radius:12px;border:2px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(–muted);cursor:pointer;position:relative;overflow:hidden}
 .photo-zone img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.tag-added{background:var(--teal-light);color:var(--teal-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
-.tag-add-btn{background:var(--bg);color:var(--muted);font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px dashed #D1D5DB;cursor:pointer}
-.journal-empty{text-align:center;padding:48px 24px;color:var(--muted)}
+.tag-added{background:var(–teal-light);color:var(–teal-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.tag-add-btn{background:var(–bg);color:var(–muted);font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px dashed #D1D5DB;cursor:pointer}
+.journal-empty{text-align:center;padding:48px 24px;color:var(–muted)}
 
 /* Detail vue */
-.jdetail-photo{width:100%;height:180px;background:linear-gradient(135deg,var(--teal-light),#B8E0DB);display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;flex-shrink:0}
+.jdetail-photo{width:100%;height:180px;background:linear-gradient(135deg,var(–teal-light),#B8E0DB);display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;flex-shrink:0}
 .jdetail-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .jdetail-date-badge{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.45);color:#fff;font-size:10px;padding:3px 8px;border-radius:6px}
-.jdetail-mood-card{background:var(--white);border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.jdetail-mood-card{background:var(–white);border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
 
 @media(min-width:480px){
-  body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
-  .screen{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.12)}
-  .fab{right:calc(50% - 215px + 20px)}
+body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
+.screen{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.12)}
+.fab{right:calc(50% - 215px + 20px)}
 }
 </style>
+
 </head>
 <body>
 
 <!-- ONBOARDING -->
+
 <div id="screen-onboarding" class="screen active">
   <div style="flex:1;background:var(--white);display:flex;flex-direction:column">
     <div style="flex:1;position:relative;overflow:hidden">
@@ -266,6 +269,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- AUTH -->
+
 <div id="screen-auth" class="screen">
   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;background:var(--white)">
     <div style="text-align:center;padding:20px 0 4px">
@@ -296,6 +300,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MOT DE PASSE OUBLIÉ -->
+
 <div id="screen-forgot" class="screen">
   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:16px;background:var(--white)">
     <div style="text-align:center;padding:20px 0">
@@ -311,6 +316,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- TUTO -->
+
 <div id="screen-tuto" class="screen">
   <div style="background:var(--teal);padding:20px;color:#fff;flex-shrink:0">
     <div style="font-size:20px;font-weight:700">📲 Installer VetID</div>
@@ -344,6 +350,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- DASHBOARD -->
+
 <div id="screen-dashboard" class="screen">
   <div class="dash-header">
     <div id="dash-greeting" style="font-size:14px;opacity:.85">Bonjour 👋</div>
@@ -376,6 +383,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- SOINS -->
+
 <div id="screen-soins" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -391,6 +399,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- POIDS -->
+
 <div id="screen-poids" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -406,6 +415,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- CROQUETTES -->
+
 <div id="screen-croquettes" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -418,6 +428,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- VÉTÉRINAIRE -->
+
 <div id="screen-vet" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -430,6 +441,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- BLOG -->
+
 <div id="screen-blog" class="screen">
   <div class="dash-header">
     <div style="font-size:22px;font-weight:700">Blog santé</div>
@@ -451,6 +463,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- ARTICLE -->
+
 <div id="screen-article" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('blog')">‹</div>
@@ -468,6 +481,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <!-- ══════════════════════════════════════
      JOURNAL DE VIE
      ══════════════════════════════════════ -->
+
 <div id="screen-journal" class="screen">
   <div class="dash-header">
     <div style="display:flex;align-items:center;justify-content:space-between">
@@ -509,6 +523,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- JOURNAL DETAIL -->
+
 <div id="screen-journal-detail" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('journal')">‹</div>
@@ -543,6 +558,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- RÉGLAGES -->
+
 <div id="screen-settings" class="screen">
   <div class="dash-header"><div style="font-size:22px;font-weight:700">Réglages</div><div id="settings-email" style="font-size:13px;opacity:.8;margin-top:2px"></div></div>
   <div style="flex:1;overflow-y:auto;padding:16px">
@@ -613,6 +629,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- PRIVACY -->
+
 <div id="screen-privacy" class="screen">
   <div class="page-header"><div class="back-btn" onclick="showScreen('settings')">‹</div><div style="font-size:18px;font-weight:700">Politique de confidentialité</div></div>
   <div style="flex:1;overflow-y:auto;padding:20px;font-size:14px;line-height:1.8;color:var(--text)">
@@ -633,6 +650,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <!-- ══════════════════════════════════════
      MODAL ANIMAL
      ══════════════════════════════════════ -->
+
 <div class="modal-overlay" id="modal-animal">
   <div class="modal-sheet" id="sheet-animal">
     <div class="modal-handle" id="handle-animal"></div>
@@ -695,6 +713,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL SOINS -->
+
 <div class="modal-overlay" id="modal-soin">
   <div class="modal-sheet" id="sheet-soin">
     <div class="modal-handle" id="handle-soin"></div>
@@ -732,6 +751,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL POIDS -->
+
 <div class="modal-overlay" id="modal-poids">
   <div class="modal-sheet" id="sheet-poids">
     <div class="modal-handle" id="handle-poids"></div>
@@ -747,6 +767,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL CROQUETTES -->
+
 <div class="modal-overlay" id="modal-croquette">
   <div class="modal-sheet" id="sheet-croquette">
     <div class="modal-handle" id="handle-croquette"></div>
@@ -764,6 +785,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL VÉTÉRINAIRE -->
+
 <div class="modal-overlay" id="modal-vet">
   <div class="modal-sheet" id="sheet-vet">
     <div class="modal-handle" id="handle-vet"></div>
@@ -781,6 +803,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL FEEDBACK -->
+
 <div class="modal-overlay" id="modal-feedback">
   <div class="modal-sheet" id="sheet-feedback">
     <div class="modal-handle" id="handle-feedback"></div>
@@ -796,6 +819,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 </div>
 
 <!-- MODAL AJOUTER ENTRÉE JOURNAL -->
+
 <div class="modal-overlay" id="modal-journal-entry">
   <div class="modal-sheet" id="sheet-journal-entry">
     <div class="modal-handle" id="handle-journal-entry"></div>
@@ -804,80 +828,84 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       <button onclick="saveJournalEntry()" style="background:var(--teal);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer">Sauvegarder</button>
     </div>
 
-    <!-- Sélecteur de type -->
-    <div class="jtype-selector" id="jtype-selector" style="margin-bottom:14px">
-      <div class="jtype-btn selected" onclick="selectJournalType('photo',this)"><div class="jt-icon">📸</div><div class="jt-label">Photo</div></div>
-      <div class="jtype-btn unsel" onclick="selectJournalType('poids',this)"><div class="jt-icon">⚖️</div><div class="jt-label">Pesée</div></div>
-      <div class="jtype-btn unsel" onclick="selectJournalType('veto',this)"><div class="jt-icon">🩺</div><div class="jt-label">Véto</div></div>
-      <div class="jtype-btn unsel" onclick="selectJournalType('traitement',this)"><div class="jt-icon">💊</div><div class="jt-label">Traitement</div></div>
-      <div class="jtype-btn unsel" onclick="selectJournalType('note',this)"><div class="jt-icon">📝</div><div class="jt-label">Note</div></div>
-    </div>
+```
+<!-- Sélecteur de type -->
+<div class="jtype-selector" id="jtype-selector" style="margin-bottom:14px">
+  <div class="jtype-btn selected" onclick="selectJournalType('photo',this)"><div class="jt-icon">📸</div><div class="jt-label">Photo</div></div>
+  <div class="jtype-btn unsel" onclick="selectJournalType('poids',this)"><div class="jt-icon">⚖️</div><div class="jt-label">Pesée</div></div>
+  <div class="jtype-btn unsel" onclick="selectJournalType('veto',this)"><div class="jt-icon">🩺</div><div class="jt-label">Véto</div></div>
+  <div class="jtype-btn unsel" onclick="selectJournalType('traitement',this)"><div class="jt-icon">💊</div><div class="jt-label">Traitement</div></div>
+  <div class="jtype-btn unsel" onclick="selectJournalType('note',this)"><div class="jt-icon">📝</div><div class="jt-label">Note</div></div>
+</div>
 
-    <!-- Zone photo (visible si type=photo) -->
-    <div class="compose-section" id="jform-photo-section">
-      <div class="compose-section-title">📸 Photo</div>
-      <div class="photo-zone" onclick="document.getElementById('jphoto-input').click()">
-        <span style="font-size:22px">📷</span>
-        <span>Prendre une photo ou choisir</span>
-      </div>
-      <input type="file" id="jphoto-input" accept="image/*" capture="environment" style="display:none" onchange="handleJournalPhoto(this)">
-    </div>
+<!-- Zone photo (visible si type=photo) -->
+<div class="compose-section" id="jform-photo-section">
+  <div class="compose-section-title">📸 Photo</div>
+  <div class="photo-zone" onclick="document.getElementById('jphoto-input').click()">
+    <span style="font-size:22px">📷</span>
+    <span>Prendre une photo ou choisir</span>
+  </div>
+  <input type="file" id="jphoto-input" accept="image/*" style="display:none" onchange="handleJournalPhoto(this)">
+</div>
 
-    <!-- Poids (visible si type=poids) -->
-    <div class="compose-section" id="jform-poids-section" style="display:none">
-      <div class="compose-section-title">⚖️ Poids</div>
-      <input class="field-input" id="j-poids-val" type="number" step="0.1" placeholder="Ex: 5,2">
-    </div>
+<!-- Poids (visible si type=poids) -->
+<div class="compose-section" id="jform-poids-section" style="display:none">
+  <div class="compose-section-title">⚖️ Poids</div>
+  <input class="field-input" id="j-poids-val" type="number" step="0.1" placeholder="Ex: 5,2">
+</div>
 
-    <!-- Véto (visible si type=veto) -->
-    <div class="compose-section" id="jform-veto-section" style="display:none">
-      <div class="compose-section-title">🩺 Vétérinaire</div>
-      <input class="field-input" id="j-veto-doc" type="text" placeholder="Dr Martin" style="margin-bottom:8px">
-      <input class="field-input" id="j-veto-motif" type="text" placeholder="Motif de la visite">
-    </div>
+<!-- Véto (visible si type=veto) -->
+<div class="compose-section" id="jform-veto-section" style="display:none">
+  <div class="compose-section-title">🩺 Vétérinaire</div>
+  <input class="field-input" id="j-veto-doc" type="text" placeholder="Dr Martin" style="margin-bottom:8px">
+  <input class="field-input" id="j-veto-motif" type="text" placeholder="Motif de la visite">
+</div>
 
-    <!-- Traitement (visible si type=traitement) -->
-    <div class="compose-section" id="jform-traitement-section" style="display:none">
-      <div class="compose-section-title">💊 Traitement</div>
-      <input class="field-input" id="j-trait-nom" type="text" placeholder="Ex: Vermifuge Milbemax">
-    </div>
+<!-- Traitement (visible si type=traitement) -->
+<div class="compose-section" id="jform-traitement-section" style="display:none">
+  <div class="compose-section-title">💊 Traitement</div>
+  <input class="field-input" id="j-trait-nom" type="text" placeholder="Ex: Vermifuge Milbemax">
+</div>
 
-    <!-- Description (toujours visible) -->
-    <div class="compose-section">
-      <div class="compose-section-title">📝 Description</div>
-      <textarea class="field-input" id="j-description" rows="3" placeholder="Décrivez le moment…" style="resize:none;line-height:1.5"></textarea>
-    </div>
+<!-- Description (toujours visible) -->
+<div class="compose-section">
+  <div class="compose-section-title">📝 Description</div>
+  <textarea class="field-input" id="j-description" rows="3" placeholder="Décrivez le moment…" style="resize:none;line-height:1.5"></textarea>
+</div>
 
-    <!-- Humeur -->
-    <div class="compose-section" id="jform-mood-section">
-      <div class="compose-section-title" id="jform-mood-label">😺 Comment va votre animal ?</div>
-      <div class="mood-row">
-        <div class="mood-btn unsel" onclick="selectJournalMood('😿','Pas bien',this)"><div class="mood-emoji">😿</div><div class="mood-label">Pas bien</div></div>
-        <div class="mood-btn unsel" onclick="selectJournalMood('😐','Bof',this)"><div class="mood-emoji">😐</div><div class="mood-label">Bof</div></div>
-        <div class="mood-btn unsel" onclick="selectJournalMood('😺','Bien',this)"><div class="mood-emoji">😺</div><div class="mood-label">Bien</div></div>
-        <div class="mood-btn sel" onclick="selectJournalMood('😸','Top forme',this)"><div class="mood-emoji">😸</div><div class="mood-label">Top forme</div></div>
-      </div>
-    </div>
+<!-- Humeur -->
+<div class="compose-section" id="jform-mood-section">
+  <div class="compose-section-title" id="jform-mood-label">😺 Comment va votre animal ?</div>
+  <div class="mood-row">
+    <div class="mood-btn unsel" onclick="selectJournalMood('😿','Pas bien',this)"><div class="mood-emoji">😿</div><div class="mood-label">Pas bien</div></div>
+    <div class="mood-btn unsel" onclick="selectJournalMood('😐','Bof',this)"><div class="mood-emoji">😐</div><div class="mood-label">Bof</div></div>
+    <div class="mood-btn unsel" onclick="selectJournalMood('😺','Bien',this)"><div class="mood-emoji">😺</div><div class="mood-label">Bien</div></div>
+    <div class="mood-btn sel" onclick="selectJournalMood('😸','Top forme',this)"><div class="mood-emoji">😸</div><div class="mood-label">Top forme</div></div>
+  </div>
+</div>
 
-    <!-- Tags -->
-    <div class="compose-section">
-      <div class="compose-section-title">🏷️ Tags</div>
-      <div id="j-tags-container" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-        <div class="tag-add-btn" onclick="addJournalTag()">+ Ajouter un tag</div>
-      </div>
-    </div>
+<!-- Tags -->
+<div class="compose-section">
+  <div class="compose-section-title">🏷️ Tags</div>
+  <div id="j-tags-container" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+    <div class="tag-add-btn" onclick="addJournalTag()">+ Ajouter un tag</div>
+  </div>
+</div>
 
-    <!-- Date -->
-    <div class="compose-section">
-      <div class="compose-section-title">📅 Date</div>
-      <input class="field-input" id="j-date" type="date">
-    </div>
+<!-- Date -->
+<div class="compose-section">
+  <div class="compose-section-title">📅 Date</div>
+  <input class="field-input" id="j-date" type="date">
+</div>
 
-    <button class="btn-ghost" onclick="closeModal('modal-journal-entry')" style="margin-top:4px">Annuler</button>
+<button class="btn-ghost" onclick="closeModal('modal-journal-entry')" style="margin-top:4px">Annuler</button>
+```
+
   </div>
 </div>
 
 <!-- MODAL CHOIX ANIMAL (JOURNAL) -->
+
 <div class="modal-overlay" id="modal-animal-picker">
   <div class="modal-sheet" id="sheet-animal-picker">
     <div class="modal-handle" id="handle-animal-picker"></div>
@@ -2169,5 +2197,6 @@ showScreen('onboarding');
 });
 initSwipeNav();
 </script>
+
 </body>
 </html>
