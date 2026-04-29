@@ -1414,10 +1414,10 @@ function updateDashboard() {
       lastCroquette ? { text: 'OK', bg: '#dcfce7', color: '#166534' } : null,
       function() { openCroquettes(a.id); }
     ));
-    grid.appendChild(createDashCard('📓', 'Journal',
-      journalCount ? journalCount + ' entrée' + (journalCount > 1 ? 's' : '') : 'Vide',
-      journalCount ? { text: journalCount + ' entrées', bg: 'var(--teal-light)', color: 'var(--teal-dark)' } : null,
-      function() { openJournalForAnimal(a.id); }
+    grid.appendChild(createDashCard('🏥', 'Vétérinaire',
+      vet ? (vet.name || vet.clinic || 'Enregistré') : 'Non renseigné',
+      vet ? { text: 'Enregistré', bg: '#E6F1FB', color: '#185FA5' } : null,
+      function() { openVet(a.id); }
     ));
     detail.appendChild(grid);
     const editBtn = document.createElement('button');
@@ -1523,7 +1523,7 @@ function openAddAnimal() {
   selectSpecies('dog'); selectSex('m'); selectIdType('puce');
   document.getElementById('steril-toggle').classList.remove('on');
   ['a-name', 'a-breed', 'a-birth', 'a-idnum'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('modal-animal').classList.add('open');
+  openModal('modal-animal');
 }
 function openEditAnimal(aid) {
   const a = state.animals.find(x => x.id === aid);
@@ -1549,9 +1549,20 @@ function openEditAnimal(aid) {
   selectSex(a.sex || 'm'); selectIdType(a.idType || 'puce');
   if (a.sterilized) document.getElementById('steril-toggle').classList.add('on');
   else document.getElementById('steril-toggle').classList.remove('on');
-  document.getElementById('modal-animal').classList.add('open');
+  openModal('modal-animal');
 }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  // Bloquer le scroll de la page derrière le modal
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  // Réactiver le scroll seulement si plus aucun modal ouvert
+  if (!document.querySelector('.modal-overlay.open')) {
+    document.body.style.overflow = '';
+  }
+}
 function selectSpecies(s) {
   state.selectedSpecies = s;
   ['dog', 'cat', 'other'].forEach(x => document.getElementById('sp-' + x)?.classList.toggle('active', x === s));
@@ -1655,7 +1666,7 @@ function openAddSoin(aid) {
   selectTreatType('antipuces');
   document.getElementById('t-product').value = '';
   document.getElementById('t-lastdate').value = '';
-  document.getElementById('modal-soin').classList.add('open');
+  openModal('modal-soin');
 }
 function openEditSoin(tid) {
   const t = state.treatments.find(x => x.id === tid);
@@ -1668,7 +1679,7 @@ function openEditSoin(tid) {
   document.getElementById('t-lastdate').value = t.lastDate || '';
   document.getElementById('t-freq').value = t.freqMonths || 3;
   if (t.type === 'autre') document.getElementById('t-autre-name').value = t.autreName || '';
-  document.getElementById('modal-soin').classList.add('open');
+  openModal('modal-soin');
 }
 function selectTreatType(t) {
   state.selectedTreatType = t;
@@ -1724,7 +1735,7 @@ function openAddWeight() {
   document.getElementById('w-value').value = '';
   document.getElementById('w-date').value = new Date().toISOString().split('T')[0];
   document.getElementById('w-notes').value = '';
-  document.getElementById('modal-poids').classList.add('open');
+  openModal('modal-poids');
 }
 function saveWeight() {
   const value = parseFloat(document.getElementById('w-value').value);
@@ -1779,7 +1790,7 @@ function openCroquettes(aid) {
 function openAddCroquette() {
   ['c-brand', 'c-product', 'c-qty', 'c-reminder'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
-  document.getElementById('modal-croquette').classList.add('open');
+  openModal('modal-croquette');
 }
 function saveCroquette() {
   const brand = document.getElementById('c-brand').value.trim();
@@ -1837,7 +1848,7 @@ function openEditVet() {
   document.getElementById('v-address').value = vet.address || '';
   document.getElementById('v-phone').value = vet.phone || '';
   document.getElementById('v-email').value = vet.email || '';
-  document.getElementById('modal-vet').classList.add('open');
+  openModal('modal-vet');
 }
 function saveVet() {
   state.vets[state.currentAnimalId] = {
@@ -1919,7 +1930,7 @@ function openAnimalPickerForJournal() {
     };
     list.appendChild(btn);
   });
-  document.getElementById('modal-animal-picker').classList.add('open');
+  openModal('modal-animal-picker');
 }
 
 function renderJournal() {
@@ -2225,7 +2236,7 @@ function openAddJournalEntry() {
   renderJournalTagsInput();
   // Mood label
   if (a) document.getElementById('jform-mood-label').textContent = '😺 Comment va ' + a.name + ' ?';
-  document.getElementById('modal-journal-entry').classList.add('open');
+  openModal('modal-journal-entry');
 }
 
 function selectJournalType(type, el) {
@@ -2536,7 +2547,7 @@ function openAddLieu() {
   if (success) success.style.display = 'none';
   const btn = document.getElementById('lieu-submit-btn');
   if (btn) { btn.style.display = 'block'; btn.disabled = false; btn.textContent = 'Envoyer ma suggestion'; }
-  document.getElementById('modal-lieu').classList.add('open');
+  openModal('modal-lieu');
 }
 
 function setLieuNote(val) {
@@ -2663,7 +2674,7 @@ function openFeedback() {
   document.getElementById('feedback-msg').value = '';
   document.getElementById('feedback-success').style.display = 'none';
   document.getElementById('feedback-btn').style.display = 'block';
-  document.getElementById('modal-feedback').classList.add('open');
+  openModal('modal-feedback');
 }
 async function sendFeedback() {
   const msg = document.getElementById('feedback-msg').value.trim();
@@ -2724,15 +2735,43 @@ function initSwipeClose(handleId, overlayId) {
   if (!handle || !overlay) return;
   const sheet = handle.parentElement;
   let startY = 0, isDragging = false;
-  handle.addEventListener('touchstart', e => { startY = e.touches[0].clientY; isDragging = true; }, { passive: true });
-  document.addEventListener('touchmove', e => { if (!isDragging) return; const dy = e.touches[0].clientY - startY; if (dy > 0) sheet.style.transform = 'translateY(' + dy + 'px)'; }, { passive: true });
-  document.addEventListener('touchend', e => {
-    if (!isDragging) return; isDragging = false;
+
+  // Swipe uniquement depuis la poignée (handle), pas depuis tout le sheet
+  handle.addEventListener('touchstart', e => {
+    startY = e.touches[0].clientY;
+    isDragging = true;
+  }, { passive: true });
+
+  handle.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy > 0) {
+      e.preventDefault(); // empêche le scroll de la page derrière
+      sheet.style.transform = 'translateY(' + dy + 'px)';
+    }
+  }, { passive: false }); // passive:false pour pouvoir appeler preventDefault
+
+  handle.addEventListener('touchend', e => {
+    if (!isDragging) return;
+    isDragging = false;
     const dy = e.changedTouches[0].clientY - startY;
-    if (dy > 100) { overlay.classList.remove('open'); sheet.style.transform = ''; }
-    else { sheet.style.transition = 'transform .3s'; sheet.style.transform = ''; setTimeout(() => sheet.style.transition = '', 300); }
+    if (dy > 80) {
+      overlay.classList.remove('open');
+      sheet.style.transform = '';
+    } else {
+      sheet.style.transition = 'transform .3s';
+      sheet.style.transform = '';
+      setTimeout(() => sheet.style.transition = '', 300);
+    }
+  }, { passive: true });
+
+  // Clic sur le fond pour fermer
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      sheet.style.transform = '';
+    }
   });
-  overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.classList.remove('open'); sheet.style.transform = ''; } });
 }
 
 // ─── SWIPE NAV ────────────────────────────────────────────────────────────────
