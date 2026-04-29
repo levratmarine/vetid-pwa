@@ -2789,6 +2789,19 @@ function buildBaladeWidget(a) {
     wrap.appendChild(startBtn);
   }
 
+  // Lien historique — toujours visible
+  const histLink = document.createElement('div');
+  histLink.style.cssText = 'text-align:center;margin-top:8px';
+  const histBtn = document.createElement('button');
+  histBtn.style.cssText = 'background:none;border:none;color:var(--teal-dark);font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;padding:4px';
+  const nbBalades = state.balades.filter(function(b) { return b.animalId === a.id; }).length;
+  histBtn.textContent = nbBalades > 0
+    ? 'Voir les ' + nbBalades + ' balade' + (nbBalades > 1 ? 's' : '') + ' ›'
+    : "Voir l'historique ›";
+  histBtn.onclick = function(e) { e.stopPropagation(); openBalades(a.id); };
+  histLink.appendChild(histBtn);
+  wrap.appendChild(histLink);
+
   return wrap;
 }
 
