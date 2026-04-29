@@ -317,6 +317,19 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .jdetail-date-badge{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.45);color:#fff;font-size:10px;padding:3px 8px;border-radius:6px}
 .jdetail-mood-card{background:var(--white);border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
 
+/* ── BALADES ── */
+.balade-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
+.balade-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.balade-icon{width:40px;height:40px;border-radius:12px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.balade-stats{display:flex;gap:8px;margin-bottom:8px}
+.balade-stat{flex:1;background:var(--bg);border-radius:10px;padding:8px 10px;text-align:center}
+.balade-stat-val{font-size:16px;font-weight:800;color:var(--teal)}
+.balade-stat-label{font-size:9px;color:var(--muted);font-weight:500;text-transform:uppercase;margin-top:1px}
+.objectif-bar-wrap{margin-top:4px}
+.objectif-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px}
+.chrono-btn-start{width:100%;padding:14px;border-radius:14px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.chrono-btn-start:active{opacity:.85}
+
 /* ── LIEUX ── */
 .lieu-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:10px;cursor:pointer;transition:transform .15s;display:flex;gap:12px;align-items:flex-start}
 .lieu-card:active{transform:scale(.98)}
@@ -539,6 +552,29 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   <div style="flex:1;overflow-y:auto;padding:16px">
     <div id="vet-content"></div>
     <button class="btn-primary" onclick="openEditVet()" id="vet-edit-btn">✏️ Modifier les coordonnées</button>
+  </div>
+</div>
+
+<!-- BALADES -->
+<div id="screen-balades" class="screen">
+  <div class="page-header">
+    <div class="back-btn" onclick="showScreen('dashboard')">&#8249;</div>
+    <div>
+      <div id="balades-title" style="font-size:18px;font-weight:700">Balades</div>
+      <div style="font-size:12px;opacity:.8">Historique et suivi</div>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:16px">
+    <div id="balades-chrono-banner" style="display:none;background:var(--teal);border-radius:16px;padding:16px;margin-bottom:16px;color:#fff">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div>
+          <div style="font-size:13px;opacity:.85">Balade en cours</div>
+          <div id="balades-chrono-display" style="font-size:32px;font-weight:800;font-variant-numeric:tabular-nums">00:00</div>
+        </div>
+        <button id="balades-stop-btn" onclick="terminerBalade()" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:12px;padding:12px 18px;font-size:14px;font-weight:700;cursor:pointer">Terminer</button>
+      </div>
+    </div>
+    <div id="balades-list"></div>
   </div>
 </div>
 
@@ -846,6 +882,10 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       <div class="form-row"><label class="field-label">Date de naissance</label><input class="field-input" id="a-birth" type="date"></div>
       <div class="form-row"><label class="field-label">Sexe</label><div class="species-row"><div class="species-btn active" id="sx-m" onclick="selectSex('m')">♂ Mâle</div><div class="species-btn" id="sx-f" onclick="selectSex('f')">♀ Femelle</div></div></div>
       <div class="toggle-row"><div style="font-size:14px;font-weight:500;color:var(--text)">Stérilisé(e)</div><div class="toggle" id="steril-toggle" onclick="this.classList.toggle('on')"></div></div>
+      <div class="form-row" id="objectif-balades-row" style="display:none">
+        <label class="field-label">🐾 Objectif balades / semaine</label>
+        <input class="field-input" id="a-objectif-balades" type="number" min="1" max="14" placeholder="5" value="5">
+      </div>
       <div class="form-row"><label class="field-label">Identification</label><div class="species-row"><div class="species-btn active" id="id-puce" onclick="selectIdType('puce')">📡 Puce</div><div class="species-btn" id="id-tat" onclick="selectIdType('tatouage')">🖊 Tatouage</div></div></div>
       <div class="form-row">
         <label class="field-label">Numéro d'identification</label>
@@ -1113,6 +1153,37 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
+<!-- MODAL LOG BALADE -->
+<div class="modal-overlay" id="modal-balade">
+  <div class="modal-sheet" id="sheet-balade">
+    <div class="modal-handle" id="handle-balade"></div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">&#128062; Enregistrer la balade</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px" id="modal-balade-sub">Durée automatique depuis le chrono</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;gap:10px">
+        <div class="form-row" style="flex:1">
+          <label class="field-label">Durée (min)</label>
+          <input class="field-input" id="b-duree" type="number" placeholder="30" min="1">
+        </div>
+        <div class="form-row" style="flex:1">
+          <label class="field-label">Distance (km)</label>
+          <input class="field-input" id="b-distance" type="number" step="0.1" placeholder="2.5">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="field-label">Lieu (optionnel)</label>
+        <input class="field-input" id="b-lieu" type="text" placeholder="Parc de la Visitation">
+      </div>
+      <div class="form-row">
+        <label class="field-label">Notes (optionnel)</label>
+        <textarea class="field-input" id="b-notes" rows="2" placeholder="Il a adoré rencontrer d'autres chiens..." style="resize:none"></textarea>
+      </div>
+      <button class="btn-primary" onclick="sauvegarderBalade()">Enregistrer la balade</button>
+      <button class="btn-ghost" onclick="closeModal('modal-balade')">Annuler</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1148,6 +1219,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 let state = {
   user: null, animals: [], treatments: [], weights: {}, croquettes: {}, vets: {},
   journal: {},   // { animalId: [ entryObj, … ] }
+  balades: [],   // [ { id, animalId, date, dureeMin, distanceKm, lieu, notes } ]
   currentAnimalId: null, editingAnimalId: null,
   selectedSpecies: 'dog', selectedSex: 'm', selectedIdType: 'puce',
   selectedTreatType: 'antipuces', selectedEmoji: '🐶', isLogin: false,
@@ -1158,6 +1230,9 @@ let state = {
   journalMoodLabel: 'Top forme',
   journalTags: [],
   journalPhotoData: null,
+  // Chrono balade
+  baladeEnCours: null,   // { animalId, startTime }
+  baladeInterval: null,
   viewingEntryId: null
 };
 let allArticles = [];
@@ -1175,6 +1250,7 @@ function loadState(uid) {
     state.croquettes = p.croquettes || {};
     state.vets = p.vets || {};
     state.journal = p.journal || {};
+    state.balades = p.balades || [];
   }
   // Puis charge le journal depuis Firestore (source de vérité)
   if (uid) loadJournalFromFirestore(uid);
@@ -1225,7 +1301,7 @@ function saveState() {
     localStorage.setItem('vetid_' + state.user.uid, JSON.stringify({
       animals: state.animals, treatments: state.treatments,
       weights: state.weights, croquettes: state.croquettes, vets: state.vets,
-      journal: state.journal
+      journal: state.journal, balades: state.balades
     }));
   }
 }
@@ -1341,8 +1417,8 @@ function goToDashboard() {
   updateDashboard();
   loadBlogPreview();
   showScreen('dashboard');
-  // Vérifier alertes croquettes à chaque ouverture
   setTimeout(checkCroquettesAlert, 2000);
+  restaurerChronoBalade();
 }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
@@ -1463,6 +1539,15 @@ function updateDashboard() {
       function() { openVet(a.id); }
     ));
     detail.appendChild(grid);
+    // Widget balade — uniquement pour les chiens
+    if (a.species === 'dog') {
+      const baladeWrap = document.createElement('div');
+      baladeWrap.style.cssText = 'margin-top:10px';
+      const baladeWidget = buildBaladeWidget(a);
+      baladeWrap.appendChild(baladeWidget);
+      detail.appendChild(baladeWrap);
+    }
+
     const editBtn = document.createElement('button');
     editBtn.style.cssText = 'margin-top:10px;width:100%;padding:9px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;color:var(--muted);cursor:pointer';
     editBtn.innerHTML = '✏️ Modifier le profil de ' + a.name;
@@ -1601,6 +1686,8 @@ function openEditAnimal(aid) {
   document.getElementById('a-breed').value = a.breed || '';
   document.getElementById('a-birth').value = a.birth || '';
   document.getElementById('a-idnum').value = a.idNum || '';
+  const objEl = document.getElementById('a-objectif-balades');
+  if (objEl) objEl.value = a.objectifBalades || 5;
   selectSex(a.sex || 'm'); selectIdType(a.idType || 'puce');
   if (a.sterilized) document.getElementById('steril-toggle').classList.add('on');
   else document.getElementById('steril-toggle').classList.remove('on');
@@ -1622,6 +1709,9 @@ function selectSpecies(s) {
   state.selectedSpecies = s;
   ['dog', 'cat', 'other'].forEach(x => document.getElementById('sp-' + x)?.classList.toggle('active', x === s));
   if (document.getElementById('swatches-dog')) updateSwatchesForSpecies(s);
+  // Afficher objectif balades uniquement pour les chiens
+  const objRow = document.getElementById('objectif-balades-row');
+  if (objRow) objRow.style.display = s === 'dog' ? 'flex' : 'none';
 }
 function selectSex(s) {
   state.selectedSex = s;
@@ -1637,6 +1727,7 @@ function saveAnimal() {
   const name = document.getElementById('a-name').value.trim();
   if (!name) { showToast('Donnez un nom à votre animal'); return; }
   const isEdit = !!state.editingAnimalId;
+  const objectifEl = document.getElementById('a-objectif-balades');
   const animal = {
     id: isEdit ? state.editingAnimalId : Date.now().toString(),
     name, emoji: state.selectedEmoji, species: state.selectedSpecies,
@@ -1645,7 +1736,8 @@ function saveAnimal() {
     sex: state.selectedSex,
     sterilized: document.getElementById('steril-toggle').classList.contains('on'),
     idType: state.selectedIdType,
-    idNum: document.getElementById('a-idnum').value.trim()
+    idNum: document.getElementById('a-idnum').value.trim(),
+    objectifBalades: objectifEl ? (parseInt(objectifEl.value) || 5) : 5
   };
   if (isEdit) {
     const idx = state.animals.findIndex(x => x.id === state.editingAnimalId);
@@ -2593,6 +2685,367 @@ async function saveJournalEntry() {
   }
 }
 
+// ─── BALADES ──────────────────────────────────────────────────────────────────
+
+function getBaladesSemaine(aid) {
+  const lundi = new Date();
+  lundi.setDate(lundi.getDate() - lundi.getDay() + 1);
+  lundi.setHours(0, 0, 0, 0);
+  return state.balades.filter(function(b) {
+    return b.animalId === aid && new Date(b.date) >= lundi;
+  });
+}
+
+function getDerniereBaladesAid(aid) {
+  const balades = state.balades.filter(function(b) { return b.animalId === aid; });
+  if (!balades.length) return null;
+  return balades.reduce(function(a, b) { return new Date(a.date) > new Date(b.date) ? a : b; });
+}
+
+function getObjectifBalade(aid) {
+  const a = state.animals.find(function(x) { return x.id === aid; });
+  return (a && a.objectifBalades) ? a.objectifBalades : 5;
+}
+
+function buildBaladeWidget(a) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'background:var(--teal-light);border-radius:14px;padding:12px';
+
+  const enCours = state.baladeEnCours && state.baladeEnCours.animalId === a.id;
+  const derniere = getDerniereBaladesAid(a.id);
+  const baladesWeek = getBaladesSemaine(a.id);
+  const objectif = getObjectifBalade(a.id);
+  const pct = Math.min(100, Math.round((baladesWeek.length / objectif) * 100));
+
+  // Titre
+  const titre = document.createElement('div');
+  titre.style.cssText = 'font-size:12px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px';
+  titre.textContent = '🐾 Balades';
+  wrap.appendChild(titre);
+
+  if (enCours) {
+    // Afficher chrono en cours
+    const chronoDiv = document.createElement('div');
+    chronoDiv.style.cssText = 'display:flex;align-items:center;justify-content:space-between';
+    const chronoLeft = document.createElement('div');
+    const chronoLabel = document.createElement('div');
+    chronoLabel.style.cssText = 'font-size:11px;color:var(--teal-dark)';
+    chronoLabel.textContent = 'En cours…';
+    const chronoTime = document.createElement('div');
+    chronoTime.id = 'chrono-dash-' + a.id;
+    chronoTime.style.cssText = 'font-size:22px;font-weight:800;color:var(--teal-dark);font-variant-numeric:tabular-nums';
+    chronoTime.textContent = formatChrono(Date.now() - state.baladeEnCours.startTime);
+    chronoLeft.appendChild(chronoLabel);
+    chronoLeft.appendChild(chronoTime);
+    const stopBtn = document.createElement('button');
+    stopBtn.style.cssText = 'background:var(--teal);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer';
+    stopBtn.textContent = 'Terminer';
+    stopBtn.onclick = function(e) { e.stopPropagation(); terminerBalade(); };
+    chronoDiv.appendChild(chronoLeft);
+    chronoDiv.appendChild(stopBtn);
+    wrap.appendChild(chronoDiv);
+  } else {
+    // Objectif semaine
+    const objRow = document.createElement('div');
+    objRow.className = 'objectif-bar-wrap';
+    const objLabel = document.createElement('div');
+    objLabel.className = 'objectif-label';
+    const objLeft = document.createElement('span');
+    objLeft.textContent = baladesWeek.length + '/' + objectif + ' balades cette semaine';
+    const objRight = document.createElement('span');
+    objRight.textContent = pct + '%';
+    objLabel.appendChild(objLeft);
+    objLabel.appendChild(objRight);
+    const bar = document.createElement('div');
+    bar.className = 'progress-bar';
+    const fill = document.createElement('div');
+    fill.className = 'progress-fill';
+    fill.style.cssText = 'width:' + pct + '%;background:' + (pct >= 100 ? 'var(--green)' : 'var(--teal)');
+    bar.appendChild(fill);
+    objRow.appendChild(objLabel);
+    objRow.appendChild(bar);
+    wrap.appendChild(objRow);
+
+    // Dernière balade
+    if (derniere) {
+      const lastDiv = document.createElement('div');
+      lastDiv.style.cssText = 'font-size:11px;color:var(--teal-dark);margin:6px 0 8px';
+      const dist = derniere.distanceKm ? ' · ' + derniere.distanceKm + ' km' : '';
+      const duree = derniere.dureeMin ? derniere.dureeMin + ' min' : '';
+      lastDiv.textContent = 'Dernière : ' + formatDateShort(derniere.date) + (duree ? ' · ' + duree : '') + dist;
+      wrap.appendChild(lastDiv);
+    }
+
+    // Bouton démarrer
+    const startBtn = document.createElement('button');
+    startBtn.className = 'chrono-btn-start';
+    startBtn.style.marginTop = '6px';
+    startBtn.innerHTML = '&#128062; Démarrer une balade';
+    startBtn.onclick = function(e) { e.stopPropagation(); demarrerBalade(a.id); };
+    wrap.appendChild(startBtn);
+  }
+
+  return wrap;
+}
+
+function formatChrono(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  if (h > 0) {
+    return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+function demarrerBalade(aid) {
+  // Sauvegarder startTime dans localStorage pour résister au verrouillage écran iOS
+  const startTime = Date.now();
+  state.baladeEnCours = { animalId: aid, startTime };
+  localStorage.setItem('vetid_balade_en_cours', JSON.stringify({ animalId: aid, startTime }));
+
+  // Lancer le chrono
+  if (state.baladeInterval) clearInterval(state.baladeInterval);
+  state.baladeInterval = setInterval(function() {
+    const elapsed = Date.now() - state.baladeEnCours.startTime;
+    const txt = formatChrono(elapsed);
+    // Mettre à jour dans le dashboard
+    const el = document.getElementById('chrono-dash-' + aid);
+    if (el) el.textContent = txt;
+    // Mettre à jour dans l'écran balades si ouvert
+    const el2 = document.getElementById('balades-chrono-display');
+    if (el2) el2.textContent = txt;
+  }, 1000);
+
+  updateDashboard();
+  showToast('Balade démarrée ! 🐾');
+}
+
+function terminerBalade() {
+  if (!state.baladeEnCours) return;
+  if (state.baladeInterval) { clearInterval(state.baladeInterval); state.baladeInterval = null; }
+
+  const dureeMs = Date.now() - state.baladeEnCours.startTime;
+  const dureeMin = Math.max(1, Math.round(dureeMs / 60000));
+  const aid = state.baladeEnCours.animalId;
+
+  // Pré-remplir le modal
+  document.getElementById('b-duree').value = dureeMin;
+  document.getElementById('b-distance').value = '';
+  document.getElementById('b-lieu').value = '';
+  document.getElementById('b-notes').value = '';
+
+  const a = state.animals.find(function(x) { return x.id === aid; });
+  const sub = document.getElementById('modal-balade-sub');
+  if (sub) sub.textContent = a ? 'Balade de ' + a.name + ' — ' + dureeMin + ' min' : dureeMin + ' min';
+
+  openModal('modal-balade');
+}
+
+async function sauvegarderBalade() {
+  if (!state.baladeEnCours) { closeModal('modal-balade'); return; }
+
+  const aid = state.baladeEnCours.animalId;
+  const dureeMin = parseInt(document.getElementById('b-duree').value) || 1;
+  const distanceKm = parseFloat(document.getElementById('b-distance').value) || null;
+  const lieu = document.getElementById('b-lieu').value.trim();
+  const notes = document.getElementById('b-notes').value.trim();
+
+  const balade = {
+    id: Date.now().toString(),
+    animalId: aid,
+    date: new Date().toISOString(),
+    dureeMin,
+    distanceKm,
+    lieu,
+    notes
+  };
+
+  state.balades.push(balade);
+  state.baladeEnCours = null;
+  localStorage.removeItem('vetid_balade_en_cours');
+
+  // Sauvegarder dans Firestore en arrière-plan
+  const uid = state.user?.uid;
+  if (uid && window._db) {
+    try {
+      await window._setDoc(
+        window._doc(window._db, 'users', uid, 'balades', balade.id),
+        balade
+      );
+    } catch(e) { console.warn('Firestore balades write failed:', e); }
+  }
+
+  saveState();
+  closeModal('modal-balade');
+  updateDashboard();
+  showToast('Balade enregistrée 🐾');
+}
+
+function openBalades(aid) {
+  state.currentAnimalId = aid;
+  const a = state.animals.find(function(x) { return x.id === aid; });
+  document.getElementById('balades-title').textContent = (a ? a.emoji + ' ' + a.name : '') + ' — Balades';
+  renderBalades(aid);
+  showScreen('balades');
+}
+
+function renderBalades(aid) {
+  const list = document.getElementById('balades-list');
+  list.innerHTML = '';
+
+  const enCours = state.baladeEnCours && state.baladeEnCours.animalId === aid;
+  const banner = document.getElementById('balades-chrono-banner');
+  if (banner) banner.style.display = enCours ? 'block' : 'none';
+
+  const balades = state.balades
+    .filter(function(b) { return b.animalId === aid; })
+    .sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+
+  // Stats semaine
+  const baladesWeek = getBaladesSemaine(aid);
+  const objectif = getObjectifBalade(aid);
+  const totalKm = baladesWeek.reduce(function(s, b) { return s + (b.distanceKm || 0); }, 0);
+  const totalMin = baladesWeek.reduce(function(s, b) { return s + (b.dureeMin || 0); }, 0);
+
+  // Card stats semaine
+  const statsCard = document.createElement('div');
+  statsCard.style.cssText = 'background:var(--teal);border-radius:16px;padding:14px;margin-bottom:14px;color:#fff';
+  const statsTitle = document.createElement('div');
+  statsTitle.style.cssText = 'font-size:12px;opacity:.8;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px';
+  statsTitle.textContent = 'Cette semaine';
+  statsCard.appendChild(statsTitle);
+  const statsRow = document.createElement('div');
+  statsRow.style.cssText = 'display:flex;gap:8px;margin-bottom:10px';
+  [
+    [baladesWeek.length, 'Balades'],
+    [totalKm.toFixed(1) + ' km', 'Distance'],
+    [Math.round(totalMin / 60 * 10) / 10 + 'h', 'Durée']
+  ].forEach(function(item) {
+    const s = document.createElement('div');
+    s.style.cssText = 'flex:1;background:rgba(255,255,255,.15);border-radius:10px;padding:8px;text-align:center';
+    const v = document.createElement('div');
+    v.style.cssText = 'font-size:18px;font-weight:800';
+    v.textContent = item[0];
+    const l = document.createElement('div');
+    l.style.cssText = 'font-size:9px;opacity:.8;margin-top:2px';
+    l.textContent = item[1];
+    s.appendChild(v); s.appendChild(l);
+    statsRow.appendChild(s);
+  });
+  statsCard.appendChild(statsRow);
+  // Barre objectif
+  const pct = Math.min(100, Math.round((baladesWeek.length / objectif) * 100));
+  const objLabel = document.createElement('div');
+  objLabel.style.cssText = 'display:flex;justify-content:space-between;font-size:10px;opacity:.8;margin-bottom:4px';
+  objLabel.innerHTML = '<span>Objectif : ' + objectif + ' balades/semaine</span><span>' + pct + '%</span>';
+  const objBar = document.createElement('div');
+  objBar.style.cssText = 'height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden';
+  const objFill = document.createElement('div');
+  objFill.style.cssText = 'height:100%;width:' + pct + '%;background:#fff;border-radius:3px;transition:width .3s';
+  objBar.appendChild(objFill);
+  statsCard.appendChild(objLabel);
+  statsCard.appendChild(objBar);
+  list.appendChild(statsCard);
+
+  // Bouton démarrer si pas de balade en cours
+  if (!enCours) {
+    const startBtn = document.createElement('button');
+    startBtn.className = 'chrono-btn-start';
+    startBtn.style.marginBottom = '14px';
+    startBtn.innerHTML = '&#128062; Démarrer une balade';
+    startBtn.onclick = function() { demarrerBalade(aid); };
+    list.appendChild(startBtn);
+  }
+
+  // Historique
+  if (!balades.length) {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'text-align:center;padding:32px;color:var(--muted);font-size:14px';
+    empty.textContent = 'Aucune balade enregistrée';
+    list.appendChild(empty);
+    return;
+  }
+
+  const histTitle = document.createElement('div');
+  histTitle.style.cssText = 'font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px';
+  histTitle.textContent = 'Historique';
+  list.appendChild(histTitle);
+
+  balades.forEach(function(b) {
+    const card = document.createElement('div');
+    card.className = 'balade-card';
+
+    const header = document.createElement('div');
+    header.className = 'balade-header';
+    const icon = document.createElement('div');
+    icon.className = 'balade-icon';
+    icon.textContent = '🐾';
+    const info = document.createElement('div');
+    info.style.flex = '1';
+    const dateEl = document.createElement('div');
+    dateEl.style.cssText = 'font-size:13px;font-weight:700;color:var(--text)';
+    dateEl.textContent = formatDate(b.date);
+    const lieuEl = document.createElement('div');
+    lieuEl.style.cssText = 'font-size:11px;color:var(--muted)';
+    lieuEl.textContent = b.lieu || 'Lieu non précisé';
+    info.appendChild(dateEl);
+    info.appendChild(lieuEl);
+    header.appendChild(icon);
+    header.appendChild(info);
+    card.appendChild(header);
+
+    const stats = document.createElement('div');
+    stats.className = 'balade-stats';
+    [
+      [b.dureeMin ? b.dureeMin + ' min' : '—', 'Durée'],
+      [b.distanceKm ? b.distanceKm + ' km' : '—', 'Distance'],
+    ].forEach(function(item) {
+      const s = document.createElement('div');
+      s.className = 'balade-stat';
+      const v = document.createElement('div');
+      v.className = 'balade-stat-val';
+      v.textContent = item[0];
+      const l = document.createElement('div');
+      l.className = 'balade-stat-label';
+      l.textContent = item[1];
+      s.appendChild(v); s.appendChild(l);
+      stats.appendChild(s);
+    });
+    card.appendChild(stats);
+
+    if (b.notes) {
+      const notes = document.createElement('div');
+      notes.style.cssText = 'font-size:12px;color:var(--muted);font-style:italic;margin-top:4px';
+      notes.textContent = b.notes;
+      card.appendChild(notes);
+    }
+
+    list.appendChild(card);
+  });
+}
+
+// Reprendre le chrono si l'app était fermée pendant une balade
+function restaurerChronoBalade() {
+  const saved = localStorage.getItem('vetid_balade_en_cours');
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    state.baladeEnCours = data;
+    if (state.baladeInterval) clearInterval(state.baladeInterval);
+    state.baladeInterval = setInterval(function() {
+      const elapsed = Date.now() - state.baladeEnCours.startTime;
+      const txt = formatChrono(elapsed);
+      const el = document.getElementById('chrono-dash-' + data.animalId);
+      if (el) el.textContent = txt;
+      const el2 = document.getElementById('balades-chrono-display');
+      if (el2) el2.textContent = txt;
+    }, 1000);
+    showToast('Balade en cours restaurée ⏱');
+  } catch(e) { localStorage.removeItem('vetid_balade_en_cours'); }
+}
+
 // ─── LIEUX PET-FRIENDLY ──────────────────────────────────────────────────────
 
 const LIEU_CONFIG = {
@@ -2989,7 +3442,7 @@ function initSwipeNav() {
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 loadState();
 showScreen('onboarding');
-['animal', 'soin', 'poids', 'croquette', 'vet', 'feedback', 'journal-entry', 'animal-picker', 'lieu'].forEach(id => {
+['animal', 'soin', 'poids', 'croquette', 'vet', 'feedback', 'journal-entry', 'animal-picker', 'lieu', 'balade'].forEach(id => {
   initSwipeClose('handle-' + id, 'modal-' + id);
 });
 initSwipeNav();
