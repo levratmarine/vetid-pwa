@@ -297,6 +297,27 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .jdetail-date-badge{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.45);color:#fff;font-size:10px;padding:3px 8px;border-radius:6px}
 .jdetail-mood-card{background:var(--white);border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
 
+/* ── LIEUX ── */
+.lieu-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:10px;cursor:pointer;transition:transform .15s;display:flex;gap:12px;align-items:flex-start}
+.lieu-card:active{transform:scale(.98)}
+.lieu-icon-box{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.lieu-info{flex:1;min-width:0}
+.lieu-nom{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.lieu-adresse{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:6px}
+.lieu-footer{display:flex;align-items:center;gap:8px}
+.lieu-cat-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px}
+.lieu-stars{font-size:12px;color:var(--amber)}
+.lieux-search{background:rgba(255,255,255,.2);border:none;border-radius:12px;padding:10px 14px;width:100%;color:#fff;font-size:14px;outline:none;margin-top:12px}
+.lieux-search::placeholder{color:rgba(255,255,255,.7)}
+.lieux-filter-row{display:flex;gap:6px;padding:12px 16px 0;overflow-x:auto;flex-shrink:0}
+.lieux-filter-row::-webkit-scrollbar{display:none}
+.lieu-chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;flex-shrink:0;cursor:pointer;border:none}
+.lieu-chip.active{background:var(--teal);color:#fff}
+.lieu-chip.inactive{background:var(--white);color:var(--muted);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.star-btn{font-size:24px;cursor:pointer;opacity:.4;transition:opacity .15s;background:none;border:none;padding:2px}
+.star-btn.on{opacity:1}
+.lieux-empty{text-align:center;padding:48px 24px;color:var(--muted)}
+
 @media(min-width:480px){
   body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
   .screen{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.12)}
@@ -442,6 +463,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   <div class="bottom-nav">
     <div class="nav-item active" id="nav-home" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
     <div class="nav-item" id="nav-journal" onclick="goToTab('journal')"><div class="nav-icon">📓</div><div class="nav-label">Journal</div></div>
+    <div class="nav-item" id="nav-lieux" onclick="goToTab('lieux')"><div class="nav-icon">📍</div><div class="nav-label">Lieux</div></div>
     <div class="nav-item" id="nav-settings" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
   </div>
 </div>
@@ -575,6 +597,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   <div class="bottom-nav">
     <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
     <div class="nav-item active"><div class="nav-icon">📓</div><div class="nav-label">Journal</div></div>
+    <div class="nav-item" onclick="goToTab('lieux')"><div class="nav-icon">📍</div><div class="nav-label">Lieux</div></div>
     <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
   </div>
 </div>
@@ -621,6 +644,43 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div style="background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px">Copier</div>
   </div>
 
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     LIEUX PET-FRIENDLY
+     ══════════════════════════════════════ -->
+<div id="screen-lieux" class="screen">
+  <div class="dash-header">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:22px;font-weight:700">Lieux pet-friendly</div>
+        <div style="font-size:13px;opacity:.8;margin-top:2px">Restos, parcs, hôtels, vétos…</div>
+      </div>
+      <button onclick="openAddLieu()" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer">＋ Ajouter</button>
+    </div>
+    <input class="lieux-search" id="lieux-search" type="text" placeholder="🔍 Rechercher un lieu ou une ville…" oninput="filterLieux()">
+  </div>
+
+  <!-- Filtres catégorie -->
+  <div class="lieux-filter-row" id="lieux-filter-row">
+    <button class="lieu-chip active" onclick="selectLieuCat('',this)">🐾 Tous</button>
+    <button class="lieu-chip inactive" onclick="selectLieuCat('resto',this)">🍽️ Restos</button>
+    <button class="lieu-chip inactive" onclick="selectLieuCat('hotel',this)">🏨 Hôtels</button>
+    <button class="lieu-chip inactive" onclick="selectLieuCat('parc',this)">🌳 Parcs</button>
+    <button class="lieu-chip inactive" onclick="selectLieuCat('veto',this)">🩺 Vétos</button>
+    <button class="lieu-chip inactive" onclick="selectLieuCat('shop',this)">🛍️ Shops</button>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:14px" id="lieux-list">
+    <div style="text-align:center;padding:40px;color:var(--muted)">Chargement…</div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+    <div class="nav-item" onclick="goToTab('journal')"><div class="nav-icon">📓</div><div class="nav-label">Journal</div></div>
+    <div class="nav-item active"><div class="nav-icon">📍</div><div class="nav-label">Lieux</div></div>
+    <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
   </div>
 </div>
 
@@ -690,6 +750,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   <div class="bottom-nav">
     <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
     <div class="nav-item" onclick="goToTab('journal')"><div class="nav-icon">📓</div><div class="nav-label">Journal</div></div>
+    <div class="nav-item" onclick="goToTab('lieux')"><div class="nav-icon">📍</div><div class="nav-label">Lieux</div></div>
     <div class="nav-item active"><div class="nav-icon">⚙️</div><div class="nav-label">Réglages</div></div>
   </div>
 </div>
@@ -969,6 +1030,59 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
+<!-- MODAL AJOUTER UN LIEU -->
+<div class="modal-overlay" id="modal-lieu">
+  <div class="modal-sheet" id="sheet-lieu">
+    <div class="modal-handle" id="handle-lieu"></div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">📍 Proposer un lieu</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Votre suggestion sera vérifiée avant publication</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="form-row">
+        <label class="field-label">Nom du lieu *</label>
+        <input class="field-input" id="lieu-nom" type="text" placeholder="Le Café des Chiens">
+      </div>
+      <div class="form-row">
+        <label class="field-label">Adresse *</label>
+        <input class="field-input" id="lieu-adresse" type="text" placeholder="12 rue de la Paix">
+      </div>
+      <div class="form-row">
+        <label class="field-label">Ville *</label>
+        <input class="field-input" id="lieu-ville" type="text" placeholder="Paris">
+      </div>
+      <div class="form-row">
+        <label class="field-label">Catégorie *</label>
+        <select class="field-input" id="lieu-categorie">
+          <option value="">Choisir…</option>
+          <option value="resto">🍽️ Restaurant / Café</option>
+          <option value="hotel">🏨 Hôtel</option>
+          <option value="parc">🌳 Parc / Jardin</option>
+          <option value="veto">🩺 Vétérinaire</option>
+          <option value="shop">🛍️ Animalerie / Shop</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="field-label">Description (optionnel)</label>
+        <textarea class="field-input" id="lieu-description" rows="3" placeholder="Terrasse acceptant les chiens, bol d'eau fourni…" style="resize:none;line-height:1.5"></textarea>
+      </div>
+      <div class="form-row">
+        <label class="field-label">Votre note</label>
+        <div style="display:flex;gap:4px" id="lieu-stars-input">
+          <button class="star-btn" data-val="1" onclick="setLieuNote(1)">⭐</button>
+          <button class="star-btn" data-val="2" onclick="setLieuNote(2)">⭐</button>
+          <button class="star-btn" data-val="3" onclick="setLieuNote(3)">⭐</button>
+          <button class="star-btn" data-val="4" onclick="setLieuNote(4)">⭐</button>
+          <button class="star-btn" data-val="5" onclick="setLieuNote(5)">⭐</button>
+        </div>
+      </div>
+      <div id="lieu-success" style="display:none;background:var(--teal-light);border-radius:10px;padding:12px;font-size:13px;color:var(--teal-dark);text-align:center">
+        🐾 Merci ! Votre lieu sera vérifié avant publication.
+      </div>
+      <button class="btn-primary" id="lieu-submit-btn" onclick="soumettreUnLieu()">Envoyer ma suggestion</button>
+      <button class="btn-ghost" onclick="closeModal('modal-lieu')">Annuler</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1198,6 +1312,7 @@ function goToDashboard() { updateDashboard(); loadBlogPreview(); showScreen('das
 // ─── TABS ─────────────────────────────────────────────────────────────────────
 function goToTab(tab) {
   if (tab === 'journal') { openJournal(); return; }
+  if (tab === 'lieux') { openLieux(); return; }
   const map = { home: 'dashboard', settings: 'settings' };
   showScreen(map[tab] || tab);
   if (tab === 'settings') {
@@ -2284,6 +2399,191 @@ async function saveJournalEntry() {
   }
 }
 
+// ─── LIEUX PET-FRIENDLY ──────────────────────────────────────────────────────
+
+const LIEU_CONFIG = {
+  resto:  { icon: '🍽️', label: 'Restaurant', bg: '#FFF0EB', color: 'var(--orange)' },
+  hotel:  { icon: '🏨', label: 'Hôtel',       bg: 'var(--blue-light)', color: 'var(--blue)' },
+  parc:   { icon: '🌳', label: 'Parc',         bg: '#ECFDF5', color: '#16A34A' },
+  veto:   { icon: '🩺', label: 'Vétérinaire',  bg: 'var(--teal-light)', color: 'var(--teal-dark)' },
+  shop:   { icon: '🛍️', label: 'Shop',         bg: '#F5F3FF', color: 'var(--purple)' }
+};
+
+// Lieux de démonstration pré-chargés pour la V0
+const LIEUX_DEMO = [
+  { id: 'demo1', nom: 'Le Petit Bistrot', adresse: '14 rue Montorgueil', ville: 'Paris', categorie: 'resto', description: 'Terrasse couverte, bol d'eau fourni. Chiens acceptés en intérieur.', note: 5, statut: 'valide' },
+  { id: 'demo2', nom: 'Parc des Buttes-Chaumont', adresse: 'Entrée principale rue Botzaris', ville: 'Paris', categorie: 'parc', description: 'Grand parc idéal pour les balades. Zone sans laisse autorisée.', note: 5, statut: 'valide' },
+  { id: 'demo3', nom: 'Hôtel Le Marais', adresse: '3 rue de Bretagne', ville: 'Paris', categorie: 'hotel', description: 'Accepte les chiens jusqu'à 15 kg. Litière et gamelles fournies.', note: 4, statut: 'valide' },
+  { id: 'demo4', nom: 'Clinique Vétérinaire Bastille', adresse: '22 bd Beaumarchais', ville: 'Paris', categorie: 'veto', description: 'Urgences 24h/24, 7j/7. Équipe spécialisée chiens et chats.', note: 5, statut: 'valide' },
+  { id: 'demo5', nom: 'Wanimo La Rochelle', adresse: 'Centre commercial La Pallice', ville: 'La Rochelle', categorie: 'shop', description: 'Grande animalerie, gamme bio et naturelle.', note: 4, statut: 'valide' },
+  { id: 'demo6', nom: 'La Cabane à Toutou', adresse: '7 rue du Port', ville: 'La Rochelle', categorie: 'resto', description: 'Bar à bières dog-friendly, snacks pour chiens offerts !', note: 5, statut: 'valide' },
+  { id: 'demo7', nom: 'Parc de la Visitation', adresse: 'Rue de la Visitation', ville: 'Lyon', categorie: 'parc', description: 'Beau parc arboré, fontaine pour les chiens.', note: 4, statut: 'valide' },
+  { id: 'demo8', nom: 'Mon Vétérinaire', adresse: '45 cours Lafayette', ville: 'Lyon', categorie: 'veto', description: 'Consultations sur rdv, urgences le week-end.', note: 4, statut: 'valide' },
+];
+
+// State lieux
+let allLieux = [];
+let lieuCatFiltre = '';
+let lieuNoteSelectionnee = 0;
+
+async function openLieux() {
+  showScreen('lieux');
+  if (!allLieux.length) await chargerLieux();
+  renderLieux();
+}
+
+async function chargerLieux() {
+  try {
+    const db = window._db;
+    if (db) {
+      const snap = await window._getDocs(
+        window._query(
+          window._collection(db, 'lieux'),
+          window._where('statut', '==', 'valide'),
+          window._orderBy('dateAjout', 'desc')
+        )
+      );
+      const lieuFirestore = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      // Fusionner démo + Firestore (démo en dernier)
+      allLieux = [...lieuFirestore];
+      // Ajouter les démos qui ne sont pas déjà dans Firestore
+      LIEUX_DEMO.forEach(demo => {
+        if (!allLieux.find(l => l.id === demo.id)) allLieux.push(demo);
+      });
+    } else {
+      allLieux = [...LIEUX_DEMO];
+    }
+  } catch(e) {
+    console.warn('Firestore lieux failed, using demo:', e);
+    allLieux = [...LIEUX_DEMO];
+  }
+}
+
+function renderLieux() {
+  const list = document.getElementById('lieux-list');
+  if (!list) return;
+  const search = (document.getElementById('lieux-search')?.value || '').toLowerCase().trim();
+
+  let filtered = allLieux.filter(l => l.statut === 'valide');
+  if (lieuCatFiltre) filtered = filtered.filter(l => l.categorie === lieuCatFiltre);
+  if (search) filtered = filtered.filter(l =>
+    l.nom.toLowerCase().includes(search) ||
+    l.ville.toLowerCase().includes(search) ||
+    (l.adresse || '').toLowerCase().includes(search)
+  );
+
+  if (!filtered.length) {
+    list.innerHTML = '<div class="lieux-empty"><div style="font-size:40px;margin-bottom:12px">📍</div><div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px">Aucun lieu trouvé</div><div style="font-size:13px">Soyez le premier à en proposer un !</div></div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  filtered.forEach(lieu => {
+    const cfg = LIEU_CONFIG[lieu.categorie] || { icon: '📍', label: lieu.categorie, bg: 'var(--bg)', color: 'var(--muted)' };
+    const stars = '⭐'.repeat(Math.round(lieu.note || 0));
+    const card = document.createElement('div');
+    card.className = 'lieu-card';
+    card.innerHTML =
+      '<div class="lieu-icon-box" style="background:' + cfg.bg + '">' + cfg.icon + '</div>'
+      + '<div class="lieu-info">'
+      +   '<div class="lieu-nom">' + lieu.nom + '</div>'
+      +   '<div class="lieu-adresse">' + (lieu.adresse || '') + ' · ' + lieu.ville + '</div>'
+      +   (lieu.description ? '<div style="font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:6px">' + lieu.description + '</div>' : '')
+      +   '<div class="lieu-footer">'
+      +     '<span class="lieu-cat-badge" style="background:' + cfg.bg + ';color:' + cfg.color + '">' + cfg.icon + ' ' + cfg.label + '</span>'
+      +     (stars ? '<span class="lieu-stars">' + stars + '</span>' : '')
+      +   '</div>'
+      + '</div>';
+    list.appendChild(card);
+  });
+
+  // Compteur
+  const counter = document.createElement('div');
+  counter.style.cssText = 'text-align:center;padding:16px 0;font-size:12px;color:var(--muted)';
+  counter.textContent = filtered.length + ' lieu' + (filtered.length > 1 ? 'x' : '') + ' trouvé' + (filtered.length > 1 ? 's' : '');
+  list.appendChild(counter);
+
+  // Bouton flottant suggérer
+  const fab = document.createElement('button');
+  fab.style.cssText = 'display:block;width:100%;margin-top:8px;padding:14px;border-radius:14px;background:var(--teal-light);color:var(--teal-dark);border:1.5px dashed var(--teal);font-size:14px;font-weight:600;cursor:pointer';
+  fab.textContent = '➕ Proposer un lieu manquant';
+  fab.onclick = openAddLieu;
+  list.appendChild(fab);
+}
+
+function selectLieuCat(cat, el) {
+  lieuCatFiltre = cat;
+  document.querySelectorAll('.lieu-chip').forEach(c => { c.classList.remove('active'); c.classList.add('inactive'); });
+  el.classList.remove('inactive'); el.classList.add('active');
+  renderLieux();
+}
+
+function filterLieux() {
+  renderLieux();
+}
+
+function openAddLieu() {
+  lieuNoteSelectionnee = 0;
+  ['lieu-nom', 'lieu-adresse', 'lieu-ville', 'lieu-description'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const sel = document.getElementById('lieu-categorie');
+  if (sel) sel.value = '';
+  document.querySelectorAll('#lieu-stars-input .star-btn').forEach(b => b.classList.remove('on'));
+  const success = document.getElementById('lieu-success');
+  if (success) success.style.display = 'none';
+  const btn = document.getElementById('lieu-submit-btn');
+  if (btn) { btn.style.display = 'block'; btn.disabled = false; btn.textContent = 'Envoyer ma suggestion'; }
+  document.getElementById('modal-lieu').classList.add('open');
+}
+
+function setLieuNote(val) {
+  lieuNoteSelectionnee = val;
+  document.querySelectorAll('#lieu-stars-input .star-btn').forEach(b => {
+    b.classList.toggle('on', parseInt(b.dataset.val) <= val);
+  });
+}
+
+async function soumettreUnLieu() {
+  const nom = document.getElementById('lieu-nom').value.trim();
+  const adresse = document.getElementById('lieu-adresse').value.trim();
+  const ville = document.getElementById('lieu-ville').value.trim();
+  const categorie = document.getElementById('lieu-categorie').value;
+
+  if (!nom || !adresse || !ville || !categorie) {
+    showToast('Remplissez les champs obligatoires *');
+    return;
+  }
+
+  const btn = document.getElementById('lieu-submit-btn');
+  btn.textContent = 'Envoi…'; btn.disabled = true;
+
+  const lieu = {
+    nom, adresse, ville, categorie,
+    description: document.getElementById('lieu-description').value.trim(),
+    note: lieuNoteSelectionnee || 0,
+    statut: 'en_attente',
+    ajoutePar: state.user?.uid || 'anonyme',
+    dateAjout: new Date().toISOString()
+  };
+
+  try {
+    const db = window._db;
+    if (db) {
+      await window._addDoc(window._collection(db, 'lieux'), lieu);
+    }
+    document.getElementById('lieu-success').style.display = 'block';
+    btn.style.display = 'none';
+    showToast('Merci ! Votre lieu sera vérifié avant publication 🐾');
+    setTimeout(() => closeModal('modal-lieu'), 2500);
+  } catch(e) {
+    console.error('Soumission lieu failed:', e);
+    showToast('Erreur d'envoi, réessayez');
+    btn.textContent = 'Envoyer ma suggestion'; btn.disabled = false;
+  }
+}
+
 // ─── BLOG ─────────────────────────────────────────────────────────────────────
 async function fetchNotionArticles() {
   try {
@@ -2436,7 +2736,7 @@ function initSwipeClose(handleId, overlayId) {
 
 // ─── SWIPE NAV ────────────────────────────────────────────────────────────────
 function initSwipeNav() {
-  const screens = ['dashboard', 'journal', 'settings'];
+  const screens = ['dashboard', 'journal', 'lieux', 'settings'];
   let startX = 0, startY = 0;
   document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, { passive: true });
   document.addEventListener('touchend', e => {
@@ -2457,7 +2757,7 @@ function initSwipeNav() {
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 loadState();
 showScreen('onboarding');
-['animal', 'soin', 'poids', 'croquette', 'vet', 'feedback', 'journal-entry', 'animal-picker'].forEach(id => {
+['animal', 'soin', 'poids', 'croquette', 'vet', 'feedback', 'journal-entry', 'animal-picker', 'lieu'].forEach(id => {
   initSwipeClose('handle-' + id, 'modal-' + id);
 });
 initSwipeNav();
