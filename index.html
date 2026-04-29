@@ -330,6 +330,17 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .chrono-btn-start{width:100%;padding:14px;border-radius:14px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .chrono-btn-start:active{opacity:.85}
 
+/* ── BADGES ── */
+.badges-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+.badge-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:8px 4px;border-radius:12px;transition:background .15s}
+.badge-item:active{background:var(--bg)}
+.badge-emoji-wrap{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;transition:all .2s}
+.badge-emoji-wrap.earned{box-shadow:0 2px 8px rgba(42,157,143,.3)}
+.badge-emoji-wrap.locked{filter:grayscale(1);opacity:.35}
+.badge-name{font-size:10px;font-weight:600;color:var(--text);text-align:center;line-height:1.2}
+.badge-name.locked{color:var(--muted)}
+.badge-toast-wrap{display:flex;align-items:center;gap:8px}
+
 /* ── LIEUX ── */
 .lieu-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:10px;cursor:pointer;transition:transform .15s;display:flex;gap:12px;align-items:flex-start}
 .lieu-card:active{transform:scale(.98)}
@@ -794,6 +805,12 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <span style="color:var(--red)">›</span>
       </div>
     </div>
+    <div class="section-title">Mes badges 🏆</div>
+    <div class="settings-group">
+      <div style="padding:14px">
+        <div id="badges-grid" class="badges-grid"></div>
+      </div>
+    </div>
     <div class="section-title">Version</div>
     <div class="settings-group">
       <div class="settings-row" style="cursor:default">
@@ -1237,7 +1254,8 @@ let state = {
   // Chrono balade
   baladeEnCours: null,   // { animalId, startTime }
   baladeInterval: null,
-  viewingEntryId: null
+  viewingEntryId: null,
+  badges: []  // [ badgeId, … ]
 };
 let allArticles = [];
 let weightChart = null;
@@ -1255,6 +1273,7 @@ function loadState(uid) {
     state.vets = p.vets || {};
     state.journal = p.journal || {};
     state.balades = p.balades || [];
+    state.badges = p.badges || [];
   }
   // Puis charge le journal depuis Firestore (source de vérité)
   if (uid) loadJournalFromFirestore(uid);
@@ -1305,7 +1324,7 @@ function saveState() {
     localStorage.setItem('vetid_' + state.user.uid, JSON.stringify({
       animals: state.animals, treatments: state.treatments,
       weights: state.weights, croquettes: state.croquettes, vets: state.vets,
-      journal: state.journal, balades: state.balades
+      journal: state.journal, balades: state.balades, badges: state.badges
     }));
   }
 }
@@ -1423,6 +1442,7 @@ function goToDashboard() {
   showScreen('dashboard');
   setTimeout(checkCroquettesAlert, 2000);
   restaurerChronoBalade();
+  setTimeout(checkAndAwardBadges, 1000);
 }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
@@ -1435,6 +1455,8 @@ function goToTab(tab) {
     document.getElementById('settings-email').textContent = state.user?.email || '';
     document.getElementById('settings-name').textContent = state.user?.prenom || '';
     document.getElementById('settings-mail-display').textContent = state.user?.email || '';
+    checkAndAwardBadges();
+    renderBadgesGrid();
   }
 }
 
@@ -1752,6 +1774,7 @@ function saveAnimal() {
   state.editingAnimalId = null;
   saveState(); closeModal('modal-animal'); updateDashboard();
   showToast(isEdit ? animal.name + ' modifié ✓' : animal.name + ' ajouté ! 🐾');
+  checkAndAwardBadges();
 }
 
 // ─── SOINS ────────────────────────────────────────────────────────────────────
@@ -2680,6 +2703,7 @@ async function saveJournalEntry() {
     updateJournalHeader();
     updateDashboard();
     showToast('Entrée ajoutée au journal ✓');
+  checkAndAwardBadges();
 
   } catch(e) {
     console.error('saveJournalEntry error:', e);
@@ -2915,6 +2939,7 @@ async function sauvegarderBalade() {
   closeModal('modal-balade');
   updateDashboard();
   showToast('Balade enregistrée 🐾');
+  checkAndAwardBadges();
 }
 
 function openBalades(aid) {
@@ -3334,6 +3359,218 @@ function openArticle(idx) {
     .split('\n\n').map(p => p.startsWith('<') ? p : '<p>' + p + '</p>').join('');
   document.getElementById('article-content').innerHTML = html;
   showScreen('article');
+}
+
+// ─── BADGES ───────────────────────────────────────────────────────────────────
+
+const BADGES_CONFIG = [
+  {
+    id: 'early_adopter',
+    emoji: '🌟',
+    nom: 'Fondateur VetID',
+    description: "Parmi les premiers utilisateurs de VetID. Merci d'y croire !",
+    couleur: '#FEF3C7',
+    condition: function() { return true; } // tous les bêta-testeurs
+  },
+  {
+    id: 'premier_animal',
+    emoji: '🐾',
+    nom: 'Premier compagnon',
+    description: "Vous avez ajouté votre premier animal.",
+    couleur: '#E1F5EE',
+    condition: function() { return state.animals.length >= 1; }
+  },
+  {
+    id: 'vaccins_ok',
+    emoji: '💉',
+    nom: 'Vaccins à jour',
+    description: "Tous vos vaccins sont à jour.",
+    couleur: '#EFF6FF',
+    condition: function() {
+      const vaccins = state.treatments.filter(function(t) { return t.type === 'vaccin'; });
+      return vaccins.length > 0 && vaccins.every(function(t) {
+        return t.nextDate && (new Date(t.nextDate) - new Date()) / 86400000 > 0;
+      });
+    }
+  },
+  {
+    id: 'dix_balades',
+    emoji: '🐶',
+    nom: '10 balades',
+    description: "10 balades enregistrées avec votre chien.",
+    couleur: '#E1F5EE',
+    condition: function() { return state.balades.length >= 10; }
+  },
+  {
+    id: 'memoire_vivante',
+    emoji: '📓',
+    nom: 'Mémoire vivante',
+    description: "20 entrées dans le journal de vie.",
+    couleur: '#F5F3FF',
+    condition: function() {
+      return Object.values(state.journal).reduce(function(s, arr) { return s + arr.length; }, 0) >= 20;
+    }
+  },
+  {
+    id: 'suivi_regulier',
+    emoji: '⚖️',
+    nom: 'Suivi régulier',
+    description: "4 pesées enregistrées.",
+    couleur: '#FFFBEB',
+    condition: function() {
+      return Object.values(state.weights).reduce(function(s, arr) { return s + arr.length; }, 0) >= 4;
+    }
+  },
+  {
+    id: 'photographe',
+    emoji: '📸',
+    nom: 'Photographe',
+    description: "5 photos ajoutées dans le journal.",
+    couleur: '#FDF2F8',
+    condition: function() {
+      return Object.values(state.journal).reduce(function(s, arr) {
+        return s + arr.filter(function(e) { return e.type === 'photo'; }).length;
+      }, 0) >= 5;
+    }
+  },
+  {
+    id: 'six_mois',
+    emoji: '🥇',
+    nom: '6 mois de suivi',
+    description: "Compte actif depuis 6 mois. Bravo !",
+    couleur: '#FEF3C7',
+    condition: function() {
+      const created = state.user && state.user.createdAt;
+      return created && (Date.now() - new Date(created)) > 180 * 86400000;
+    }
+  }
+];
+
+async function checkAndAwardBadges() {
+  const earned = state.badges || [];
+  const newBadges = [];
+
+  BADGES_CONFIG.forEach(function(badge) {
+    if (!earned.includes(badge.id)) {
+      try {
+        if (badge.condition()) {
+          newBadges.push(badge);
+          earned.push(badge.id);
+        }
+      } catch(e) { /* condition peut échouer silencieusement */ }
+    }
+  });
+
+  if (!newBadges.length) return;
+
+  state.badges = earned;
+  saveState();
+
+  // Sauvegarder dans Firestore
+  const uid = state.user && state.user.uid;
+  if (uid && window._db) {
+    newBadges.forEach(async function(badge) {
+      try {
+        await window._setDoc(
+          window._doc(window._db, 'users', uid, 'badges', badge.id),
+          { badgeId: badge.id, dateObtenu: new Date().toISOString() }
+        );
+      } catch(e) { console.warn('Badge Firestore write failed:', e); }
+    });
+  }
+
+  // Afficher les toasts un par un avec délai
+  newBadges.forEach(function(badge, i) {
+    setTimeout(function() { showBadgeToast(badge); }, i * 3500);
+  });
+
+  // Rafraîchir la grille si Settings ouvert
+  const active = document.querySelector('.screen.active');
+  if (active && active.id === 'screen-settings') renderBadgesGrid();
+}
+
+function showBadgeToast(badge) {
+  const t = document.getElementById('toast');
+  t.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'display:flex;align-items:center;gap:8px';
+  const emoji = document.createElement('span');
+  emoji.style.fontSize = '20px';
+  emoji.textContent = badge.emoji;
+  const text = document.createElement('span');
+  const strong = document.createElement('strong');
+  strong.textContent = badge.nom;
+  text.appendChild(document.createTextNode('Badge débloqué : '));
+  text.appendChild(strong);
+  text.appendChild(document.createTextNode(' !'));
+  wrap.appendChild(emoji);
+  wrap.appendChild(text);
+  t.appendChild(wrap);
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3200);
+}
+
+function renderBadgesGrid() {
+  const grid = document.getElementById('badges-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const earned = state.badges || [];
+
+  BADGES_CONFIG.forEach(function(badge) {
+    const isEarned = earned.includes(badge.id);
+
+    const item = document.createElement('div');
+    item.className = 'badge-item';
+    item.onclick = function() { showBadgeDetail(badge, isEarned); };
+
+    const emojiWrap = document.createElement('div');
+    emojiWrap.className = 'badge-emoji-wrap ' + (isEarned ? 'earned' : 'locked');
+    emojiWrap.style.background = isEarned ? badge.couleur : '#F3F4F6';
+    emojiWrap.textContent = badge.emoji;
+
+    const name = document.createElement('div');
+    name.className = 'badge-name' + (isEarned ? '' : ' locked');
+    name.textContent = badge.nom;
+
+    item.appendChild(emojiWrap);
+    item.appendChild(name);
+    grid.appendChild(item);
+  });
+}
+
+function showBadgeDetail(badge, isEarned) {
+  const earned = state.badges || [];
+  const dateObtenu = isEarned ? 'Débloqué ✓' : 'Non encore obtenu';
+
+  // Mini modal natif (alert) ou toast enrichi
+  const msg = badge.emoji + ' ' + badge.nom + '\n\n' + badge.description + '\n\n' + (isEarned ? '✅ Débloqué !' : '🔒 ' + badge.description);
+  // Utiliser un toast amélioré plutôt qu'un alert
+  const t = document.getElementById('toast');
+  t.innerHTML = '';
+  t.style.cssText = '';
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'text-align:center';
+  const em = document.createElement('div');
+  em.style.fontSize = '28px';
+  em.textContent = badge.emoji;
+  const title = document.createElement('div');
+  title.style.cssText = 'font-weight:700;margin:4px 0 2px';
+  title.textContent = badge.nom;
+  const desc = document.createElement('div');
+  desc.style.cssText = 'font-size:12px;opacity:.8;line-height:1.4';
+  desc.textContent = isEarned ? 'Débloqué ✓' : 'Objectif : ' + badge.description;
+  wrap.appendChild(em);
+  wrap.appendChild(title);
+  wrap.appendChild(desc);
+  t.appendChild(wrap);
+  t.style.maxWidth = '280px';
+  t.style.whiteSpace = 'normal';
+  t.style.padding = '14px 18px';
+  t.classList.add('show');
+  setTimeout(function() {
+    t.classList.remove('show');
+    t.style.cssText = '';
+  }, 3000);
 }
 
 // ─── FEEDBACK ─────────────────────────────────────────────────────────────────
