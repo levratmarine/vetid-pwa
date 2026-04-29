@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -15,6 +14,9 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBlUWYVZEuigQ-cqzgwurOYORypi_QzApM",
   authDomain: "vetidapp.firebaseapp.com",
@@ -25,15 +27,83 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
 window._auth = auth;
+window._db = db;
+window._storage = storage;
 window._createUser = createUserWithEmailAndPassword;
 window._signIn = signInWithEmailAndPassword;
 window._resetPassword = sendPasswordResetEmail;
 window._signOut = signOut;
 window._updateProfile = updateProfile;
+window._addDoc = addDoc;
+window._setDoc = setDoc;
+window._getDoc = getDoc;
+window._getDocs = getDocs;
+window._deleteDoc = deleteDoc;
+window._doc = doc;
+window._collection = collection;
+window._query = query;
+window._where = where;
+window._orderBy = orderBy;
+window._storageRef = storageRef;
+window._uploadBytes = uploadBytes;
+window._getDownloadURL = getDownloadURL;
+window._deleteObject = deleteObject;
+
+// ─── PARTAGE PUBLIC (?share=token) ────────────────────────────────────────────
+(async function checkShareUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('share');
+  if (!token) return;
+  try {
+    const q = query(collection(db, 'journal_public'), where('shareToken', '==', token));
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      document.body.innerHTML = '<div style="font-family:system-ui;text-align:center;padding:60px 24px;color:#6B7280"><div style="font-size:48px;margin-bottom:16px">\u{1F50D}</div><div style="font-size:18px;font-weight:600;color:#1a1a2e;margin-bottom:8px">Entr\u00e9e introuvable</div><div>Ce lien est invalide ou a expir\u00e9.</div><div style="margin-top:24px"><a href="/" style="color:#2A9D8F;font-weight:600">\u2190 Retour \u00e0 VetID</a></div></div>';
+      return;
+    }
+    const entry = snap.docs[0].data();
+    const cfg = {
+      photo: { label: 'Photo', icon: '\u{1F4F8}', bg: '#FDF2F8', color: '#EC4899' },
+      poids: { label: 'Pes\u00e9e', icon: '\u2696\uFE0F', bg: '#FFFBEB', color: '#F59E0B' },
+      veto: { label: 'Visite v\u00e9to', icon: '\u{1FA7A}', bg: '#EFF6FF', color: '#3B82F6' },
+      traitement: { label: 'Traitement', icon: '\u{1F48A}', bg: '#ECFDF5', color: '#16A34A' },
+      note: { label: 'Note', icon: '\u{1F4DD}', bg: '#F5F3FF', color: '#8B5CF6' }
+    };
+    const t = cfg[entry.type] || cfg.note;
+    const d = new Date(entry.date);
+    const dateStr = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const MOOD_LABELS = { '\u{1F63F}': 'Pas bien', '\u{1F610}': 'Bof', '\u{1F63A}': 'Bien', '\u{1F638}': 'Top forme' };
+    document.body.innerHTML = \`
+      <div style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;max-width:430px;margin:0 auto;min-height:100vh;background:#F8F9FA">
+        <div style="background:#2A9D8F;padding:20px;color:#fff">
+          <div style="font-size:13px;opacity:.8;margin-bottom:4px">Journal partag\u00e9 via VetID \u{1F43E}</div>
+          <div style="font-size:20px;font-weight:700">\${entry.animalName || 'Mon animal'}</div>
+        </div>
+        \${entry.photoUrl ? \`<div style="width:100%;height:220px;overflow:hidden"><img src="\${entry.photoUrl}" style="width:100%;height:100%;object-fit:cover"></div>\` : \`<div style="width:100%;height:120px;background:\${t.bg};display:flex;align-items:center;justify-content:center;font-size:56px">\${t.icon}</div>\`}
+        <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;text-transform:uppercase;background:\${t.bg};color:\${t.color}">\${t.icon} \${t.label}</span>
+            <span style="font-size:11px;color:#6B7280">\${dateStr}</span>
+          </div>
+          \${entry.description ? \`<div style="background:#fff;border-radius:14px;padding:14px;font-size:14px;color:#1a1a2e;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,.06)">\${entry.description}</div>\` : ''}
+          \${entry.poidsVal ? \`<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)"><span style="font-size:28px;font-weight:800;color:#1a1a2e">\${entry.poidsVal}</span><span style="font-size:13px;color:#6B7280"> kg</span></div>\` : ''}
+          \${entry.mood ? \`<div style="background:#fff;border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)"><span style="font-size:28px">\${entry.mood}</span><div><div style="font-size:13px;font-weight:700;color:#1a1a2e">\${MOOD_LABELS[entry.mood] || entry.mood}</div><div style="font-size:10px;color:#6B7280">Humeur du jour</div></div></div>\` : ''}
+          \${entry.tags && entry.tags.length ? \`<div style="display:flex;gap:6px;flex-wrap:wrap">\${entry.tags.map(tag => \`<span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;background:\${t.bg};color:\${t.color}">\${tag}</span>\`).join('')}</div>\` : ''}
+          <div style="text-align:center;padding:16px 0;border-top:1px solid #E5E7EB;margin-top:8px">
+            <a href="/" style="color:#2A9D8F;font-weight:600;font-size:14px;text-decoration:none">\u{1F43E} T\u00e9l\u00e9charger VetID gratuitement</a>
+          </div>
+        </div>
+      </div>\`;
+  } catch(e) { console.error('Share page error:', e); }
+})();
+
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    state.user = { email: user.email, prenom: user.displayName || user.email.split('@')[0], uid: user.uid };
+    state.user = { email: user.email, prenom: user.displayName || user.email.split('@')[0], uid: user.uid, createdAt: user.metadata.creationTime };
     loadState(user.uid);
     const active = document.querySelector('.screen.active');
     if (active && (active.id === 'screen-auth' || active.id === 'screen-onboarding')) {
@@ -167,78 +237,76 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .journal-header-animal{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.15);border-radius:14px;padding:10px 14px;margin-top:12px}
 .journal-animal-avatar{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .journal-stats-band{display:flex;gap:8px;margin-bottom:14px}
-.journal-stat{flex:1;background:var(–white);border-radius:12px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.journal-stat{flex:1;background:var(--white);border-radius:12px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .journal-stat-val{font-size:18px;font-weight:800}
-.journal-stat-label{font-size:9px;color:var(–muted);font-weight:500;text-align:center}
+.journal-stat-label{font-size:9px;color:var(--muted);font-weight:500;text-align:center}
 .journal-filter-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
 .journal-filter-row::-webkit-scrollbar{display:none}
 .jchip{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;cursor:pointer}
-.jchip.active{background:var(–text);color:#fff}
-.jchip.inactive{background:var(–white);color:var(–muted);box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.month-divider{font-size:11px;font-weight:700;color:var(–muted);text-transform:uppercase;letter-spacing:.8px;padding:4px 0 8px}
-.journal-card{background:var(–white);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px;cursor:pointer;transition:transform .15s}
+.jchip.active{background:var(--text);color:#fff}
+.jchip.inactive{background:var(--white);color:var(--muted);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.month-divider{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;padding:4px 0 8px}
+.journal-card{background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px;cursor:pointer;transition:transform .15s}
 .journal-card:active{transform:scale(.98)}
 .journal-card-header{display:flex;align-items:center;gap:10px;padding:11px 12px 8px}
 .jtype-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .jtype-meta{flex:1}
 .jtype-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.jtype-date{font-size:10px;color:var(–muted)}
+.jtype-date{font-size:10px;color:var(--muted)}
 .jcard-mood{font-size:18px}
-.jcard-body{padding:4px 12px 12px;font-size:12px;color:var(–text);line-height:1.5}
+.jcard-body{padding:4px 12px 12px;font-size:12px;color:var(--text);line-height:1.5}
 .jcard-tags{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
 .jtag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px}
 .jcard-weight-big{display:flex;align-items:flex-end;gap:6px;padding:8px 12px 12px}
-.jcard-weight-num{font-size:26px;font-weight:800;color:var(–text)}
-.jcard-weight-unit{font-size:12px;color:var(–muted);margin-bottom:3px}
+.jcard-weight-num{font-size:26px;font-weight:800;color:var(--text)}
+.jcard-weight-unit{font-size:12px;color:var(--muted);margin-bottom:3px}
 .jcard-weight-diff{font-size:11px;font-weight:700;padding:2px 7px;border-radius:7px}
 .diff-up{background:#FEF3C7;color:#D97706}
 .diff-down{background:#ECFDF5;color:#16A34A}
-.diff-same{background:var(–bg);color:var(–muted)}
+.diff-same{background:var(--bg);color:var(--muted)}
 .jcard-vet-row{display:flex;align-items:center;gap:8px;padding:8px 12px 12px}
 .jcard-badge{font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px}
 .jcard-treat-row{display:flex;align-items:center;gap:8px;padding:8px 12px 12px}
-.jcard-note{padding:8px 12px 12px;font-size:12px;color:var(–text);line-height:1.5;font-style:italic}
+.jcard-note{padding:8px 12px 12px;font-size:12px;color:var(--text);line-height:1.5;font-style:italic}
 
 /* Type selector (add entry) */
 .jtype-selector{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px}
 .jtype-selector::-webkit-scrollbar{display:none}
 .jtype-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 10px;border-radius:12px;flex-shrink:0;min-width:58px;cursor:pointer;border:2px solid transparent}
-.jtype-btn.selected{background:var(–teal-light);border-color:var(–teal)}
-.jtype-btn.unsel{background:var(–bg)}
+.jtype-btn.selected{background:var(--teal-light);border-color:var(--teal)}
+.jtype-btn.unsel{background:var(--bg)}
 .jtype-btn .jt-icon{font-size:20px}
-.jtype-btn .jt-label{font-size:9px;font-weight:600;color:var(–text)}
-.compose-section{background:var(–white);border-radius:14px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
-.compose-section-title{font-size:10px;font-weight:700;color:var(–muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.jtype-btn .jt-label{font-size:9px;font-weight:600;color:var(--text)}
+.compose-section{background:var(--white);border-radius:14px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.compose-section-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
 .mood-row{display:flex;gap:8px;justify-content:space-around}
 .mood-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px;border-radius:10px;flex:1;cursor:pointer;border:2px solid transparent}
-.mood-btn.sel{background:var(–teal-light);border-color:var(–teal)}
-.mood-btn.unsel{background:var(–bg)}
+.mood-btn.sel{background:var(--teal-light);border-color:var(--teal)}
+.mood-btn.unsel{background:var(--bg)}
 .mood-emoji{font-size:22px}
-.mood-label{font-size:9px;color:var(–muted);font-weight:500}
-.photo-zone{height:80px;background:var(–bg);border-radius:12px;border:2px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(–muted);cursor:pointer;position:relative;overflow:hidden}
+.mood-label{font-size:9px;color:var(--muted);font-weight:500}
+.photo-zone{height:80px;background:var(--bg);border-radius:12px;border:2px dashed #D1D5DB;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(--muted);cursor:pointer;position:relative;overflow:hidden}
 .photo-zone img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.tag-added{background:var(–teal-light);color:var(–teal-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
-.tag-add-btn{background:var(–bg);color:var(–muted);font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px dashed #D1D5DB;cursor:pointer}
-.journal-empty{text-align:center;padding:48px 24px;color:var(–muted)}
+.tag-added{background:var(--teal-light);color:var(--teal-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.tag-add-btn{background:var(--bg);color:var(--muted);font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px dashed #D1D5DB;cursor:pointer}
+.journal-empty{text-align:center;padding:48px 24px;color:var(--muted)}
 
 /* Detail vue */
-.jdetail-photo{width:100%;height:180px;background:linear-gradient(135deg,var(–teal-light),#B8E0DB);display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;flex-shrink:0}
+.jdetail-photo{width:100%;height:180px;background:linear-gradient(135deg,var(--teal-light),#B8E0DB);display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;flex-shrink:0}
 .jdetail-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .jdetail-date-badge{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.45);color:#fff;font-size:10px;padding:3px 8px;border-radius:6px}
-.jdetail-mood-card{background:var(–white);border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
+.jdetail-mood-card{background:var(--white);border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
 
 @media(min-width:480px){
-body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
-.screen{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.12)}
-.fab{right:calc(50% - 215px + 20px)}
+  body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
+  .screen{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.12)}
+  .fab{right:calc(50% - 215px + 20px)}
 }
 </style>
-
 </head>
 <body>
 
 <!-- ONBOARDING -->
-
 <div id="screen-onboarding" class="screen active">
   <div style="flex:1;background:var(--white);display:flex;flex-direction:column">
     <div style="flex:1;position:relative;overflow:hidden">
@@ -269,7 +337,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- AUTH -->
-
 <div id="screen-auth" class="screen">
   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;background:var(--white)">
     <div style="text-align:center;padding:20px 0 4px">
@@ -300,7 +367,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- MOT DE PASSE OUBLIÉ -->
-
 <div id="screen-forgot" class="screen">
   <div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:16px;background:var(--white)">
     <div style="text-align:center;padding:20px 0">
@@ -316,7 +382,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- TUTO -->
-
 <div id="screen-tuto" class="screen">
   <div style="background:var(--teal);padding:20px;color:#fff;flex-shrink:0">
     <div style="font-size:20px;font-weight:700">📲 Installer VetID</div>
@@ -350,7 +415,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- DASHBOARD -->
-
 <div id="screen-dashboard" class="screen">
   <div class="dash-header">
     <div id="dash-greeting" style="font-size:14px;opacity:.85">Bonjour 👋</div>
@@ -383,7 +447,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- SOINS -->
-
 <div id="screen-soins" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -399,7 +462,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- POIDS -->
-
 <div id="screen-poids" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -415,7 +477,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- CROQUETTES -->
-
 <div id="screen-croquettes" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -428,7 +489,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- VÉTÉRINAIRE -->
-
 <div id="screen-vet" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('dashboard')">‹</div>
@@ -441,7 +501,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- BLOG -->
-
 <div id="screen-blog" class="screen">
   <div class="dash-header">
     <div style="font-size:22px;font-weight:700">Blog santé</div>
@@ -463,7 +522,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- ARTICLE -->
-
 <div id="screen-article" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('blog')">‹</div>
@@ -481,7 +539,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 <!-- ══════════════════════════════════════
      JOURNAL DE VIE
      ══════════════════════════════════════ -->
-
 <div id="screen-journal" class="screen">
   <div class="dash-header">
     <div style="display:flex;align-items:center;justify-content:space-between">
@@ -523,7 +580,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- JOURNAL DETAIL -->
-
 <div id="screen-journal-detail" class="screen">
   <div class="page-header">
     <div class="back-btn" onclick="showScreen('journal')">‹</div>
@@ -554,11 +610,21 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
       <div id="jdetail-tags" style="display:flex;gap:6px;flex-wrap:wrap"></div>
     </div>
     <div id="jdetail-animal-card" style="background:var(--teal-light);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px"></div>
+
+  <!-- Bouton partage -->
+  <div id="jdetail-share-btn" style="display:none;background:linear-gradient(135deg,var(--teal),var(--teal-dark));border-radius:14px;padding:12px 16px;align-items:center;gap:10px;cursor:pointer" onclick="copyShareLink(this.dataset.entryId)">
+    <span style="font-size:20px">↑</span>
+    <div style="flex:1">
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:2px">Partager ce souvenir</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.8)">Copier le lien — lecture seule</div>
+    </div>
+    <div style="background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px">Copier</div>
+  </div>
+
   </div>
 </div>
 
 <!-- RÉGLAGES -->
-
 <div id="screen-settings" class="screen">
   <div class="dash-header"><div style="font-size:22px;font-weight:700">Réglages</div><div id="settings-email" style="font-size:13px;opacity:.8;margin-top:2px"></div></div>
   <div style="flex:1;overflow-y:auto;padding:16px">
@@ -629,7 +695,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- PRIVACY -->
-
 <div id="screen-privacy" class="screen">
   <div class="page-header"><div class="back-btn" onclick="showScreen('settings')">‹</div><div style="font-size:18px;font-weight:700">Politique de confidentialité</div></div>
   <div style="flex:1;overflow-y:auto;padding:20px;font-size:14px;line-height:1.8;color:var(--text)">
@@ -650,7 +715,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 <!-- ══════════════════════════════════════
      MODAL ANIMAL
      ══════════════════════════════════════ -->
-
 <div class="modal-overlay" id="modal-animal">
   <div class="modal-sheet" id="sheet-animal">
     <div class="modal-handle" id="handle-animal"></div>
@@ -713,7 +777,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- MODAL SOINS -->
-
 <div class="modal-overlay" id="modal-soin">
   <div class="modal-sheet" id="sheet-soin">
     <div class="modal-handle" id="handle-soin"></div>
@@ -751,7 +814,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- MODAL POIDS -->
-
 <div class="modal-overlay" id="modal-poids">
   <div class="modal-sheet" id="sheet-poids">
     <div class="modal-handle" id="handle-poids"></div>
@@ -767,7 +829,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- MODAL CROQUETTES -->
-
 <div class="modal-overlay" id="modal-croquette">
   <div class="modal-sheet" id="sheet-croquette">
     <div class="modal-handle" id="handle-croquette"></div>
@@ -785,7 +846,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- MODAL VÉTÉRINAIRE -->
-
 <div class="modal-overlay" id="modal-vet">
   <div class="modal-sheet" id="sheet-vet">
     <div class="modal-handle" id="handle-vet"></div>
@@ -803,7 +863,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- MODAL FEEDBACK -->
-
 <div class="modal-overlay" id="modal-feedback">
   <div class="modal-sheet" id="sheet-feedback">
     <div class="modal-handle" id="handle-feedback"></div>
@@ -819,7 +878,6 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 </div>
 
 <!-- MODAL AJOUTER ENTRÉE JOURNAL -->
-
 <div class="modal-overlay" id="modal-journal-entry">
   <div class="modal-sheet" id="sheet-journal-entry">
     <div class="modal-handle" id="handle-journal-entry"></div>
@@ -828,84 +886,80 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
       <button onclick="saveJournalEntry()" style="background:var(--teal);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer">Sauvegarder</button>
     </div>
 
-```
-<!-- Sélecteur de type -->
-<div class="jtype-selector" id="jtype-selector" style="margin-bottom:14px">
-  <div class="jtype-btn selected" onclick="selectJournalType('photo',this)"><div class="jt-icon">📸</div><div class="jt-label">Photo</div></div>
-  <div class="jtype-btn unsel" onclick="selectJournalType('poids',this)"><div class="jt-icon">⚖️</div><div class="jt-label">Pesée</div></div>
-  <div class="jtype-btn unsel" onclick="selectJournalType('veto',this)"><div class="jt-icon">🩺</div><div class="jt-label">Véto</div></div>
-  <div class="jtype-btn unsel" onclick="selectJournalType('traitement',this)"><div class="jt-icon">💊</div><div class="jt-label">Traitement</div></div>
-  <div class="jtype-btn unsel" onclick="selectJournalType('note',this)"><div class="jt-icon">📝</div><div class="jt-label">Note</div></div>
-</div>
+    <!-- Sélecteur de type -->
+    <div class="jtype-selector" id="jtype-selector" style="margin-bottom:14px">
+      <div class="jtype-btn selected" onclick="selectJournalType('photo',this)"><div class="jt-icon">📸</div><div class="jt-label">Photo</div></div>
+      <div class="jtype-btn unsel" onclick="selectJournalType('poids',this)"><div class="jt-icon">⚖️</div><div class="jt-label">Pesée</div></div>
+      <div class="jtype-btn unsel" onclick="selectJournalType('veto',this)"><div class="jt-icon">🩺</div><div class="jt-label">Véto</div></div>
+      <div class="jtype-btn unsel" onclick="selectJournalType('traitement',this)"><div class="jt-icon">💊</div><div class="jt-label">Traitement</div></div>
+      <div class="jtype-btn unsel" onclick="selectJournalType('note',this)"><div class="jt-icon">📝</div><div class="jt-label">Note</div></div>
+    </div>
 
-<!-- Zone photo (visible si type=photo) -->
-<div class="compose-section" id="jform-photo-section">
-  <div class="compose-section-title">📸 Photo</div>
-  <div class="photo-zone" onclick="document.getElementById('jphoto-input').click()">
-    <span style="font-size:22px">📷</span>
-    <span>Prendre une photo ou choisir</span>
-  </div>
-  <input type="file" id="jphoto-input" accept="image/*" style="display:none" onchange="handleJournalPhoto(this)">
-</div>
+    <!-- Zone photo (visible si type=photo) -->
+    <div class="compose-section" id="jform-photo-section">
+      <div class="compose-section-title">📸 Photo</div>
+      <div class="photo-zone" onclick="document.getElementById('jphoto-input').click()">
+        <span style="font-size:22px">📷</span>
+        <span>Prendre une photo ou choisir</span>
+      </div>
+      <input type="file" id="jphoto-input" accept="image/*" style="display:none" onchange="handleJournalPhoto(this)">
+    </div>
 
-<!-- Poids (visible si type=poids) -->
-<div class="compose-section" id="jform-poids-section" style="display:none">
-  <div class="compose-section-title">⚖️ Poids</div>
-  <input class="field-input" id="j-poids-val" type="number" step="0.1" placeholder="Ex: 5,2">
-</div>
+    <!-- Poids (visible si type=poids) -->
+    <div class="compose-section" id="jform-poids-section" style="display:none">
+      <div class="compose-section-title">⚖️ Poids</div>
+      <input class="field-input" id="j-poids-val" type="number" step="0.1" placeholder="Ex: 5,2">
+    </div>
 
-<!-- Véto (visible si type=veto) -->
-<div class="compose-section" id="jform-veto-section" style="display:none">
-  <div class="compose-section-title">🩺 Vétérinaire</div>
-  <input class="field-input" id="j-veto-doc" type="text" placeholder="Dr Martin" style="margin-bottom:8px">
-  <input class="field-input" id="j-veto-motif" type="text" placeholder="Motif de la visite">
-</div>
+    <!-- Véto (visible si type=veto) -->
+    <div class="compose-section" id="jform-veto-section" style="display:none">
+      <div class="compose-section-title">🩺 Vétérinaire</div>
+      <input class="field-input" id="j-veto-doc" type="text" placeholder="Dr Martin" style="margin-bottom:8px">
+      <input class="field-input" id="j-veto-motif" type="text" placeholder="Motif de la visite">
+    </div>
 
-<!-- Traitement (visible si type=traitement) -->
-<div class="compose-section" id="jform-traitement-section" style="display:none">
-  <div class="compose-section-title">💊 Traitement</div>
-  <input class="field-input" id="j-trait-nom" type="text" placeholder="Ex: Vermifuge Milbemax">
-</div>
+    <!-- Traitement (visible si type=traitement) -->
+    <div class="compose-section" id="jform-traitement-section" style="display:none">
+      <div class="compose-section-title">💊 Traitement</div>
+      <input class="field-input" id="j-trait-nom" type="text" placeholder="Ex: Vermifuge Milbemax">
+    </div>
 
-<!-- Description (toujours visible) -->
-<div class="compose-section">
-  <div class="compose-section-title">📝 Description</div>
-  <textarea class="field-input" id="j-description" rows="3" placeholder="Décrivez le moment…" style="resize:none;line-height:1.5"></textarea>
-</div>
+    <!-- Description (toujours visible) -->
+    <div class="compose-section">
+      <div class="compose-section-title">📝 Description</div>
+      <textarea class="field-input" id="j-description" rows="3" placeholder="Décrivez le moment…" style="resize:none;line-height:1.5"></textarea>
+    </div>
 
-<!-- Humeur -->
-<div class="compose-section" id="jform-mood-section">
-  <div class="compose-section-title" id="jform-mood-label">😺 Comment va votre animal ?</div>
-  <div class="mood-row">
-    <div class="mood-btn unsel" onclick="selectJournalMood('😿','Pas bien',this)"><div class="mood-emoji">😿</div><div class="mood-label">Pas bien</div></div>
-    <div class="mood-btn unsel" onclick="selectJournalMood('😐','Bof',this)"><div class="mood-emoji">😐</div><div class="mood-label">Bof</div></div>
-    <div class="mood-btn unsel" onclick="selectJournalMood('😺','Bien',this)"><div class="mood-emoji">😺</div><div class="mood-label">Bien</div></div>
-    <div class="mood-btn sel" onclick="selectJournalMood('😸','Top forme',this)"><div class="mood-emoji">😸</div><div class="mood-label">Top forme</div></div>
-  </div>
-</div>
+    <!-- Humeur -->
+    <div class="compose-section" id="jform-mood-section">
+      <div class="compose-section-title" id="jform-mood-label">😺 Comment va votre animal ?</div>
+      <div class="mood-row">
+        <div class="mood-btn unsel" onclick="selectJournalMood('😿','Pas bien',this)"><div class="mood-emoji">😿</div><div class="mood-label">Pas bien</div></div>
+        <div class="mood-btn unsel" onclick="selectJournalMood('😐','Bof',this)"><div class="mood-emoji">😐</div><div class="mood-label">Bof</div></div>
+        <div class="mood-btn unsel" onclick="selectJournalMood('😺','Bien',this)"><div class="mood-emoji">😺</div><div class="mood-label">Bien</div></div>
+        <div class="mood-btn sel" onclick="selectJournalMood('😸','Top forme',this)"><div class="mood-emoji">😸</div><div class="mood-label">Top forme</div></div>
+      </div>
+    </div>
 
-<!-- Tags -->
-<div class="compose-section">
-  <div class="compose-section-title">🏷️ Tags</div>
-  <div id="j-tags-container" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-    <div class="tag-add-btn" onclick="addJournalTag()">+ Ajouter un tag</div>
-  </div>
-</div>
+    <!-- Tags -->
+    <div class="compose-section">
+      <div class="compose-section-title">🏷️ Tags</div>
+      <div id="j-tags-container" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+        <div class="tag-add-btn" onclick="addJournalTag()">+ Ajouter un tag</div>
+      </div>
+    </div>
 
-<!-- Date -->
-<div class="compose-section">
-  <div class="compose-section-title">📅 Date</div>
-  <input class="field-input" id="j-date" type="date">
-</div>
+    <!-- Date -->
+    <div class="compose-section">
+      <div class="compose-section-title">📅 Date</div>
+      <input class="field-input" id="j-date" type="date">
+    </div>
 
-<button class="btn-ghost" onclick="closeModal('modal-journal-entry')" style="margin-top:4px">Annuler</button>
-```
-
+    <button class="btn-ghost" onclick="closeModal('modal-journal-entry')" style="margin-top:4px">Annuler</button>
   </div>
 </div>
 
 <!-- MODAL CHOIX ANIMAL (JOURNAL) -->
-
 <div class="modal-overlay" id="modal-animal-picker">
   <div class="modal-sheet" id="sheet-animal-picker">
     <div class="modal-handle" id="handle-animal-picker"></div>
@@ -918,6 +972,34 @@ body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5
 <div class="toast" id="toast"></div>
 
 <script>
+// ─── RÈGLES FIRESTORE REQUISES ────────────────────────────────────────────────
+// À ajouter dans la console Firebase > Firestore > Règles :
+//
+// rules_version = '2';
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     match /users/{uid}/journal_entries/{entryId} {
+//       allow read, write: if request.auth.uid == uid;
+//     }
+//     match /journal_public/{entryId} {
+//       allow read: if true;  // lecture publique pour le partage
+//       allow write: if request.auth != null;
+//     }
+//   }
+// }
+//
+// RÈGLES STORAGE requises (Firebase Storage > Règles) :
+// rules_version = '2';
+// service firebase.storage {
+//   match /b/{bucket}/o {
+//     match /users/{uid}/journal/{allPaths=**} {
+//       allow read: if true;
+//       allow write: if request.auth.uid == uid && resource == null || request.resource.size < 5 * 1024 * 1024;
+//     }
+//   }
+// }
+// ─────────────────────────────────────────────────────────────────────────────
+
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let state = {
   user: null, animals: [], treatments: [], weights: {}, croquettes: {}, vets: {},
@@ -938,6 +1020,7 @@ let allArticles = [];
 let weightChart = null;
 
 function loadState(uid) {
+  // Charge depuis localStorage d'abord (rapide, fallback offline)
   const key = uid ? 'vetid_' + uid : 'vetid_guest';
   const s = localStorage.getItem(key);
   if (s) {
@@ -949,7 +1032,50 @@ function loadState(uid) {
     state.vets = p.vets || {};
     state.journal = p.journal || {};
   }
+  // Puis charge le journal depuis Firestore (source de vérité)
+  if (uid) loadJournalFromFirestore(uid);
 }
+
+async function loadJournalFromFirestore(uid) {
+  try {
+    const db = window._db;
+    if (!db) return;
+    const snap = await window._getDocs(
+      window._query(
+        window._collection(db, 'users', uid, 'journal_entries'),
+        window._orderBy('date', 'desc')
+      )
+    );
+    state.journal = {};
+    snap.forEach(d => {
+      const entry = { id: d.id, ...d.data() };
+      const aid = entry.animalId;
+      if (!state.journal[aid]) state.journal[aid] = [];
+      state.journal[aid].push(entry);
+    });
+    // Mettre à jour le journal dans localStorage comme cache
+    syncJournalToLocalStorage();
+    // Rafraîchir l'écran si journal ouvert
+    const active = document.querySelector('.screen.active');
+    if (active && active.id === 'screen-journal') {
+      renderJournal();
+      updateJournalHeader();
+    }
+    updateDashboard();
+  } catch(e) {
+    console.warn('Firestore journal load failed, using localStorage:', e);
+  }
+}
+
+function syncJournalToLocalStorage() {
+  if (!state.user) return;
+  const key = 'vetid_' + state.user.uid;
+  const s = localStorage.getItem(key);
+  const p = s ? JSON.parse(s) : {};
+  p.journal = state.journal;
+  localStorage.setItem(key, JSON.stringify(p));
+}
+
 function saveState() {
   if (state.user) {
     localStorage.setItem('vetid_' + state.user.uid, JSON.stringify({
@@ -1738,8 +1864,9 @@ function buildJournalCard(entry) {
   let bodyHTML = '';
 
   if (entry.type === 'photo') {
-    if (entry.photoData) {
-      bodyHTML += '<div style="position:relative;width:100%;height:120px;overflow:hidden"><img src="' + entry.photoData + '" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.5));padding:20px 12px 8px"><div style="font-size:12px;color:#fff;font-weight:600">' + (entry.description || '') + '</div></div></div>';
+    const imgSrc = entry.photoUrl || entry.photoData;
+    if (imgSrc) {
+      bodyHTML += '<div style="position:relative;width:100%;height:120px;overflow:hidden"><img src="' + imgSrc + '" style="width:100%;height:100%;object-fit:cover" loading="lazy"><div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.5));padding:20px 12px 8px"><div style="font-size:12px;color:#fff;font-weight:600">' + (entry.description || '') + '</div></div></div>';
     } else if (entry.description) {
       bodyHTML += '<div class="jcard-body">' + entry.description + '</div>';
     }
@@ -1796,10 +1923,10 @@ function openJournalDetail(entryId) {
   // Photo zone
   const photoZone = document.getElementById('jdetail-photo-zone');
   const photoEmoji = document.getElementById('jdetail-photo-emoji');
-  if (entry.photoData) {
+  const imgSrc = entry.photoUrl || entry.photoData;
+  if (imgSrc) {
     photoEmoji.style.display = 'none';
-    // Set as background
-    photoZone.style.backgroundImage = 'url(' + entry.photoData + ')';
+    photoZone.style.backgroundImage = 'url(' + imgSrc + ')';
     photoZone.style.backgroundSize = 'cover';
     photoZone.style.backgroundPosition = 'center';
   } else {
@@ -1849,18 +1976,81 @@ function openJournalDetail(entryId) {
     + '<div><div style="font-size:13px;font-weight:700;color:var(--teal-dark)">' + (a ? a.name : '') + '</div>'
     + '<div style="font-size:10px;color:var(--teal)">' + (a ? (a.breed || '') + (a.birth ? ' · ' + calcAge(a.birth) : '') : '') + '</div></div>';
 
+  // Afficher/masquer le bouton de partage
+  const shareBtn = document.getElementById('jdetail-share-btn');
+  if (shareBtn) {
+    shareBtn.dataset.entryId = entryId;
+    shareBtn.style.display = 'flex';
+  }
+
   showScreen('journal-detail');
 }
 
-function deleteJournalEntry() {
+async function deleteJournalEntry() {
   if (!state.viewingEntryId || !state.journalAnimalId) return;
   if (!confirm('Supprimer cette entrée ?')) return;
-  state.journal[state.journalAnimalId] = (state.journal[state.journalAnimalId] || []).filter(e => e.id !== state.viewingEntryId);
+
+  const entryId = state.viewingEntryId;
+  const aid = state.journalAnimalId;
+  const entry = (state.journal[aid] || []).find(e => e.id === entryId);
+
+  // Supprimer de l'état local immédiatement (UX réactive)
+  state.journal[aid] = (state.journal[aid] || []).filter(e => e.id !== entryId);
   saveState();
   showToast('Entrée supprimée');
   showScreen('journal');
   renderJournal();
   updateJournalHeader();
+  updateDashboard();
+
+  // Supprimer dans Firestore en arrière-plan
+  const uid = state.user?.uid;
+  if (uid && window._db) {
+    try {
+      await window._deleteDoc(window._doc(window._db, 'users', uid, 'journal_entries', entryId));
+      await window._deleteDoc(window._doc(window._db, 'journal_public', entryId));
+    } catch(e) { console.warn('Firestore delete failed:', e); }
+  }
+
+  // Supprimer la photo sur Storage si elle existe
+  if (entry && entry.photoUrl && uid && window._storage) {
+    try {
+      const photoRef = window._storageRef(window._storage, 'users/' + uid + '/journal/' + entryId + '.jpg');
+      await window._deleteObject(photoRef);
+    } catch(e) { console.warn('Storage delete failed:', e); }
+  }
+}
+
+async function copyShareLink(entryId) {
+  if (!entryId) return;
+  // Chercher l'entrée dans le state pour récupérer le shareToken
+  let entry = null;
+  for (const aid of Object.keys(state.journal)) {
+    entry = state.journal[aid].find(e => e.id === entryId);
+    if (entry) break;
+  }
+  if (!entry) { showToast('Entrée introuvable'); return; }
+
+  const token = entry.shareToken;
+  if (!token) { showToast('Lien de partage indisponible'); return; }
+
+  const url = window.location.origin + '/?share=' + token;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      // Fallback iOS Safari
+      const ta = document.createElement('textarea');
+      ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    showToast('Lien copié dans le presse-papier ✓');
+  } catch(e) {
+    // Dernier recours : afficher l'URL
+    prompt('Copiez ce lien :', url);
+  }
 }
 
 function filterJournal(type, el) {
@@ -1984,47 +2174,114 @@ function addJournalTag() {
   }
 }
 
-function saveJournalEntry() {
+async function saveJournalEntry() {
   const aid = state.journalAnimalId;
   if (!aid) { showToast('Sélectionnez un animal'); return; }
   const description = document.getElementById('j-description').value.trim();
   const dateVal = document.getElementById('j-date').value;
   if (!dateVal) { showToast('Indiquez une date'); return; }
 
-  const entry = {
-    id: Date.now().toString(),
-    type: state.journalType,
-    date: new Date(dateVal).toISOString(),
-    description,
-    mood: state.journalType !== 'traitement' ? state.journalMood : null,
-    tags: [...state.journalTags],
-    photoData: state.journalType === 'photo' ? state.journalPhotoData : null,
-    poidsVal: state.journalType === 'poids' ? parseFloat(document.getElementById('j-poids-val').value) || null : null,
-    vetoDoc: state.journalType === 'veto' ? document.getElementById('j-veto-doc').value.trim() : null,
-    vetoMotif: state.journalType === 'veto' ? document.getElementById('j-veto-motif').value.trim() : null,
-    traitNom: state.journalType === 'traitement' ? document.getElementById('j-trait-nom').value.trim() : null
-  };
+  const poidsVal = state.journalType === 'poids' ? parseFloat(document.getElementById('j-poids-val').value) || null : null;
+  const vetoDoc = state.journalType === 'veto' ? document.getElementById('j-veto-doc').value.trim() : null;
+  const vetoMotif = state.journalType === 'veto' ? document.getElementById('j-veto-motif').value.trim() : null;
+  const traitNom = state.journalType === 'traitement' ? document.getElementById('j-trait-nom').value.trim() : null;
 
-  // Validation minimale
-  const hasContent = description || entry.photoData || entry.poidsVal || entry.vetoMotif || entry.traitNom;
+  const hasContent = description || state.journalPhotoData || poidsVal || vetoMotif || traitNom;
   if (!hasContent) { showToast('Ajoutez au moins une description ou une donnée'); return; }
 
-  if (!state.journal[aid]) state.journal[aid] = [];
-  state.journal[aid].push(entry);
+  // Désactiver le bouton pendant l'upload
+  const saveBtn = document.querySelector('#sheet-journal-entry button[onclick="saveJournalEntry()"]');
+  if (saveBtn) { saveBtn.textContent = 'Enregistrement…'; saveBtn.disabled = true; }
 
-  // Si pesée : synchroniser avec state.weights
-  if (state.journalType === 'poids' && entry.poidsVal) {
-    if (!state.weights[aid]) state.weights[aid] = [];
-    state.weights[aid].push({ value: entry.poidsVal, date: dateVal, notes: description });
-    state.weights[aid].sort((a, b) => new Date(a.date) - new Date(b.date));
+  try {
+    const entryId = Date.now().toString() + Math.random().toString(36).slice(2, 7);
+    const a = state.animals.find(x => x.id === aid);
+    let photoUrl = null;
+
+    // Upload photo vers Firebase Storage si présente
+    if (state.journalType === 'photo' && state.journalPhotoData) {
+      try {
+        const uid = state.user?.uid;
+        if (uid && window._storage) {
+          const blob = await fetch(state.journalPhotoData).then(r => r.blob());
+          const photoRef = window._storageRef(window._storage, 'users/' + uid + '/journal/' + entryId + '.jpg');
+          await window._uploadBytes(photoRef, blob);
+          photoUrl = await window._getDownloadURL(photoRef);
+        } else {
+          // Fallback : stocker en base64 si pas de Storage
+          photoUrl = null;
+        }
+      } catch(uploadErr) {
+        console.warn('Upload photo échoué, fallback base64:', uploadErr);
+        photoUrl = null; // on garde photoData en local
+      }
+    }
+
+    // Générer shareToken unique
+    const shareToken = crypto.randomUUID ? crypto.randomUUID() : (entryId + Math.random().toString(36).slice(2));
+
+    const entry = {
+      id: entryId,
+      animalId: aid,
+      animalName: a ? a.name : '',
+      animalEmoji: a ? (a.emoji || '🐾') : '🐾',
+      type: state.journalType,
+      date: new Date(dateVal).toISOString(),
+      description,
+      mood: state.journalType !== 'traitement' ? state.journalMood : null,
+      tags: [...state.journalTags],
+      photoData: photoUrl ? null : (state.journalType === 'photo' ? state.journalPhotoData : null), // base64 si pas d'URL Storage
+      photoUrl,
+      poidsVal,
+      vetoDoc,
+      vetoMotif,
+      traitNom,
+      shareToken,
+      createdAt: new Date().toISOString()
+    };
+
+    // Sauvegarder dans Firestore
+    const uid = state.user?.uid;
+    if (uid && window._db) {
+      try {
+        await window._setDoc(
+          window._doc(window._db, 'users', uid, 'journal_entries', entryId),
+          entry
+        );
+        // Copie publique pour le partage par token
+        await window._setDoc(
+          window._doc(window._db, 'journal_public', entryId),
+          { ...entry, uid }
+        );
+      } catch(fsErr) {
+        console.warn('Firestore write failed, local only:', fsErr);
+      }
+    }
+
+    // Mettre à jour le state local
+    if (!state.journal[aid]) state.journal[aid] = [];
+    state.journal[aid].push(entry);
+
+    // Si pesée : synchroniser avec state.weights
+    if (state.journalType === 'poids' && poidsVal) {
+      if (!state.weights[aid]) state.weights[aid] = [];
+      state.weights[aid].push({ value: poidsVal, date: dateVal, notes: description });
+      state.weights[aid].sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+
+    saveState();
+    closeModal('modal-journal-entry');
+    renderJournal();
+    updateJournalHeader();
+    updateDashboard();
+    showToast('Entrée ajoutée au journal ✓');
+
+  } catch(e) {
+    console.error('saveJournalEntry error:', e);
+    showToast('Erreur d'enregistrement, réessayez');
+  } finally {
+    if (saveBtn) { saveBtn.textContent = 'Sauvegarder'; saveBtn.disabled = false; }
   }
-
-  saveState();
-  closeModal('modal-journal-entry');
-  renderJournal();
-  updateJournalHeader();
-  updateDashboard();
-  showToast('Entrée ajoutée au journal ✓');
 }
 
 // ─── BLOG ─────────────────────────────────────────────────────────────────────
@@ -2129,7 +2386,15 @@ async function sendFeedback() {
 
 // ─── RGPD ─────────────────────────────────────────────────────────────────────
 function exportData() {
-  const data = { user: { prenom: state.user?.prenom, email: state.user?.email }, animals: state.animals, treatments: state.treatments, weights: state.weights, croquettes: state.croquettes, vets: state.vets, journal: state.journal, exportDate: new Date().toISOString() };
+  // Préparer le journal sans les photoData base64 (trop lourds) mais avec les photoUrl
+  const journalExport = {};
+  Object.keys(state.journal).forEach(aid => {
+    journalExport[aid] = (state.journal[aid] || []).map(e => {
+      const { photoData, ...rest } = e; // exclure base64
+      return rest;
+    });
+  });
+  const data = { user: { prenom: state.user?.prenom, email: state.user?.email }, animals: state.animals, treatments: state.treatments, weights: state.weights, croquettes: state.croquettes, vets: state.vets, journal: journalExport, exportDate: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url; a.download = 'vetid-mes-donnees.json'; a.click();
@@ -2197,6 +2462,5 @@ showScreen('onboarding');
 });
 initSwipeNav();
 </script>
-
 </body>
 </html>
