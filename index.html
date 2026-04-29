@@ -810,12 +810,12 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         </div>
       </div>
       <div class="form-row" id="appearance-section">
-        <label class="field-label">Couleur de robe</label>
+        <label class="field-label" id="appearance-label">Couleur de robe</label>
         <div class="emoji-preview-box">
           <div class="emoji-preview-bubble" id="emoji-preview-bubble">🐶</div>
           <div>
             <div id="emoji-preview-label" style="font-size:15px;font-weight:700;color:var(--text)">Chien — Générique</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:3px">Choisis une couleur de robe</div>
+            <div id="appearance-hint" style="font-size:12px;color:var(--muted);margin-top:3px">Choisis une couleur de robe</div>
           </div>
         </div>
         <div id="swatches-dog" class="color-swatches">
@@ -914,13 +914,22 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <div class="modal-overlay" id="modal-croquette">
   <div class="modal-sheet" id="sheet-croquette">
     <div class="modal-handle" id="handle-croquette"></div>
-    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px">🍗 Ajouter une commande</div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">🍗 Configurer les croquettes</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Pour un suivi précis des stocks</div>
     <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="form-row"><label class="field-label">Marque</label><input class="field-input" id="c-brand" type="text" placeholder="Royal Canin"></div>
-      <div class="form-row"><label class="field-label">Nom du produit</label><input class="field-input" id="c-product" type="text" placeholder="Medium Adult 15kg"></div>
-      <div class="form-row"><label class="field-label">Quantité (kg)</label><input class="field-input" id="c-qty" type="number" step="0.5" placeholder="10"></div>
-      <div class="form-row"><label class="field-label">Date d'achat</label><input class="field-input" id="c-date" type="date"></div>
-      <div class="form-row"><label class="field-label">Rappel dans (jours)</label><input class="field-input" id="c-reminder" type="number" placeholder="30"></div>
+      <div class="form-row"><label class="field-label">Marque *</label><input class="field-input" id="c-brand" type="text" placeholder="Royal Canin"></div>
+      <div class="form-row"><label class="field-label">Nom du produit</label><input class="field-input" id="c-product" type="text" placeholder="Medium Adult"></div>
+      <div style="display:flex;gap:10px">
+        <div class="form-row" style="flex:1"><label class="field-label">Poids du sac (kg)</label><input class="field-input" id="c-qty" type="number" step="0.5" placeholder="10" oninput="calcDureeCroquette()"></div>
+        <div class="form-row" style="flex:1"><label class="field-label">Consommation (g/jour)</label><input class="field-input" id="c-conso" type="number" step="5" placeholder="200" oninput="calcDureeCroquette()"></div>
+      </div>
+      <!-- Calcul automatique durée -->
+      <div id="c-duree-display" style="display:none;background:var(--teal-light);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--teal-dark);font-weight:600;text-align:center"></div>
+      <div class="form-row"><label class="field-label">Date du dernier achat</label><input class="field-input" id="c-date" type="date"></div>
+      <div class="form-row">
+        <label class="field-label">Lien de commande (optionnel)</label>
+        <input class="field-input" id="c-lien" type="url" placeholder="https://www.zooplus.fr/...">
+      </div>
       <button class="btn-primary" onclick="saveCroquette()">Enregistrer</button>
       <button class="btn-ghost" onclick="closeModal('modal-croquette')">Annuler</button>
     </div>
@@ -1328,7 +1337,13 @@ async function doResetPassword() {
     setTimeout(() => showScreen('auth'), 2000);
   } catch (e) { showError('forgot-error', getFirebaseError(e.code)); }
 }
-function goToDashboard() { updateDashboard(); loadBlogPreview(); showScreen('dashboard'); }
+function goToDashboard() {
+  updateDashboard();
+  loadBlogPreview();
+  showScreen('dashboard');
+  // Vérifier alertes croquettes à chaque ouverture
+  setTimeout(checkCroquettesAlert, 2000);
+}
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
 function goToTab(tab) {
@@ -1409,12 +1424,39 @@ function updateDashboard() {
       lastWeight ? { text: 'Suivi actif', bg: 'var(--teal-light)', color: 'var(--teal-dark)' } : null,
       function() { openPoids(a.id); }
     ));
-    grid.appendChild(createDashCard('🍗', 'Croquettes',
-      lastCroquette ? lastCroquette.brand : 'Non renseigné',
-      getCroquetteStatus(a.id) === 'soon' ? { text: 'Bientôt', bg: '#fef3c7', color: '#92400e' } :
-      lastCroquette ? { text: 'OK', bg: '#dcfce7', color: '#166534' } : null,
-      function() { openCroquettes(a.id); }
-    ));
+    // Widget croquettes enrichi
+    (function() {
+      const croquetteCard = document.createElement('div');
+      croquetteCard.className = 'dash-card';
+      croquetteCard.onclick = function() { openCroquettes(a.id); };
+      if (lastCroquette) {
+        const jours = getJoursRestants(lastCroquette);
+        const poidsKg = lastCroquette.poidsKg || 0;
+        const consoGJour = lastCroquette.consoGJour || 0;
+        const joursTotal = (poidsKg > 0 && consoGJour > 0) ? Math.round((poidsKg * 1000) / consoGJour) : 30;
+        const pct = jours !== null ? Math.max(0, Math.min(100, Math.round((jours / joursTotal) * 100))) : null;
+        const urgent = jours !== null && jours <= 7;
+        const medium = jours !== null && jours > 7 && jours <= 21;
+        const barColor = urgent ? 'var(--red)' : medium ? 'var(--orange)' : 'var(--green)';
+        const badgeBg = urgent ? '#fee2e2' : medium ? '#fed7aa' : '#dcfce7';
+        const badgeColor = urgent ? '#991b1b' : medium ? '#9a3412' : '#166534';
+        const badgeText = jours === null ? 'Suivi actif' : jours <= 0 ? 'À commander !' : '~' + jours + 'j restants';
+        let html = '<div class="dash-card-icon">🍗</div>'
+          + '<div class="dash-card-title">Croquettes</div>'
+          + '<div class="dash-card-sub">' + lastCroquette.brand + '</div>';
+        if (pct !== null) {
+          html += '<div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin:6px 0 4px">'
+            + '<div style="height:100%;width:' + pct + '%;background:' + barColor + ';border-radius:2px;transition:width .3s"></div></div>';
+        }
+        html += '<div class="dash-card-badge" style="background:' + badgeBg + ';color:' + badgeColor + '">' + badgeText + '</div>';
+        croquetteCard.innerHTML = html;
+      } else {
+        croquetteCard.innerHTML = '<div class="dash-card-icon">🍗</div>'
+          + '<div class="dash-card-title">Croquettes</div>'
+          + '<div class="dash-card-sub">Non renseigné</div>';
+      }
+      grid.appendChild(croquetteCard);
+    })();
     grid.appendChild(createDashCard('🏥', 'Vétérinaire',
       vet ? (vet.name || vet.clinic || 'Enregistré') : 'Non renseigné',
       vet ? { text: 'Enregistré', bg: '#E6F1FB', color: '#185FA5' } : null,
@@ -1462,9 +1504,9 @@ function getCroquetteStatus(aid) {
   const croquettes = state.croquettes[aid] || [];
   if (!croquettes.length) return 'none';
   const last = croquettes[croquettes.length - 1];
-  if (!last.reminderDate) return 'ok';
-  const d = (new Date(last.reminderDate) - new Date()) / 86400000;
-  return d <= 7 ? 'soon' : 'ok';
+  const jours = getJoursRestants(last);
+  if (jours === null) return 'ok';
+  return jours <= 7 ? 'urgent' : jours <= 21 ? 'soon' : 'ok';
 }
 function formatDate(d) {
   if (!d) return '—';
@@ -1501,6 +1543,18 @@ function updateSwatchesForSpecies(species) {
     const el = document.getElementById('swatches-' + s);
     if (el) el.style.display = s === species ? 'flex' : 'none';
   });
+
+  // Adapter le label et le sous-titre selon l'espèce
+  const labelEl = document.getElementById('appearance-label');
+  const hintEl = document.getElementById('appearance-hint');
+  if (species === 'other') {
+    if (labelEl) labelEl.textContent = 'Type d'animal';
+    if (hintEl) hintEl.style.display = 'none';
+  } else {
+    if (labelEl) labelEl.textContent = 'Couleur de robe';
+    if (hintEl) { hintEl.style.display = ''; hintEl.textContent = 'Choisis une couleur de robe'; }
+  }
+
   const palette = document.getElementById('swatches-' + species);
   if (!palette) return;
   palette.querySelectorAll('.color-swatch.selected').forEach(el => el.classList.remove('selected'));
@@ -1788,50 +1842,177 @@ function openCroquettes(aid) {
   renderCroquettes(aid);
   showScreen('croquettes');
 }
+
 function openAddCroquette() {
-  ['c-brand', 'c-product', 'c-qty', 'c-reminder'].forEach(id => document.getElementById(id).value = '');
+  // Pré-remplir si config existante
+  const existing = state.croquettes[state.currentAnimalId];
+  const last = existing && existing.length ? existing[existing.length - 1] : null;
+  document.getElementById('c-brand').value = last ? (last.brand || '') : '';
+  document.getElementById('c-product').value = last ? (last.product || '') : '';
+  document.getElementById('c-qty').value = last ? (last.poidsKg || last.qty || '') : '';
+  document.getElementById('c-conso').value = last ? (last.consoGJour || '') : '';
+  document.getElementById('c-lien').value = last ? (last.lienCommande || '') : '';
   document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('c-duree-display').style.display = 'none';
+  calcDureeCroquette();
   openModal('modal-croquette');
 }
+
+function calcDureeCroquette() {
+  const poids = parseFloat(document.getElementById('c-qty').value);
+  const conso = parseFloat(document.getElementById('c-conso').value);
+  const display = document.getElementById('c-duree-display');
+  if (poids > 0 && conso > 0) {
+    const jours = Math.round((poids * 1000) / conso);
+    display.style.display = 'block';
+    display.textContent = '⏱ Durée estimée : ~' + jours + ' jour' + (jours > 1 ? 's' : '');
+  } else {
+    display.style.display = 'none';
+  }
+}
+
 function saveCroquette() {
   const brand = document.getElementById('c-brand').value.trim();
   if (!brand) { showToast('Indiquez la marque'); return; }
   const date = document.getElementById('c-date').value;
-  const reminder = parseInt(document.getElementById('c-reminder').value) || 30;
-  const reminderDate = new Date(date); reminderDate.setDate(reminderDate.getDate() + reminder);
+  const poidsKg = parseFloat(document.getElementById('c-qty').value) || 0;
+  const consoGJour = parseFloat(document.getElementById('c-conso').value) || 0;
+
+  // Calcul de la date de rappel
+  let reminderDate;
+  if (poidsKg > 0 && consoGJour > 0) {
+    const joursTotal = Math.round((poidsKg * 1000) / consoGJour);
+    reminderDate = new Date(date);
+    reminderDate.setDate(reminderDate.getDate() + joursTotal);
+  } else {
+    reminderDate = new Date(date);
+    reminderDate.setDate(reminderDate.getDate() + 30); // fallback 30j
+  }
+
   const entry = {
-    id: Date.now().toString(), brand,
+    id: Date.now().toString(),
+    brand,
     product: document.getElementById('c-product').value.trim(),
-    qty: document.getElementById('c-qty').value,
-    date, reminderDate: reminderDate.toISOString().split('T')[0]
+    poidsKg,
+    qty: poidsKg, // compatibilité ancienne structure
+    consoGJour,
+    lienCommande: document.getElementById('c-lien').value.trim(),
+    date,
+    reminderDate: reminderDate.toISOString().split('T')[0]
   };
+
   if (!state.croquettes[state.currentAnimalId]) state.croquettes[state.currentAnimalId] = [];
   state.croquettes[state.currentAnimalId].push(entry);
-  saveState(); closeModal('modal-croquette'); renderCroquettes(state.currentAnimalId);
-  updateDashboard(); showToast('Commande enregistrée ✓');
+  saveState();
+  closeModal('modal-croquette');
+  renderCroquettes(state.currentAnimalId);
+  updateDashboard();
+  checkCroquettesAlert(); // vérifier si alerte nécessaire
+  showToast('Croquettes enregistrées ✓');
 }
+
+function getJoursRestants(c) {
+  if (!c) return null;
+  if (c.poidsKg > 0 && c.consoGJour > 0) {
+    const joursTotal = Math.round((c.poidsKg * 1000) / c.consoGJour);
+    const joursEcoules = Math.round((new Date() - new Date(c.date)) / 86400000);
+    return joursTotal - joursEcoules;
+  }
+  if (c.reminderDate) {
+    return Math.round((new Date(c.reminderDate) - new Date()) / 86400000);
+  }
+  return null;
+}
+
+function checkCroquettesAlert() {
+  // Toast alerte si <= 7 jours — max 1 fois par jour par animal
+  state.animals.forEach(function(a) {
+    const croquettes = state.croquettes[a.id] || [];
+    if (!croquettes.length) return;
+    const last = croquettes[croquettes.length - 1];
+    const jours = getJoursRestants(last);
+    if (jours !== null && jours <= 7) {
+      const alertKey = 'vetid_croquette_alert_' + a.id;
+      const lastAlert = localStorage.getItem(alertKey);
+      const today = new Date().toISOString().split('T')[0];
+      if (lastAlert !== today) {
+        localStorage.setItem(alertKey, today);
+        setTimeout(function() {
+          showToast('🥣 ' + a.name + ' : plus que ~' + Math.max(0, jours) + ' jour' + (jours > 1 ? 's' : '') + ' de croquettes !');
+        }, 1500);
+      }
+    }
+  });
+}
+
 function renderCroquettes(aid) {
   const list = document.getElementById('croquettes-list');
   const croquettes = (state.croquettes[aid] || []).slice().reverse();
   list.innerHTML = '';
+
   if (!croquettes.length) {
     list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Aucune commande enregistrée</div>';
     return;
   }
-  croquettes.forEach(function(c) {
-    const daysLeft = Math.round((new Date(c.reminderDate) - new Date()) / 86400000);
-    const urgent = daysLeft <= 7;
+
+  croquettes.forEach(function(c, idx) {
+    const jours = getJoursRestants(c);
+    const pct = (c.poidsKg > 0 && c.consoGJour > 0)
+      ? Math.max(0, Math.min(100, Math.round((jours / Math.round((c.poidsKg * 1000) / c.consoGJour)) * 100)))
+      : null;
+
+    const urgent = jours !== null && jours <= 7;
+    const medium = jours !== null && jours > 7 && jours <= 21;
+    const barColor = urgent ? 'var(--red)' : medium ? 'var(--orange)' : 'var(--green)';
+    const badgeBg = urgent ? '#fee2e2' : medium ? '#fed7aa' : '#dcfce7';
+    const badgeColor = urgent ? '#991b1b' : medium ? '#9a3412' : '#166534';
+    const badgeText = jours === null ? '—' : jours <= 0 ? 'À commander !' : 'J-' + jours;
+
     const div = document.createElement('div');
     div.className = 'croquette-card';
-    div.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
-      + '<span style="font-size:24px">🍗</span>'
-      + '<div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--text)">' + c.brand + (c.product ? ' — ' + c.product : '') + '</div>'
-      + '<div style="font-size:12px;color:var(--muted)">' + (c.qty ? c.qty + ' kg · ' : '') + 'Acheté le ' + formatDate(c.date) + '</div></div>'
-      + '<div style="font-size:11px;padding:4px 8px;border-radius:8px;font-weight:500;background:' + (urgent ? '#fee2e2' : '#dcfce7') + ';color:' + (urgent ? '#991b1b' : '#166534') + '">'
-      + (daysLeft <= 0 ? 'À commander !' : 'J-' + daysLeft) + '</div></div>'
-      + '<div style="font-size:12px;color:var(--muted)">Rappel : ' + formatDate(c.reminderDate) + '</div>';
+
+    let html = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
+      + '<span style="font-size:28px">🍗</span>'
+      + '<div style="flex:1">'
+      +   '<div style="font-size:15px;font-weight:700;color:var(--text)">' + c.brand + (c.product ? ' — ' + c.product : '') + '</div>'
+      +   '<div style="font-size:11px;color:var(--muted);margin-top:2px">'
+      +     (c.poidsKg ? c.poidsKg + ' kg' : '') + (c.consoGJour ? ' · ' + c.consoGJour + ' g/jour' : '')
+      +   '</div>'
+      + '</div>'
+      + '<div style="font-size:11px;padding:5px 10px;border-radius:8px;font-weight:700;background:' + badgeBg + ';color:' + badgeColor + '">' + badgeText + '</div>'
+      + '</div>';
+
+    // Barre de progression si on a les données
+    if (pct !== null) {
+      html += '<div style="margin-bottom:10px">'
+        + '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px">'
+        + '<span>Stock restant</span><span>' + pct + '%</span></div>'
+        + '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%;background:' + barColor + '"></div></div>'
+        + '</div>';
+    }
+
+    html += '<div style="font-size:11px;color:var(--muted);margin-bottom:10px">Acheté le ' + formatDate(c.date) + '</div>';
+
+    // Bouton commander si lien disponible
+    if (c.lienCommande) {
+      html += '<button onclick="window.open('' + c.lienCommande + '','_blank')" style="width:100%;padding:10px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:6px">🛒 Commander</button>';
+    }
+
+    // Bouton mettre à jour l'achat
+    if (idx === 0) {
+      html += '<button onclick="ouvrirMiseAJourAchat()" style="width:100%;padding:9px;border-radius:10px;background:var(--bg);color:var(--muted);border:1.5px solid var(--border);font-size:12px;font-weight:500;cursor:pointer">✓ J'ai racheté un sac</button>';
+    }
+
+    div.innerHTML = html;
     list.appendChild(div);
   });
+}
+
+function ouvrirMiseAJourAchat() {
+  // Ouvre le modal en gardant la config existante, juste met à jour la date
+  openAddCroquette();
+  document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
+  showToast('Mettez à jour la date d'achat');
 }
 
 // ─── VÉTÉRINAIRE ──────────────────────────────────────────────────────────────
