@@ -15,7 +15,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBlUWYVZEuigQ-cqzgwurOYORypi_QzApM",
@@ -28,11 +27,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 window._auth = auth;
 window._db = db;
-window._storage = storage;
+window._storage = null; // Storage désactivé (plan gratuit Firebase)
 window._createUser = createUserWithEmailAndPassword;
 window._signIn = signInWithEmailAndPassword;
 window._resetPassword = sendPasswordResetEmail;
@@ -48,10 +46,11 @@ window._collection = collection;
 window._query = query;
 window._where = where;
 window._orderBy = orderBy;
-window._storageRef = storageRef;
-window._uploadBytes = uploadBytes;
-window._getDownloadURL = getDownloadURL;
-window._deleteObject = deleteObject;
+// Storage désactivé — photos stockées en base64 dans Firestore
+window._storageRef = null;
+window._uploadBytes = null;
+window._getDownloadURL = null;
+window._deleteObject = null;
 
 // ─── PARTAGE PUBLIC (?share=token) ────────────────────────────────────────────
 (async function checkShareUrl() {
@@ -2127,13 +2126,7 @@ async function deleteJournalEntry() {
     } catch(e) { console.warn('Firestore delete failed:', e); }
   }
 
-  // Supprimer la photo sur Storage si elle existe
-  if (entry && entry.photoUrl && uid && window._storage) {
-    try {
-      const photoRef = window._storageRef(window._storage, 'users/' + uid + '/journal/' + entryId + '.jpg');
-      await window._deleteObject(photoRef);
-    } catch(e) { console.warn('Storage delete failed:', e); }
-  }
+  // Suppression photo Storage : non activé en V0
 }
 
 async function copyShareLink(entryId) {
@@ -2314,22 +2307,9 @@ async function saveJournalEntry() {
     let photoUrl = null;
 
     // Upload photo vers Firebase Storage si présente
+    // Photos stockées en base64 dans Firestore (Storage non activé en V0)
     if (state.journalType === 'photo' && state.journalPhotoData) {
-      try {
-        const uid = state.user?.uid;
-        if (uid && window._storage) {
-          const blob = await fetch(state.journalPhotoData).then(r => r.blob());
-          const photoRef = window._storageRef(window._storage, 'users/' + uid + '/journal/' + entryId + '.jpg');
-          await window._uploadBytes(photoRef, blob);
-          photoUrl = await window._getDownloadURL(photoRef);
-        } else {
-          // Fallback : stocker en base64 si pas de Storage
-          photoUrl = null;
-        }
-      } catch(uploadErr) {
-        console.warn('Upload photo échoué, fallback base64:', uploadErr);
-        photoUrl = null; // on garde photoData en local
-      }
+      photoUrl = null; // pas d'URL distante, on utilise photoData (base64)
     }
 
     // Générer shareToken unique
