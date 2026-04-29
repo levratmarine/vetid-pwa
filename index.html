@@ -1548,7 +1548,7 @@ function updateSwatchesForSpecies(species) {
   const labelEl = document.getElementById('appearance-label');
   const hintEl = document.getElementById('appearance-hint');
   if (species === 'other') {
-    if (labelEl) labelEl.textContent = 'Type d'animal';
+    if (labelEl) labelEl.textContent = "Type d'animal";
     if (hintEl) hintEl.style.display = 'none';
   } else {
     if (labelEl) labelEl.textContent = 'Couleur de robe';
@@ -2012,7 +2012,7 @@ function ouvrirMiseAJourAchat() {
   // Ouvre le modal en gardant la config existante, juste met à jour la date
   openAddCroquette();
   document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
-  showToast('Mettez à jour la date d'achat');
+  showToast("Mettez à jour la date d'achat");
 }
 
 // ─── VÉTÉRINAIRE ──────────────────────────────────────────────────────────────
