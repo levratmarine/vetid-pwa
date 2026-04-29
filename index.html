@@ -755,6 +755,12 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <div id="screen-settings" class="screen">
   <div class="dash-header"><div style="font-size:22px;font-weight:700">Réglages</div><div id="settings-email" style="font-size:13px;opacity:.8;margin-top:2px"></div></div>
   <div style="flex:1;overflow-y:auto;padding:16px">
+    <div class="section-title">Mes badges 🏆</div>
+    <div class="settings-group">
+      <div style="padding:14px">
+        <div id="badges-grid" class="badges-grid"></div>
+      </div>
+    </div>
     <div class="section-title">Mon compte</div>
     <div class="settings-group">
       <div class="settings-row" style="cursor:default">
@@ -803,12 +809,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <div class="settings-icon" style="background:#fee2e2">🗑</div>
         <div style="flex:1"><div style="font-size:15px;font-weight:500;color:var(--red)">Supprimer mon compte</div><div style="font-size:12px;color:var(--muted)">Suppression définitive</div></div>
         <span style="color:var(--red)">›</span>
-      </div>
-    </div>
-    <div class="section-title">Mes badges 🏆</div>
-    <div class="settings-group">
-      <div style="padding:14px">
-        <div id="badges-grid" class="badges-grid"></div>
       </div>
     </div>
     <div class="section-title">Version</div>
@@ -3081,8 +3081,166 @@ function renderBalades(aid) {
       card.appendChild(notes);
     }
 
+    // Photo de balade (si présente)
+    if (b.photoData) {
+      const photoWrap = document.createElement('div');
+      photoWrap.style.cssText = 'margin-top:10px;border-radius:10px;overflow:hidden;height:120px';
+      const img = document.createElement('img');
+      img.src = b.photoData;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover';
+      photoWrap.appendChild(img);
+      card.appendChild(photoWrap);
+    }
+
+    // Actions : ajouter photo + supprimer
+    const actionsRow = document.createElement('div');
+    actionsRow.style.cssText = 'display:flex;gap:8px;margin-top:10px';
+
+    const photoBtn = document.createElement('button');
+    photoBtn.style.cssText = 'flex:1;padding:8px;border-radius:10px;background:var(--teal-light);color:var(--teal-dark);border:none;font-size:12px;font-weight:600;cursor:pointer';
+    photoBtn.textContent = b.photoData ? '📸 Changer la photo' : '📸 Ajouter une photo';
+    photoBtn.onclick = (function(baladeId) {
+      return function() { ouvrirPhotoBalade(baladeId); };
+    })(b.id);
+
+    const delBtn = document.createElement('button');
+    delBtn.style.cssText = 'padding:8px 12px;border-radius:10px;background:#fee2e2;color:#991b1b;border:none;font-size:12px;font-weight:600;cursor:pointer';
+    delBtn.textContent = '🗑';
+    delBtn.onclick = (function(baladeId, animalId) {
+      return function() { supprimerBalade(baladeId, animalId); };
+    })(b.id, aid);
+
+    actionsRow.appendChild(photoBtn);
+    actionsRow.appendChild(delBtn);
+    card.appendChild(actionsRow);
+
+    // Input photo caché
+    const photoInput = document.createElement('input');
+    photoInput.type = 'file';
+    photoInput.accept = 'image/*';
+    photoInput.style.display = 'none';
+    photoInput.id = 'photo-input-balade-' + b.id;
+    photoInput.onchange = (function(baladeId, animalId) {
+      return function() { handlePhotoBalade(this, baladeId, animalId); };
+    })(b.id, aid);
+    card.appendChild(photoInput);
+
     list.appendChild(card);
   });
+}
+
+function ouvrirPhotoBalade(baladeId) {
+  const input = document.getElementById('photo-input-balade-' + baladeId);
+  if (input) input.click();
+}
+
+function handlePhotoBalade(input, baladeId, animalId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    // Compression via canvas
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const MAX = 800;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const photoData = canvas.toDataURL('image/jpeg', 0.7);
+
+      // Mettre à jour la balade
+      const balade = state.balades.find(function(b) { return b.id === baladeId; });
+      if (!balade) return;
+      balade.photoData = photoData;
+      saveState();
+
+      // Synchroniser dans le journal : créer ou mettre à jour une entrée photo liée
+      syncBaladeToJournal(balade, animalId);
+
+      // Rafraîchir l'écran
+      renderBalades(animalId);
+      showToast('Photo ajoutée ✓');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function syncBaladeToJournal(balade, animalId) {
+  if (!animalId) return;
+  if (!state.journal[animalId]) state.journal[animalId] = [];
+
+  // Chercher si une entrée journal existe déjà pour cette balade
+  const existing = state.journal[animalId].find(function(e) {
+    return e.baladeId === balade.id;
+  });
+
+  const a = state.animals.find(function(x) { return x.id === animalId; });
+  const desc = [
+    balade.lieu ? 'Balade à ' + balade.lieu : 'Balade',
+    balade.dureeMin ? balade.dureeMin + ' min' : '',
+    balade.distanceKm ? balade.distanceKm + ' km' : '',
+    balade.notes || ''
+  ].filter(Boolean).join(' · ');
+
+  if (existing) {
+    // Mettre à jour la photo dans l'entrée existante
+    existing.photoData = balade.photoData;
+    existing.description = desc;
+  } else {
+    // Créer une nouvelle entrée journal
+    const entry = {
+      id: 'balade-' + balade.id,
+      baladeId: balade.id,
+      animalId: animalId,
+      animalName: a ? a.name : '',
+      animalEmoji: a ? (a.emoji || '🐾') : '🐾',
+      type: 'photo',
+      date: balade.date,
+      description: desc,
+      mood: '😸',
+      tags: ['Balade'],
+      photoData: balade.photoData,
+      photoUrl: null,
+      shareToken: (typeof crypto !== 'undefined' && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : 'balade-' + balade.id + '-' + Date.now(),
+      createdAt: new Date().toISOString()
+    };
+    state.journal[animalId].push(entry);
+  }
+  saveState();
+}
+
+async function supprimerBalade(baladeId, animalId) {
+  if (!confirm('Supprimer cette balade ?')) return;
+
+  // Retirer du state
+  state.balades = state.balades.filter(function(b) { return b.id !== baladeId; });
+
+  // Retirer aussi du journal si une entrée liée existe
+  if (animalId && state.journal[animalId]) {
+    state.journal[animalId] = state.journal[animalId].filter(function(e) {
+      return e.baladeId !== baladeId;
+    });
+  }
+
+  saveState();
+
+  // Supprimer de Firestore
+  const uid = state.user && state.user.uid;
+  if (uid && window._db) {
+    try {
+      await window._deleteDoc(window._doc(window._db, 'users', uid, 'balades', baladeId));
+    } catch(e) { console.warn('Firestore balade delete failed:', e); }
+  }
+
+  renderBalades(animalId);
+  updateDashboard();
+  showToast('Balade supprimée');
 }
 
 // Reprendre le chrono si l'app était fermée pendant une balade
