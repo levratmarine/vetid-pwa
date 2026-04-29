@@ -61,43 +61,64 @@ window._deleteObject = null;
     const q = query(collection(db, 'journal_public'), where('shareToken', '==', token));
     const snap = await getDocs(q);
     if (snap.empty) {
-      document.body.innerHTML = '<div style="font-family:system-ui;text-align:center;padding:60px 24px;color:#6B7280"><div style="font-size:48px;margin-bottom:16px">\u{1F50D}</div><div style="font-size:18px;font-weight:600;color:#1a1a2e;margin-bottom:8px">Entr\u00e9e introuvable</div><div>Ce lien est invalide ou a expir\u00e9.</div><div style="margin-top:24px"><a href="/" style="color:#2A9D8F;font-weight:600">\u2190 Retour \u00e0 VetID</a></div></div>';
+      document.body.innerHTML = '<div style="font-family:system-ui;text-align:center;padding:60px 24px;color:#6B7280"><div style="font-size:48px;margin-bottom:16px">🔍</div><div style="font-size:18px;font-weight:600;color:#1a1a2e;margin-bottom:8px">Entrée introuvable</div><div>Ce lien est invalide ou a expiré.</div><div style="margin-top:24px"><a href="/" style="color:#2A9D8F;font-weight:600">← Retour à VetID</a></div></div>';
       return;
     }
     const entry = snap.docs[0].data();
-    const cfg = {
-      photo: { label: 'Photo', icon: '\u{1F4F8}', bg: '#FDF2F8', color: '#EC4899' },
-      poids: { label: 'Pes\u00e9e', icon: '\u2696\uFE0F', bg: '#FFFBEB', color: '#F59E0B' },
-      veto: { label: 'Visite v\u00e9to', icon: '\u{1FA7A}', bg: '#EFF6FF', color: '#3B82F6' },
-      traitement: { label: 'Traitement', icon: '\u{1F48A}', bg: '#ECFDF5', color: '#16A34A' },
-      note: { label: 'Note', icon: '\u{1F4DD}', bg: '#F5F3FF', color: '#8B5CF6' }
+    const cfgMap = {
+      photo:      { label: 'Photo',       icon: '📸', bg: '#FDF2F8', color: '#EC4899' },
+      poids:      { label: 'Pesée',       icon: '⚖️', bg: '#FFFBEB', color: '#F59E0B' },
+      veto:       { label: 'Visite véto', icon: '🩺', bg: '#EFF6FF', color: '#3B82F6' },
+      traitement: { label: 'Traitement',  icon: '💊', bg: '#ECFDF5', color: '#16A34A' },
+      note:       { label: 'Note',        icon: '📝', bg: '#F5F3FF', color: '#8B5CF6' }
     };
-    const t = cfg[entry.type] || cfg.note;
+    const t = cfgMap[entry.type] || cfgMap.note;
     const d = new Date(entry.date);
     const dateStr = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    const MOOD_LABELS = { '\u{1F63F}': 'Pas bien', '\u{1F610}': 'Bof', '\u{1F63A}': 'Bien', '\u{1F638}': 'Top forme' };
-    document.body.innerHTML = \`
-      <div style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;max-width:430px;margin:0 auto;min-height:100vh;background:#F8F9FA">
-        <div style="background:#2A9D8F;padding:20px;color:#fff">
-          <div style="font-size:13px;opacity:.8;margin-bottom:4px">Journal partag\u00e9 via VetID \u{1F43E}</div>
-          <div style="font-size:20px;font-weight:700">\${entry.animalName || 'Mon animal'}</div>
-        </div>
-        \${entry.photoUrl ? \`<div style="width:100%;height:220px;overflow:hidden"><img src="\${entry.photoUrl}" style="width:100%;height:100%;object-fit:cover"></div>\` : \`<div style="width:100%;height:120px;background:\${t.bg};display:flex;align-items:center;justify-content:center;font-size:56px">\${t.icon}</div>\`}
-        <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;text-transform:uppercase;background:\${t.bg};color:\${t.color}">\${t.icon} \${t.label}</span>
-            <span style="font-size:11px;color:#6B7280">\${dateStr}</span>
-          </div>
-          \${entry.description ? \`<div style="background:#fff;border-radius:14px;padding:14px;font-size:14px;color:#1a1a2e;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,.06)">\${entry.description}</div>\` : ''}
-          \${entry.poidsVal ? \`<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)"><span style="font-size:28px;font-weight:800;color:#1a1a2e">\${entry.poidsVal}</span><span style="font-size:13px;color:#6B7280"> kg</span></div>\` : ''}
-          \${entry.mood ? \`<div style="background:#fff;border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)"><span style="font-size:28px">\${entry.mood}</span><div><div style="font-size:13px;font-weight:700;color:#1a1a2e">\${MOOD_LABELS[entry.mood] || entry.mood}</div><div style="font-size:10px;color:#6B7280">Humeur du jour</div></div></div>\` : ''}
-          \${entry.tags && entry.tags.length ? \`<div style="display:flex;gap:6px;flex-wrap:wrap">\${entry.tags.map(tag => \`<span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;background:\${t.bg};color:\${t.color}">\${tag}</span>\`).join('')}</div>\` : ''}
-          <div style="text-align:center;padding:16px 0;border-top:1px solid #E5E7EB;margin-top:8px">
-            <a href="/" style="color:#2A9D8F;font-weight:600;font-size:14px;text-decoration:none">\u{1F43E} T\u00e9l\u00e9charger VetID gratuitement</a>
-          </div>
-        </div>
-      </div>\`;
-  } catch(e) { console.error('Share page error:', e); }
+    const moodLabels = { '😿': 'Pas bien', '😐': 'Bof', '😺': 'Bien', '😸': 'Top forme' };
+
+    let html = '<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:430px;margin:0 auto;min-height:100vh;background:#F8F9FA">';
+    html += '<div style="background:#2A9D8F;padding:20px;color:#fff">';
+    html += '<div style="font-size:13px;opacity:.8;margin-bottom:4px">Journal partagé via VetID 🐾</div>';
+    html += '<div style="font-size:20px;font-weight:700">' + (entry.animalName || 'Mon animal') + '</div>';
+    html += '</div>';
+
+    if (entry.photoUrl) {
+      html += '<div style="width:100%;height:220px;overflow:hidden"><img src="' + entry.photoUrl + '" style="width:100%;height:100%;object-fit:cover"></div>';
+    } else {
+      html += '<div style="width:100%;height:120px;background:' + t.bg + ';display:flex;align-items:center;justify-content:center;font-size:56px">' + t.icon + '</div>';
+    }
+
+    html += '<div style="padding:20px;display:flex;flex-direction:column;gap:14px">';
+    html += '<div style="display:flex;align-items:center;gap:8px">';
+    html += '<span style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;text-transform:uppercase;background:' + t.bg + ';color:' + t.color + '">' + t.icon + ' ' + t.label + '</span>';
+    html += '<span style="font-size:11px;color:#6B7280">' + dateStr + '</span>';
+    html += '</div>';
+
+    if (entry.description) {
+      html += '<div style="background:#fff;border-radius:14px;padding:14px;font-size:14px;color:#1a1a2e;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,.06)">' + entry.description + '</div>';
+    }
+    if (entry.poidsVal) {
+      html += '<div style="background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)"><span style="font-size:28px;font-weight:800;color:#1a1a2e">' + entry.poidsVal + '</span><span style="font-size:13px;color:#6B7280"> kg</span></div>';
+    }
+    if (entry.mood) {
+      html += '<div style="background:#fff;border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)"><span style="font-size:28px">' + entry.mood + '</span><div><div style="font-size:13px;font-weight:700;color:#1a1a2e">' + (moodLabels[entry.mood] || entry.mood) + '</div><div style="font-size:10px;color:#6B7280">Humeur du jour</div></div></div>';
+    }
+    if (entry.tags && entry.tags.length) {
+      html += '<div style="display:flex;gap:6px;flex-wrap:wrap">';
+      entry.tags.forEach(function(tag) {
+        html += '<span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;background:' + t.bg + ';color:' + t.color + '">' + tag + '</span>';
+      });
+      html += '</div>';
+    }
+    html += '<div style="text-align:center;padding:16px 0;border-top:1px solid #E5E7EB;margin-top:8px">';
+    html += '<a href="/" style="color:#2A9D8F;font-weight:600;font-size:14px;text-decoration:none">🐾 Télécharger VetID gratuitement</a>';
+    html += '</div></div></div>';
+
+    document.body.innerHTML = html;
+  } catch(e) {
+    console.error('Share page error:', e);
+  }
 })();
 
 onAuthStateChanged(auth, (user) => {
