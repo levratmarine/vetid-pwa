@@ -1179,7 +1179,11 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <textarea class="field-input" id="b-notes" rows="2" placeholder="Il a adoré rencontrer d'autres chiens..." style="resize:none"></textarea>
       </div>
       <button class="btn-primary" onclick="sauvegarderBalade()">Enregistrer la balade</button>
-      <button class="btn-ghost" onclick="closeModal('modal-balade')">Annuler</button>
+      <!-- Séparateur -->
+      <div style="display:flex;gap:8px">
+        <button onclick="reprendreBalade()" style="flex:1;padding:12px;border-radius:12px;background:var(--teal-light);color:var(--teal-dark);border:none;font-size:13px;font-weight:600;cursor:pointer">&#9654; Reprendre</button>
+        <button onclick="annulerBaladeDefinitivement()" style="flex:1;padding:12px;border-radius:12px;background:#fee2e2;color:#991b1b;border:none;font-size:13px;font-weight:600;cursor:pointer">&#128465; Ne pas enregistrer</button>
+      </div>
     </div>
   </div>
 </div>
@@ -2841,6 +2845,23 @@ function terminerBalade() {
   if (sub) sub.textContent = a ? 'Balade de ' + a.name + ' — ' + dureeMin + ' min' : dureeMin + ' min';
 
   openModal('modal-balade');
+}
+
+function reprendreBalade() {
+  // Fermer le modal — le chrono continue en arrière-plan
+  closeModal('modal-balade');
+  showToast('Balade reprise &#9654;');
+  updateDashboard();
+}
+
+function annulerBaladeDefinitivement() {
+  // Stopper le chrono et effacer la balade sans enregistrer
+  if (state.baladeInterval) { clearInterval(state.baladeInterval); state.baladeInterval = null; }
+  state.baladeEnCours = null;
+  localStorage.removeItem('vetid_balade_en_cours');
+  closeModal('modal-balade');
+  updateDashboard();
+  showToast('Balade annulée');
 }
 
 async function sauvegarderBalade() {
