@@ -1995,12 +1995,12 @@ function renderCroquettes(aid) {
 
     // Bouton commander si lien disponible
     if (c.lienCommande) {
-      html += '<button onclick="window.open('' + c.lienCommande + '','_blank')" style="width:100%;padding:10px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:6px">🛒 Commander</button>';
+      html += "<button onclick=\"window.open('" + c.lienCommande + "','_blank')\" style='width:100%;padding:10px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:6px'>🛒 Commander</button>";
     }
 
     // Bouton mettre à jour l'achat
     if (idx === 0) {
-      html += '<button onclick="ouvrirMiseAJourAchat()" style="width:100%;padding:9px;border-radius:10px;background:var(--bg);color:var(--muted);border:1.5px solid var(--border);font-size:12px;font-weight:500;cursor:pointer">✓ J'ai racheté un sac</button>';
+      html += "<button onclick='ouvrirMiseAJourAchat()' style='width:100%;padding:9px;border-radius:10px;background:var(--bg);color:var(--muted);border:1.5px solid var(--border);font-size:12px;font-weight:500;cursor:pointer'>✓ J'ai racheté un sac</button>";
     }
 
     div.innerHTML = html;
