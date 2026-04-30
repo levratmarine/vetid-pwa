@@ -3292,7 +3292,8 @@ let lieuNoteSelectionnee = 0;
 
 async function openLieux() {
   showScreen('lieux');
-  if (!allLieux.length) await chargerLieux();
+  // Toujours recharger depuis Firestore (pas de cache)
+  await chargerLieux();
   renderLieux();
 }
 
@@ -3300,11 +3301,11 @@ async function chargerLieux() {
   try {
     const db = window._db;
     if (db) {
+      // Sans orderBy pour éviter l'index composite Firestore (non créé en V0)
       const snap = await window._getDocs(
         window._query(
           window._collection(db, 'lieux'),
-          window._where('statut', '==', 'valide'),
-          window._orderBy('dateAjout', 'desc')
+          window._where('statut', '==', 'valide')
         )
       );
       const lieuFirestore = snap.docs.map(d => ({ id: d.id, ...d.data() }));
