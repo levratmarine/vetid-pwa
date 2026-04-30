@@ -332,13 +332,18 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .new-animal-tab-av{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:11px}
 /* Hero */
 .new-hero-card{background:linear-gradient(135deg,var(--teal) 0%,var(--teal-dark) 100%);border-radius:20px;padding:18px;color:white;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.new-hero-info h2{font-size:22px;font-weight:800;margin-bottom:3px}
-.new-hero-info p{font-size:12px;opacity:.85;margin-bottom:10px}
-.new-hero-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.22);padding:5px 10px;border-radius:10px;font-size:11px;font-weight:600}
+.new-hero-info h2{font-size:24px;font-weight:700;margin-bottom:4px;letter-spacing:-.5px}
+.new-hero-info p{font-size:12px;opacity:.8;margin-bottom:10px;line-height:1.4}
+.new-hero-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.22);padding:5px 12px;border-radius:10px;font-size:11px;font-weight:600;letter-spacing:.1px}
 .new-hero-avatar{width:64px;height:64px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
 /* Card générique */
 .new-card{background:var(--white);border-radius:16px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.new-card-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.new-card-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.new-stats-band{display:flex;gap:8px}
+.new-stat-pill{flex:1;background:var(--white);border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;transition:transform .15s}
+.new-stat-pill:active{transform:scale(.97)}
+.new-stat-val{font-size:22px;font-weight:700;color:var(--teal);line-height:1;letter-spacing:-.5px}
+.new-stat-label{font-size:10px;color:var(--muted);font-weight:500;text-align:center;line-height:1.2}
 /* Rappels */
 .new-rappels-row{display:flex;gap:8px}
 .new-rappel-item{flex:1;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:3px}
@@ -600,7 +605,23 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <div class="new-hero-avatar" id="hero-avatar"></div>
       </div>
 
-      <!-- ② RAPPELS -->
+      <!-- ② BANDE STATS CLÉS -->
+      <div class="new-stats-band" id="stats-band">
+        <div class="new-stat-pill" onclick="openPoids(selectedAnimalId)">
+          <div class="new-stat-val" id="stat-poids">—</div>
+          <div class="new-stat-label">kg · poids</div>
+        </div>
+        <div class="new-stat-pill" onclick="openCroquettes(selectedAnimalId)">
+          <div class="new-stat-val" id="stat-croq" style="color:var(--orange)">—</div>
+          <div class="new-stat-label">croquettes</div>
+        </div>
+        <div class="new-stat-pill" onclick="goToTab('settings')">
+          <div class="new-stat-val" id="stat-badges" style="color:var(--purple)">—</div>
+          <div class="new-stat-label">badges</div>
+        </div>
+      </div>
+
+      <!-- ③ RAPPELS -->
       <div class="new-card">
         <div class="new-card-title">Prochains rappels</div>
         <div class="new-rappels-row" id="rappels-row"></div>
@@ -643,16 +664,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- ④ LIEUX PREVIEW -->
-      <div class="new-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <span class="new-card-title" style="margin:0">Lieux pet-friendly 📍</span>
-          <span style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer" onclick="goToTab('lieux')">Voir liste ›</span>
-        </div>
-        <div id="lieux-preview-list"></div>
-        <div class="new-lieu-add-btn" onclick="openAddLieu()">➕ Proposer un lieu</div>
       </div>
 
       <!-- ⑤ CROQUETTES -->
@@ -1800,9 +1811,6 @@ function renderDashboardWidgets(animalId) {
     if (isChien) renderBaladeDashWidget(animalId);
   }
 
-  // ④ LIEUX PREVIEW
-  renderLieuxPreview();
-
   // ⑤ CROQUETTES
   renderCroqWidget(animalId);
 
@@ -1815,9 +1823,67 @@ function renderDashboardWidgets(animalId) {
   // ⑧ BADGES
   renderBadgesDash();
 
+  // ② BIS — BANDE STATS
+  renderStatsBand(animalId);
+
   // BLOG PREVIEW
   const blogPreview = document.getElementById('blog-preview');
   if (blogPreview) blogPreview.style.display = allArticles.length ? 'block' : 'none';
+}
+
+function renderStatsBand(animalId) {
+  // Stat poids
+  const weights = state.weights[animalId] || [];
+  const statPoids = document.getElementById('stat-poids');
+  if (statPoids) {
+    if (weights.length) {
+      const sorted = [...weights].sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+      statPoids.textContent = sorted[sorted.length - 1].value + ' kg';
+      statPoids.style.color = 'var(--teal)';
+    } else {
+      statPoids.textContent = '—';
+      statPoids.style.color = 'var(--muted)';
+    }
+    // Corriger le label
+    const pill = statPoids.parentElement;
+    const label = pill.querySelector('.new-stat-label');
+    if (label) label.textContent = weights.length ? 'kg · poids' : 'poids';
+  }
+
+  // Stat croquettes
+  const croquettes = state.croquettes[animalId] || [];
+  const statCroq = document.getElementById('stat-croq');
+  if (statCroq) {
+    if (croquettes.length) {
+      const last = croquettes[croquettes.length - 1];
+      const jours = getJoursRestants(last);
+      if (jours !== null) {
+        statCroq.textContent = jours <= 0 ? 'Vide !' : 'J-' + jours;
+        statCroq.style.color = jours <= 7 ? 'var(--red)' : jours <= 21 ? 'var(--orange)' : 'var(--teal)';
+      } else {
+        statCroq.textContent = 'OK';
+        statCroq.style.color = 'var(--teal)';
+      }
+    } else {
+      statCroq.textContent = '—';
+      statCroq.style.color = 'var(--muted)';
+    }
+    const pill = statCroq.parentElement;
+    const label = pill.querySelector('.new-stat-label');
+    if (label) label.textContent = 'croquettes';
+  }
+
+  // Stat badges
+  const statBadges = document.getElementById('stat-badges');
+  if (statBadges) {
+    const earned = (state.badges || []).length;
+    const total = typeof BADGES_CONFIG !== 'undefined' ? BADGES_CONFIG.length : 8;
+    statBadges.textContent = earned + '/' + total;
+    statBadges.style.color = earned > 0 ? 'var(--purple)' : 'var(--muted)';
+    const pill = statBadges.parentElement;
+    const label = pill.querySelector('.new-stat-label');
+    if (label) label.textContent = 'badges';
+  }
 }
 
 function renderRappelsDash(animalId) {
@@ -3771,9 +3837,10 @@ const LIEUX_DEMO = [
   { id: 'demo2', nom: 'Parc des Buttes-Chaumont', adresse: 'Entrée principale rue Botzaris', ville: 'Paris', categorie: 'parc', description: "Grand parc idéal pour les balades. Zone sans laisse autorisée.", note: 5, statut: 'valide' },
   { id: 'demo3', nom: 'Hôtel Le Marais', adresse: '3 rue de Bretagne', ville: 'Paris', categorie: 'hotel', description: "Accepte les chiens jusqu'à 15 kg. Litière et gamelles fournies.", note: 4, statut: 'valide' },
   { id: 'demo4', nom: 'Clinique Vétérinaire Bastille', adresse: '22 bd Beaumarchais', ville: 'Paris', categorie: 'veto', description: "Urgences 24h/24, 7j/7. Équipe spécialisée chiens et chats.", note: 5, statut: 'valide' },
-  { id: 'demo5', nom: 'Terranimo', adresse: 'ZAC de Beaulieu, Rue du 14 Juillet', ville: 'Puilboreau', categorie: 'shop', description: "Cette boutique aux murs ornés d'aquariums vend des animaux de compagnie et tous les accessoires nécessaires.", note: 4, statut: 'valide' },
-  { id: 'demo6', nom: 'Parc de la Visitation', adresse: 'Rue de la Visitation', ville: 'Lyon', categorie: 'parc', description: "Beau parc arboré, fontaine pour les chiens.", note: 4, statut: 'valide' },
-  { id: 'demo7', nom: 'Clinique Vétérinaire Lyonnaise', adresse: '45 cours Lafayette', ville: 'Lyon', categorie: 'veto', description: "Consultations sur rdv, urgences le week-end.", note: 4, statut: 'valide' },
+  { id: 'demo5', nom: 'Wanimo La Rochelle', adresse: 'Centre commercial La Pallice', ville: 'La Rochelle', categorie: 'shop', description: "Grande animalerie, gamme bio et naturelle.", note: 4, statut: 'valide' },
+  { id: 'demo6', nom: 'La Cabane à Toutou', adresse: '7 rue du Port', ville: 'La Rochelle', categorie: 'resto', description: "Bar à bières dog-friendly, snacks pour chiens offerts !", note: 5, statut: 'valide' },
+  { id: 'demo7', nom: 'Parc de la Visitation', adresse: 'Rue de la Visitation', ville: 'Lyon', categorie: 'parc', description: "Beau parc arboré, fontaine pour les chiens.", note: 4, statut: 'valide' },
+  { id: 'demo8', nom: 'Mon Vétérinaire', adresse: '45 cours Lafayette', ville: 'Lyon', categorie: 'veto', description: "Consultations sur rdv, urgences le week-end.", note: 4, statut: 'valide' },
 ];
 
 // State lieux
