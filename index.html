@@ -317,6 +317,89 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .jdetail-date-badge{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.45);color:#fff;font-size:10px;padding:3px 8px;border-radius:6px}
 .jdetail-mood-card{background:var(--white);border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:10px}
 
+/* ══ NOUVEAU DASHBOARD ══════════════════════════════════════════════════════ */
+.new-dash-header{background:var(--white);padding:12px 20px 14px;flex-shrink:0;border-bottom:1px solid var(--border)}
+.new-dash-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.new-app-name{font-size:22px;font-weight:800;color:var(--teal);letter-spacing:-.5px}
+.new-notif-btn{width:36px;height:36px;background:var(--teal-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;position:relative;cursor:pointer}
+.new-notif-dot{position:absolute;top:4px;right:4px;width:9px;height:9px;background:var(--orange);border-radius:50%;border:2px solid white;display:none}
+.new-notif-dot.visible{display:block}
+.new-animal-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.new-animal-tabs::-webkit-scrollbar{display:none}
+.new-animal-tab{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;background:var(--bg);color:var(--muted);transition:all .2s;border:none}
+.new-animal-tab.active{background:var(--teal);color:white}
+.new-animal-tab.add-tab{background:transparent;border:1.5px dashed var(--border);color:var(--muted);font-size:12px}
+.new-animal-tab-av{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:11px}
+/* Hero */
+.new-hero-card{background:linear-gradient(135deg,var(--teal) 0%,var(--teal-dark) 100%);border-radius:20px;padding:18px;color:white;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.new-hero-info h2{font-size:22px;font-weight:800;margin-bottom:3px}
+.new-hero-info p{font-size:12px;opacity:.85;margin-bottom:10px}
+.new-hero-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.22);padding:5px 10px;border-radius:10px;font-size:11px;font-weight:600}
+.new-hero-avatar{width:64px;height:64px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+/* Card générique */
+.new-card{background:var(--white);border-radius:16px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.new-card-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+/* Rappels */
+.new-rappels-row{display:flex;gap:8px}
+.new-rappel-item{flex:1;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:3px}
+.new-rappel-item.ok{background:#ECFDF5}
+.new-rappel-item.soon{background:#FFFBEB}
+.new-rappel-item.late{background:#FEF2F2}
+.new-rappel-item.empty{background:var(--bg)}
+.new-rappel-icon{font-size:16px}
+.new-rappel-name{font-size:10px;font-weight:600;color:var(--text)}
+.new-rappel-date{font-size:9px;color:var(--muted)}
+.new-rappel-status{font-size:9px;font-weight:700;margin-top:2px}
+.new-rappel-item.ok .new-rappel-status{color:#16A34A}
+.new-rappel-item.soon .new-rappel-status{color:#D97706}
+.new-rappel-item.late .new-rappel-status{color:#DC2626}
+.new-rappel-item.empty .new-rappel-status{color:var(--muted)}
+/* Balade */
+.new-balade-cta{background:linear-gradient(135deg,var(--orange) 0%,#D4523A 100%);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;color:white;cursor:pointer}
+.new-balade-icon{width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.new-balade-text h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.new-balade-text p{font-size:11px;opacity:.85}
+.new-balade-active{background:#FEF2F2;border:2px solid var(--red);border-radius:16px;padding:14px;text-align:center}
+.new-balade-timer{font-size:32px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+.new-balade-stop{background:var(--red);color:white;border:none;border-radius:12px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;width:100%}
+/* Lieux preview */
+.new-lieu-item{display:flex;align-items:center;gap:10px;padding:9px;background:var(--bg);border-radius:10px;margin-bottom:7px;cursor:pointer}
+.new-lieu-emoji{width:32px;height:32px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.new-lieu-name{font-size:12px;font-weight:600;color:var(--text)}
+.new-lieu-sub{font-size:10px;color:var(--muted)}
+.new-lieu-add-btn{text-align:center;padding:9px;border:1.5px dashed #86EFAC;border-radius:10px;background:#F0FDF4;color:#16A34A;font-size:12px;font-weight:600;cursor:pointer;margin-top:4px}
+/* Croquettes */
+.new-croq-card{background:linear-gradient(135deg,#FFF7ED 0%,#FFEDD5 100%);border:1px solid #FED7AA;border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px}
+.new-croq-icon{font-size:28px;flex-shrink:0}
+.new-croq-info{flex:1}
+.new-croq-title{font-size:13px;font-weight:700;color:#92400E;margin-bottom:2px}
+.new-croq-sub{font-size:11px;color:#B45309}
+.new-croq-progress{height:4px;background:#FED7AA;border-radius:2px;margin-top:6px;overflow:hidden}
+.new-croq-fill{height:100%;border-radius:2px;transition:width .3s}
+.new-croq-btn{background:var(--orange);color:white;border:none;border-radius:10px;padding:8px 12px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0}
+/* Poids */
+.new-poids-val{font-size:26px;font-weight:800;color:var(--text)}
+.new-poids-val small{font-size:14px;font-weight:500;color:var(--muted)}
+.new-poids-badge{font-size:11px;font-weight:700;padding:4px 9px;border-radius:8px}
+.new-poids-badge.up{background:#FEF3C7;color:#D97706}
+.new-poids-badge.down{background:#DCFCE7;color:#16A34A}
+.new-mini-chart{display:flex;align-items:flex-end;gap:4px;height:38px;margin-top:4px}
+.new-mini-bar{flex:1;background:var(--teal-light);border-radius:4px 4px 0 0;transition:height .3s}
+.new-mini-bar.current{background:var(--teal)}
+.new-poids-alert{font-size:11px;color:#D97706;background:#FFFBEB;padding:7px 10px;border-radius:8px;margin-top:8px;line-height:1.4}
+/* Conseil */
+.new-conseil-card{background:linear-gradient(135deg,#EDE9FE 0%,#F5F3FF 100%);border:1px solid #DDD6FE;border-radius:16px;padding:14px}
+.new-conseil-tag{display:inline-flex;align-items:center;gap:4px;background:var(--purple);color:white;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.new-conseil-text{font-size:13px;color:#4C1D95;line-height:1.55;font-weight:500}
+/* Badges dash */
+.new-badge-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.new-badge-row::-webkit-scrollbar{display:none}
+.new-badge-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:52px}
+.new-badge-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.new-badge-circle.earned{background:var(--teal-light);border:2px solid var(--teal)}
+.new-badge-circle.locked{background:var(--bg);border:2px solid var(--border);filter:grayscale(1);opacity:.45}
+.new-badge-name{font-size:9px;color:var(--muted);text-align:center;font-weight:500;line-height:1.2}
+
 /* ── BALADES ── */
 .balade-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
 .balade-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -481,29 +564,164 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 
 <!-- DASHBOARD -->
 <div id="screen-dashboard" class="screen">
-  <div class="dash-header">
-    <div id="dash-greeting" style="font-size:14px;opacity:.85">Bonjour 👋</div>
-    <div style="font-size:22px;font-weight:700;margin-top:2px">Mes animaux</div>
-  </div>
-  <div style="flex:1;overflow-y:auto;padding:16px">
-    <div id="empty-state" style="text-align:center;padding:48px 24px;color:var(--muted)">
-      <div style="font-size:48px;margin-bottom:16px">🐾</div>
-      <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Aucun animal pour l'instant</div>
-      <div style="font-size:14px;line-height:1.6">Ajoutez votre premier compagnon en appuyant sur + ci-dessous</div>
-    </div>
-    <div id="animals-list"></div>
-    <div id="blog-preview" style="display:none">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:16px">
-        <div class="section-title" style="margin:0">Derniers articles</div>
-        <span onclick="loadBlog();showScreen('blog')" style="font-size:12px;color:var(--teal);font-weight:600;cursor:pointer">Voir tous →</span>
-      </div>
-      <div id="blog-preview-list" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px"></div>
-      <div style="margin-top:12px;text-align:center;padding-bottom:8px">
-        <span onclick="loadBlog();showScreen('blog')" style="font-size:13px;color:var(--teal);font-weight:600;cursor:pointer;border:1.5px solid var(--teal);border-radius:20px;padding:8px 20px;display:inline-block">📖 Voir tous les articles</span>
+  <!-- NOUVEAU HEADER BLANC -->
+  <div class="new-dash-header">
+    <div class="new-dash-header-top">
+      <div class="new-app-name">VetId</div>
+      <div class="new-notif-btn" onclick="checkNotifications()">
+        🔔
+        <div class="new-notif-dot" id="notif-dot"></div>
       </div>
     </div>
+    <div class="new-animal-tabs" id="animal-tabs-container"></div>
   </div>
-  <button class="fab" onclick="openAddAnimal()">+</button>
+
+  <!-- CONTENU SCROLLABLE -->
+  <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px" id="dash-widgets">
+
+    <!-- EMPTY STATE -->
+    <div id="dash-empty-state" style="display:none;text-align:center;padding:48px 0;color:var(--muted)">
+      <div style="font-size:56px;margin-bottom:16px">🐾</div>
+      <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Bienvenue sur VetId !</div>
+      <div style="font-size:14px;line-height:1.7;margin-bottom:24px">Ajoutez votre premier compagnon<br>pour commencer le suivi.</div>
+      <button class="btn-primary" style="max-width:240px;margin:0 auto" onclick="openAddAnimal()">+ Ajouter mon animal</button>
+    </div>
+
+    <!-- WIDGETS (visibles uniquement si animal sélectionné) -->
+    <div id="dash-animal-widgets" style="display:none;flex-direction:column;gap:12px">
+
+      <!-- ① HERO CARD -->
+      <div class="new-hero-card" onclick="openEditAnimal(selectedAnimalId)">
+        <div class="new-hero-info">
+          <h2 id="hero-name"></h2>
+          <p id="hero-sub"></p>
+          <div class="new-hero-badge" id="hero-badge"></div>
+        </div>
+        <div class="new-hero-avatar" id="hero-avatar"></div>
+      </div>
+
+      <!-- ② RAPPELS -->
+      <div class="new-card">
+        <div class="new-card-title">Prochains rappels</div>
+        <div class="new-rappels-row" id="rappels-row"></div>
+        <div style="text-align:right;margin-top:8px">
+          <span style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer" onclick="openSoins(selectedAnimalId)">Gérer les soins ›</span>
+        </div>
+      </div>
+
+      <!-- ③ BALADE (chiens uniquement) -->
+      <div id="balade-widget-container" style="display:none;flex-direction:column;gap:10px">
+        <!-- CTA si pas de balade en cours -->
+        <div class="new-balade-cta" id="balade-cta" onclick="demarrerBalade(selectedAnimalId)">
+          <div class="new-balade-icon">🐾</div>
+          <div class="new-balade-text">
+            <h3>Logger une balade</h3>
+            <p id="balade-last-text">Aucune balade enregistrée</p>
+          </div>
+          <div style="margin-left:auto;font-size:20px;opacity:.7">›</div>
+        </div>
+        <!-- Chrono si balade en cours -->
+        <div class="new-balade-active" id="balade-active-widget" style="display:none">
+          <div class="new-balade-timer" id="balade-timer-widget">00:00</div>
+          <div style="font-size:12px;color:var(--red);margin:4px 0 12px">Balade en cours 🔴</div>
+          <button class="new-balade-stop" onclick="terminerBalade()">⏹ Terminer la balade</button>
+        </div>
+        <!-- Historique + objectif -->
+        <div class="new-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span class="new-card-title" style="margin:0">Dernières balades</span>
+            <span style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer" onclick="openBalades(selectedAnimalId)">Voir tout ›</span>
+          </div>
+          <div id="balade-history-list"></div>
+          <div style="margin-top:10px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px">
+              <span>Objectif semaine</span>
+              <span style="color:var(--teal);font-weight:700" id="balade-objectif-text">0/5 jours</span>
+            </div>
+            <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
+              <div style="height:100%;background:var(--teal);border-radius:3px;transition:width .3s" id="balade-objectif-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ LIEUX PREVIEW -->
+      <div class="new-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span class="new-card-title" style="margin:0">Lieux pet-friendly 📍</span>
+          <span style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer" onclick="goToTab('lieux')">Voir liste ›</span>
+        </div>
+        <div id="lieux-preview-list"></div>
+        <div class="new-lieu-add-btn" onclick="openAddLieu()">➕ Proposer un lieu</div>
+      </div>
+
+      <!-- ⑤ CROQUETTES -->
+      <div id="croq-widget" style="display:none">
+        <div class="new-croq-card">
+          <div class="new-croq-icon">🥣</div>
+          <div class="new-croq-info">
+            <div class="new-croq-title" id="croq-title"></div>
+            <div class="new-croq-sub" id="croq-sub"></div>
+            <div class="new-croq-progress"><div class="new-croq-fill" id="croq-fill"></div></div>
+          </div>
+          <button class="new-croq-btn" id="croq-btn" onclick="openCroquettes(selectedAnimalId)">Voir</button>
+        </div>
+      </div>
+      <div id="croq-empty-widget" style="display:none">
+        <div class="new-card" style="text-align:center;padding:14px;cursor:pointer" onclick="openCroquettes(selectedAnimalId)">
+          <div style="font-size:24px;margin-bottom:6px">🥣</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">Croquettes non configurées</div>
+          <div style="font-size:11px;color:var(--teal);font-weight:600">Configurer →</div>
+        </div>
+      </div>
+
+      <!-- ⑥ POIDS -->
+      <div class="new-card" id="poids-widget" style="display:none">
+        <div class="new-card-title">Suivi du poids</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px">
+          <div>
+            <div class="new-poids-val"><span id="poids-val">—</span> <small>kg</small></div>
+            <div style="font-size:10px;color:var(--muted)" id="poids-date"></div>
+          </div>
+          <div class="new-poids-badge" id="poids-badge" style="display:none"></div>
+        </div>
+        <div class="new-mini-chart" id="poids-mini-chart"></div>
+        <div class="new-poids-alert" id="poids-alert" style="display:none">
+          ⚠️ Variation de poids significative · Consultez votre vétérinaire
+        </div>
+        <div style="text-align:right;margin-top:8px">
+          <span style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer" onclick="openPoids(selectedAnimalId)">Voir le suivi ›</span>
+        </div>
+      </div>
+
+      <!-- ⑦ CONSEIL DU JOUR -->
+      <div class="new-conseil-card">
+        <div class="new-conseil-tag">✨ Conseil du jour</div>
+        <div class="new-conseil-text" id="conseil-text">Complétez le profil de votre animal pour recevoir des conseils personnalisés.</div>
+      </div>
+
+      <!-- ⑧ BADGES -->
+      <div class="new-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span class="new-card-title" style="margin:0">Mes badges</span>
+          <span style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer" onclick="goToTab('settings')">Tous ›</span>
+        </div>
+        <div class="new-badge-row" id="badges-row-dash"></div>
+      </div>
+
+      <!-- BLOG PREVIEW -->
+      <div id="blog-preview" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div class="new-card-title" style="margin:0">Derniers articles</div>
+          <span onclick="loadBlog();showScreen('blog')" style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer">Voir tous →</span>
+        </div>
+        <div id="blog-preview-list" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px"></div>
+      </div>
+
+      <div style="height:20px"></div>
+    </div>
+  </div>
+
   <div class="bottom-nav">
     <div class="nav-item active" id="nav-home" onclick="goToTab('home')"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
     <div class="nav-item" id="nav-journal" onclick="goToTab('journal')"><div class="nav-icon">📓</div><div class="nav-label">Journal</div></div>
@@ -1437,9 +1655,11 @@ async function doResetPassword() {
   } catch (e) { showError('forgot-error', getFirebaseError(e.code)); }
 }
 function goToDashboard() {
+  showScreen('dashboard');
   updateDashboard();
   loadBlogPreview();
-  showScreen('dashboard');
+  // Charger les lieux pour la preview dashboard
+  if (!allLieux.length) chargerLieux().then(function() { renderLieuxPreview(); });
   setTimeout(checkCroquettesAlert, 2000);
   restaurerChronoBalade();
   setTimeout(checkAndAwardBadges, 1000);
@@ -1470,119 +1690,391 @@ function toggleAnimalDetail(aid) {
   chevron.classList.toggle('open', !isOpen);
 }
 
-function updateDashboard() {
-  if (state.user) document.getElementById('dash-greeting').textContent = 'Bonjour ' + state.user.prenom + ' 👋';
-  const list = document.getElementById('animals-list');
-  const empty = document.getElementById('empty-state');
-  const blogPreview = document.getElementById('blog-preview');
-  if (state.animals.length === 0) { empty.style.display = 'block'; list.innerHTML = ''; blogPreview.style.display = 'none'; return; }
-  empty.style.display = 'none';
-  blogPreview.style.display = 'block';
-  list.innerHTML = '';
-  state.animals.forEach(function(a) {
-    const treats = state.treatments.filter(t => t.animalId === a.id);
-    const weights = state.weights[a.id] || [];
-    const croquettes = state.croquettes[a.id] || [];
-    const vet = state.vets[a.id];
-    const treatStatus = getAnimalTreatStatus(a.id);
-    const lastWeight = weights.length ? weights[weights.length - 1] : null;
-    const lastCroquette = croquettes.length ? croquettes[croquettes.length - 1] : null;
-    const journalCount = (state.journal[a.id] || []).length;
-    const soinsBg = treatStatus === 'red' ? '#fee2e2' : treatStatus === 'orange' ? '#fed7aa' : '#dcfce7';
-    const section = document.createElement('div');
-    section.className = 'animal-section';
-    const header = document.createElement('div');
-    header.className = 'animal-section-header';
-    header.onclick = function() { toggleAnimalDetail(a.id); };
-    header.innerHTML =
-      '<div class="animal-avatar">' + (a.emoji || '🐾') + '</div>'
-      + '<div style="flex:0 1 auto;min-width:0">'
-      +   '<div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + a.name + '</div>'
-      +   '<div style="font-size:11px;color:var(--muted)">' + calcAge(a.birth) + '</div>'
-      + '</div>'
-      + '<div class="quick-icons">'
-      +   '<div class="quick-icon" style="background:' + soinsBg + '" onclick="event.stopPropagation();openSoins(\'' + a.id + '\')" title="Soins">💊</div>'
-      +   '<div class="quick-icon" style="background:var(--teal-light)" onclick="event.stopPropagation();openPoids(\'' + a.id + '\')" title="Poids">⚖️</div>'
-      +   '<div class="quick-icon" style="background:#fef9ec" onclick="event.stopPropagation();openCroquettes(\'' + a.id + '\')" title="Croquettes">🍗</div>'
-      +   '<div class="quick-icon" style="background:#E6F1FB" onclick="event.stopPropagation();openVet(\'' + a.id + '\')" title="Vétérinaire">🏥</div>'
-      + '</div>'
-      + '<div class="chevron" id="chevron-' + a.id + '">⌄</div>';
-    section.appendChild(header);
-    const detail = document.createElement('div');
-    detail.className = 'animal-detail';
-    detail.id = 'detail-' + a.id;
-    detail.innerHTML = '<div style="height:1px;background:var(--border);margin-bottom:12px"></div>';
-    const grid = document.createElement('div');
-    grid.className = 'card-grid';
-    grid.appendChild(createDashCard('💊', 'Soins',
-      treats.length ? treats.length + ' traitement' + (treats.length > 1 ? 's' : '') : 'Aucun soin',
-      treatStatus === 'red' ? { text: 'En retard', bg: '#fee2e2', color: '#991b1b' } :
-      treatStatus === 'orange' ? { text: 'Bientôt', bg: '#fed7aa', color: '#9a3412' } :
-      treats.length ? { text: 'À jour', bg: '#dcfce7', color: '#166534' } : null,
-      function() { openSoins(a.id); }
-    ));
-    grid.appendChild(createDashCard('⚖️', 'Poids',
-      lastWeight ? lastWeight.value + ' kg' : 'Non renseigné',
-      lastWeight ? { text: 'Suivi actif', bg: 'var(--teal-light)', color: 'var(--teal-dark)' } : null,
-      function() { openPoids(a.id); }
-    ));
-    // Widget croquettes enrichi
-    (function() {
-      const croquetteCard = document.createElement('div');
-      croquetteCard.className = 'dash-card';
-      croquetteCard.onclick = function() { openCroquettes(a.id); };
-      if (lastCroquette) {
-        const jours = getJoursRestants(lastCroquette);
-        const poidsKg = lastCroquette.poidsKg || 0;
-        const consoGJour = lastCroquette.consoGJour || 0;
-        const joursTotal = (poidsKg > 0 && consoGJour > 0) ? Math.round((poidsKg * 1000) / consoGJour) : 30;
-        const pct = jours !== null ? Math.max(0, Math.min(100, Math.round((jours / joursTotal) * 100))) : null;
-        const urgent = jours !== null && jours <= 7;
-        const medium = jours !== null && jours > 7 && jours <= 21;
-        const barColor = urgent ? 'var(--red)' : medium ? 'var(--orange)' : 'var(--green)';
-        const badgeBg = urgent ? '#fee2e2' : medium ? '#fed7aa' : '#dcfce7';
-        const badgeColor = urgent ? '#991b1b' : medium ? '#9a3412' : '#166534';
-        const badgeText = jours === null ? 'Suivi actif' : jours <= 0 ? 'À commander !' : '~' + jours + 'j restants';
-        let html = '<div class="dash-card-icon">🍗</div>'
-          + '<div class="dash-card-title">Croquettes</div>'
-          + '<div class="dash-card-sub">' + lastCroquette.brand + '</div>';
-        if (pct !== null) {
-          html += '<div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin:6px 0 4px">'
-            + '<div style="height:100%;width:' + pct + '%;background:' + barColor + ';border-radius:2px;transition:width .3s"></div></div>';
-        }
-        html += '<div class="dash-card-badge" style="background:' + badgeBg + ';color:' + badgeColor + '">' + badgeText + '</div>';
-        croquetteCard.innerHTML = html;
-      } else {
-        croquetteCard.innerHTML = '<div class="dash-card-icon">🍗</div>'
-          + '<div class="dash-card-title">Croquettes</div>'
-          + '<div class="dash-card-sub">Non renseigné</div>';
-      }
-      grid.appendChild(croquetteCard);
-    })();
-    grid.appendChild(createDashCard('🏥', 'Vétérinaire',
-      vet ? (vet.name || vet.clinic || 'Enregistré') : 'Non renseigné',
-      vet ? { text: 'Enregistré', bg: '#E6F1FB', color: '#185FA5' } : null,
-      function() { openVet(a.id); }
-    ));
-    detail.appendChild(grid);
-    // Widget balade — uniquement pour les chiens
-    if (a.species === 'dog') {
-      const baladeWrap = document.createElement('div');
-      baladeWrap.style.cssText = 'margin-top:10px';
-      const baladeWidget = buildBaladeWidget(a);
-      baladeWrap.appendChild(baladeWidget);
-      detail.appendChild(baladeWrap);
-    }
+// ─── NOUVEAU DASHBOARD ───────────────────────────────────────────────────────
 
-    const editBtn = document.createElement('button');
-    editBtn.style.cssText = 'margin-top:10px;width:100%;padding:9px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;color:var(--muted);cursor:pointer';
-    editBtn.innerHTML = '✏️ Modifier le profil de ' + a.name;
-    editBtn.onclick = function() { openEditAnimal(a.id); };
-    detail.appendChild(editBtn);
-    section.appendChild(detail);
-    list.appendChild(section);
+let selectedAnimalId = null;
+
+const CONSEILS_JOUR = [
+  { espece: 'cat', ageMin: 0, ageMax: 1, texte: "Chaton en croissance : des croquettes riches en protéines et un accès permanent à l'eau fraîche sont essentiels." },
+  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Chat adulte : une pesée mensuelle permet de détecter une prise de poids avant qu'elle devienne problématique." },
+  { espece: 'cat', ageMin: 7, ageMax: 99, texte: "Chat senior : à partir de 7 ans, un bilan vétérinaire annuel est recommandé même sans symptômes visibles." },
+  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Chiot : la socialisation avant 3 mois est cruciale pour son équilibre comportemental adulte." },
+  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "Chien adulte : l'activité physique régulière prévient l'obésité et maintient une bonne santé articulaire." },
+  { espece: 'dog', ageMin: 7, ageMax: 99, texte: "Chien senior : réduisez l'intensité des exercices et surveillez les signes de raideur au lever." },
+];
+
+function getDaysUntil(dateStr) {
+  if (!dateStr) return null;
+  return Math.round((new Date(dateStr) - new Date()) / 86400000);
+}
+
+function getConseilDuJour(animal) {
+  if (!animal || !animal.birth) return "Complétez le profil de votre animal pour recevoir des conseils personnalisés.";
+  const ageAns = Math.floor((Date.now() - new Date(animal.birth)) / (365.25 * 86400000));
+  const sp = animal.species === 'chien' ? 'dog' : (animal.species === 'chat' ? 'cat' : animal.species);
+  const matching = CONSEILS_JOUR.filter(function(c) { return c.espece === sp && ageAns >= c.ageMin && ageAns < c.ageMax; });
+  if (!matching.length) return "Prenez soin de votre compagnon au quotidien — chaque attention compte !";
+  return matching[Math.floor(Date.now() / 86400000) % matching.length].texte;
+}
+
+function getHeroBadge(animalId) {
+  const treatments = state.treatments.filter(function(t) { return t.animalId === animalId; });
+  const late = treatments.filter(function(t) { const d = getDaysUntil(t.nextDate); return d !== null && d < 0; });
+  const soon = treatments.filter(function(t) { const d = getDaysUntil(t.nextDate); return d !== null && d >= 0 && d <= 14; });
+  if (late.length) return (late.length > 1 ? late.length + ' rappels en retard' : '1 rappel en retard');
+  if (soon.length) return (soon.length > 1 ? soon.length + ' rappels bientôt' : '1 rappel bientôt');
+  return 'Traitements à jour';
+}
+
+function updateDashboard() {
+  renderAnimalTabs();
+  if (state.animals.length === 0) {
+    document.getElementById('dash-empty-state').style.display = 'block';
+    document.getElementById('dash-animal-widgets').style.display = 'none';
+    return;
+  }
+  document.getElementById('dash-empty-state').style.display = 'none';
+  // Sélectionner le premier animal si aucun sélectionné
+  if (!selectedAnimalId || !state.animals.find(function(a) { return a.id === selectedAnimalId; })) {
+    selectedAnimalId = state.animals[0].id;
+  }
+  renderDashboardWidgets(selectedAnimalId);
+}
+
+function renderAnimalTabs() {
+  const container = document.getElementById('animal-tabs-container');
+  if (!container) return;
+  container.innerHTML = '';
+  state.animals.forEach(function(animal) {
+    const tab = document.createElement('button');
+    tab.className = 'new-animal-tab' + (animal.id === selectedAnimalId ? ' active' : '');
+    tab.onclick = function() { selectAnimal(animal.id); };
+    const av = document.createElement('div');
+    av.className = 'new-animal-tab-av';
+    av.textContent = animal.emoji || (animal.species === 'cat' ? '🐱' : '🐶');
+    tab.appendChild(av);
+    tab.appendChild(document.createTextNode(animal.name));
+    container.appendChild(tab);
+  });
+  const addTab = document.createElement('button');
+  addTab.className = 'new-animal-tab add-tab';
+  addTab.onclick = openAddAnimal;
+  addTab.textContent = '+ Ajouter';
+  container.appendChild(addTab);
+}
+
+function selectAnimal(animalId) {
+  selectedAnimalId = animalId;
+  renderAnimalTabs();
+  renderDashboardWidgets(animalId);
+}
+
+function renderDashboardWidgets(animalId) {
+  const animal = state.animals.find(function(a) { return a.id === animalId; });
+  if (!animal) return;
+  const widgets = document.getElementById('dash-animal-widgets');
+  widgets.style.display = 'flex';
+
+  const isChien = animal.species === 'dog' || animal.species === 'chien';
+
+  // ① HERO
+  document.getElementById('hero-name').textContent = animal.name;
+  const ageStr = calcAge(animal.birth);
+  document.getElementById('hero-sub').textContent = (animal.breed || '') + (animal.breed && ageStr ? ' · ' : '') + ageStr;
+  const heroBadgeEl = document.getElementById('hero-badge');
+  heroBadgeEl.textContent = (getAnimalTreatStatus(animalId) === 'red' ? '⚠️ ' : getAnimalTreatStatus(animalId) === 'orange' ? '⏰ ' : '✅ ') + getHeroBadge(animalId);
+  document.getElementById('hero-avatar').textContent = animal.emoji || (isChien ? '🐶' : '🐱');
+
+  // Pastille notif
+  const hasUrgent = state.treatments.some(function(t) { return t.animalId === animalId && getDaysUntil(t.nextDate) < 0; });
+  const notifDot = document.getElementById('notif-dot');
+  if (notifDot) notifDot.classList.toggle('visible', hasUrgent);
+
+  // ② RAPPELS
+  renderRappelsDash(animalId);
+
+  // ③ BALADE (chiens uniquement)
+  const baladeContainer = document.getElementById('balade-widget-container');
+  if (baladeContainer) {
+    baladeContainer.style.display = isChien ? 'flex' : 'none';
+    if (isChien) renderBaladeDashWidget(animalId);
+  }
+
+  // ④ LIEUX PREVIEW
+  renderLieuxPreview();
+
+  // ⑤ CROQUETTES
+  renderCroqWidget(animalId);
+
+  // ⑥ POIDS
+  renderPoidsWidget(animalId);
+
+  // ⑦ CONSEIL
+  document.getElementById('conseil-text').textContent = getConseilDuJour(animal);
+
+  // ⑧ BADGES
+  renderBadgesDash();
+
+  // BLOG PREVIEW
+  const blogPreview = document.getElementById('blog-preview');
+  if (blogPreview) blogPreview.style.display = allArticles.length ? 'block' : 'none';
+}
+
+function renderRappelsDash(animalId) {
+  const row = document.getElementById('rappels-row');
+  if (!row) return;
+  row.innerHTML = '';
+  const TYPES = [
+    { key: 'vaccin', icon: '💉', label: 'Vaccin' },
+    { key: 'vermifuge', icon: '🪱', label: 'Vermifuge' },
+    { key: 'antipuces', icon: '🦟', label: 'Anti-puces' },
+  ];
+  TYPES.forEach(function(type) {
+    const treat = state.treatments.find(function(t) { return t.animalId === animalId && t.type === type.key; });
+    const item = document.createElement('div');
+    if (!treat) {
+      item.className = 'new-rappel-item empty';
+      const icon = document.createElement('div'); icon.className = 'new-rappel-icon'; icon.textContent = type.icon;
+      const name = document.createElement('div'); name.className = 'new-rappel-name'; name.textContent = type.label;
+      const status = document.createElement('div'); status.className = 'new-rappel-status'; status.textContent = 'Non configuré';
+      item.appendChild(icon); item.appendChild(name); item.appendChild(status);
+      item.onclick = function() { openSoins(animalId); };
+    } else {
+      const days = getDaysUntil(treat.nextDate);
+      const st = days === null ? 'ok' : days < 0 ? 'late' : days <= 14 ? 'soon' : 'ok';
+      item.className = 'new-rappel-item ' + st;
+      const icon = document.createElement('div'); icon.className = 'new-rappel-icon'; icon.textContent = type.icon;
+      const name = document.createElement('div'); name.className = 'new-rappel-name'; name.textContent = type.label;
+      const date = document.createElement('div'); date.className = 'new-rappel-date';
+      date.textContent = treat.nextDate ? new Date(treat.nextDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '';
+      const status = document.createElement('div'); status.className = 'new-rappel-status';
+      status.textContent = days === null ? 'OK' : days < 0 ? (Math.abs(days) + 'j dépassé') : days === 0 ? "Aujourd'hui" : days <= 14 ? ('Dans ' + days + 'j') : 'À jour';
+      item.appendChild(icon); item.appendChild(name); item.appendChild(date); item.appendChild(status);
+      item.onclick = function() { openSoins(animalId); };
+    }
+    row.appendChild(item);
   });
 }
+
+function renderBaladeDashWidget(animalId) {
+  const enCours = state.baladeEnCours && state.baladeEnCours.animalId === animalId;
+  const ctaEl = document.getElementById('balade-cta');
+  const activeEl = document.getElementById('balade-active-widget');
+  if (ctaEl) ctaEl.style.display = enCours ? 'none' : 'flex';
+  if (activeEl) activeEl.style.display = enCours ? 'block' : 'none';
+
+  // Chrono live dans le widget
+  if (enCours) {
+    const elapsed = Date.now() - state.baladeEnCours.startTime;
+    const timerEl = document.getElementById('balade-timer-widget');
+    if (timerEl) timerEl.textContent = formatChrono(elapsed);
+    if (state.baladeInterval) clearInterval(state.baladeInterval);
+    state.baladeInterval = setInterval(function() {
+      const el = document.getElementById('balade-timer-widget');
+      if (el) el.textContent = formatChrono(Date.now() - state.baladeEnCours.startTime);
+    }, 1000);
+  }
+
+  // Dernière balade
+  const derniere = getDerniereBaladesAid(animalId);
+  const lastTextEl = document.getElementById('balade-last-text');
+  if (lastTextEl) {
+    lastTextEl.textContent = derniere
+      ? 'Dernière : ' + formatDateShort(derniere.date) + (derniere.dureeMin ? ' · ' + derniere.dureeMin + ' min' : '')
+      : 'Aucune balade enregistrée';
+  }
+
+  // Historique (3 dernières)
+  const histEl = document.getElementById('balade-history-list');
+  if (histEl) {
+    histEl.innerHTML = '';
+    const recent = state.balades.filter(function(b) { return b.animalId === animalId; })
+      .sort(function(a, b) { return new Date(b.date) - new Date(a.date); }).slice(0, 3);
+    if (!recent.length) {
+      histEl.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0">Aucune balade encore</div>';
+    } else {
+      recent.forEach(function(b) {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)';
+        const d = document.createElement('div');
+        d.style.flex = '1';
+        const dt = document.createElement('div');
+        dt.style.cssText = 'font-size:12px;font-weight:600;color:var(--text)';
+        dt.textContent = formatDateShort(b.date);
+        const sub = document.createElement('div');
+        sub.style.cssText = 'font-size:10px;color:var(--muted)';
+        sub.textContent = (b.dureeMin ? b.dureeMin + ' min' : '') + (b.distanceKm ? ' · ' + b.distanceKm + ' km' : '');
+        d.appendChild(dt); d.appendChild(sub);
+        row.appendChild(d);
+        if (b.lieu) {
+          const lieu = document.createElement('div');
+          lieu.style.cssText = 'font-size:10px;color:var(--muted)';
+          lieu.textContent = b.lieu;
+          row.appendChild(lieu);
+        }
+        histEl.appendChild(row);
+      });
+    }
+  }
+
+  // Objectif
+  const baladesWeek = getBaladesSemaine(animalId);
+  const objectif = getObjectifBalade(animalId);
+  const pct = Math.min(100, Math.round((baladesWeek.length / objectif) * 100));
+  const objText = document.getElementById('balade-objectif-text');
+  const objBar = document.getElementById('balade-objectif-bar');
+  if (objText) objText.textContent = baladesWeek.length + '/' + objectif + ' jours';
+  if (objBar) objBar.style.width = pct + '%';
+}
+
+function renderLieuxPreview() {
+  const el = document.getElementById('lieux-preview-list');
+  if (!el) return;
+  el.innerHTML = '';
+  const LIEU_CFG = {
+    resto: { icon: '🍽️' }, hotel: { icon: '🏨' }, parc: { icon: '🌳' },
+    veto: { icon: '🩺' }, shop: { icon: '🛍️' }
+  };
+  const preview = allLieux.filter(function(l) { return l.statut === 'valide'; }).slice(0, 2);
+  if (!preview.length) {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'font-size:12px;color:var(--muted);text-align:center;padding:8px 0';
+    empty.textContent = 'Aucun lieu pour le moment';
+    el.appendChild(empty);
+    return;
+  }
+  preview.forEach(function(lieu) {
+    const cfg = LIEU_CFG[lieu.categorie] || { icon: '📍' };
+    const item = document.createElement('div');
+    item.className = 'new-lieu-item';
+    item.onclick = function() { goToTab('lieux'); };
+    const emoji = document.createElement('div');
+    emoji.className = 'new-lieu-emoji';
+    emoji.textContent = cfg.icon;
+    const info = document.createElement('div');
+    const name = document.createElement('div');
+    name.className = 'new-lieu-name';
+    name.textContent = lieu.nom;
+    const sub = document.createElement('div');
+    sub.className = 'new-lieu-sub';
+    sub.textContent = lieu.ville + (lieu.categorie ? ' · ' + lieu.categorie : '');
+    info.appendChild(name); info.appendChild(sub);
+    item.appendChild(emoji); item.appendChild(info);
+    el.appendChild(item);
+  });
+}
+
+function renderCroqWidget(animalId) {
+  const croquettes = state.croquettes[animalId] || [];
+  const croqWidget = document.getElementById('croq-widget');
+  const croqEmpty = document.getElementById('croq-empty-widget');
+  if (!croqWidget || !croqEmpty) return;
+  if (!croquettes.length) {
+    croqWidget.style.display = 'none';
+    croqEmpty.style.display = 'block';
+    return;
+  }
+  const last = croquettes[croquettes.length - 1];
+  const jours = getJoursRestants(last);
+  const poidsKg = last.poidsKg || 0;
+  const consoGJour = last.consoGJour || 0;
+  const joursTotal = (poidsKg > 0 && consoGJour > 0) ? Math.round((poidsKg * 1000) / consoGJour) : 30;
+  const pct = jours !== null ? Math.max(0, Math.min(100, Math.round((jours / joursTotal) * 100))) : 50;
+  const barColor = pct <= 10 ? 'var(--red)' : pct <= 30 ? 'var(--orange)' : 'var(--green)';
+
+  croqWidget.style.display = 'block';
+  croqEmpty.style.display = 'none';
+
+  const titleEl = document.getElementById('croq-title');
+  const subEl = document.getElementById('croq-sub');
+  const fillEl = document.getElementById('croq-fill');
+  const btnEl = document.getElementById('croq-btn');
+
+  if (titleEl) titleEl.textContent = last.brand + (last.product ? ' — ' + last.product : '');
+  if (subEl) subEl.textContent = jours !== null ? (jours <= 0 ? 'Stock épuisé !' : '~' + jours + ' jours restants') : 'Suivi actif';
+  if (fillEl) { fillEl.style.width = pct + '%'; fillEl.style.background = barColor; }
+  if (btnEl) {
+    if (last.lienCommande) {
+      btnEl.textContent = 'Commander';
+      btnEl.onclick = function() { window.open(last.lienCommande, '_blank'); };
+    } else {
+      btnEl.textContent = 'Voir';
+      btnEl.onclick = function() { openCroquettes(animalId); };
+    }
+  }
+}
+
+function renderPoidsWidget(animalId) {
+  const weights = state.weights[animalId] || [];
+  const widget = document.getElementById('poids-widget');
+  if (!widget) return;
+  if (!weights.length) { widget.style.display = 'none'; return; }
+  widget.style.display = 'block';
+
+  const sorted = [...weights].sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+  const last = sorted[sorted.length - 1];
+  document.getElementById('poids-val').textContent = last.value;
+  document.getElementById('poids-date').textContent = formatDateShort(last.date);
+
+  // Badge variation
+  const badgeEl = document.getElementById('poids-badge');
+  if (sorted.length >= 2) {
+    const prev = sorted[sorted.length - 2];
+    const diff = (last.value - prev.value).toFixed(1);
+    badgeEl.style.display = 'block';
+    badgeEl.className = 'new-poids-badge ' + (diff > 0 ? 'up' : 'down');
+    badgeEl.textContent = (diff > 0 ? '+' : '') + diff + ' kg';
+    // Alerte si variation > 10%
+    const alertEl = document.getElementById('poids-alert');
+    if (alertEl) alertEl.style.display = Math.abs(diff / prev.value) > 0.1 ? 'block' : 'none';
+  } else {
+    badgeEl.style.display = 'none';
+  }
+
+  // Mini chart
+  const chartEl = document.getElementById('poids-mini-chart');
+  if (chartEl) {
+    chartEl.innerHTML = '';
+    const recent = sorted.slice(-6);
+    const max = Math.max(...recent.map(function(w) { return w.value; }));
+    const min = Math.min(...recent.map(function(w) { return w.value; }));
+    const range = max - min || 1;
+    recent.forEach(function(w, i) {
+      const bar = document.createElement('div');
+      bar.className = 'new-mini-bar' + (i === recent.length - 1 ? ' current' : '');
+      const pct = 20 + Math.round(((w.value - min) / range) * 75);
+      bar.style.height = pct + '%';
+      chartEl.appendChild(bar);
+    });
+  }
+}
+
+function renderBadgesDash() {
+  const row = document.getElementById('badges-row-dash');
+  if (!row) return;
+  row.innerHTML = '';
+  const earned = state.badges || [];
+  BADGES_CONFIG.forEach(function(badge) {
+    const isEarned = earned.includes(badge.id);
+    const item = document.createElement('div');
+    item.className = 'new-badge-item';
+    const circle = document.createElement('div');
+    circle.className = 'new-badge-circle ' + (isEarned ? 'earned' : 'locked');
+    circle.textContent = badge.emoji;
+    const name = document.createElement('div');
+    name.className = 'new-badge-name';
+    name.textContent = badge.nom;
+    item.appendChild(circle); item.appendChild(name);
+    item.onclick = function() { showBadgeDetail(badge, isEarned); };
+    row.appendChild(item);
+  });
+}
+
+function checkNotifications() {
+  openSoins(selectedAnimalId);
+}
+
+
 function createDashCard(icon, title, sub, badge, onClick) {
   const card = document.createElement('div');
   card.className = 'dash-card';
