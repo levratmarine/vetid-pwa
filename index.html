@@ -636,7 +636,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <div class="new-balade-cta" id="balade-cta" onclick="demarrerBalade(selectedAnimalId)">
           <div class="new-balade-icon">🐾</div>
           <div class="new-balade-text">
-            <h3>Logger une balade</h3>
+            <h3>Enregistrer une balade</h3>
             <p id="balade-last-text">Aucune balade enregistrée</p>
           </div>
           <div style="margin-left:auto;font-size:20px;opacity:.7">›</div>
@@ -4099,10 +4099,18 @@ function getFallbackArticles() {
 async function loadBlog() {
   document.getElementById('blog-list').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Chargement…</div>';
   allArticles = await fetchNotionArticles();
+  // Trier par date décroissante (plus récent en premier)
+  allArticles.sort(function(a, b) {
+    return new Date(b.date || b.created || 0) - new Date(a.date || a.created || 0);
+  });
   renderBlog(allArticles);
 }
 async function loadBlogPreview() {
   allArticles = await fetchNotionArticles();
+  // Trier par date décroissante (plus récent en premier)
+  allArticles.sort(function(a, b) {
+    return new Date(b.date || b.created || 0) - new Date(a.date || a.created || 0);
+  });
   const preview = document.getElementById('blog-preview-list');
   const catColors = { 'Santé': 'var(--teal-light)', 'Nutrition': '#FAECE7', 'Comportement': '#EAF3DE', 'Conseils': '#fef3c7' };
   preview.innerHTML = allArticles.slice(0, 5).map((a, i) =>
