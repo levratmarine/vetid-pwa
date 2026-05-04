@@ -9,8 +9,8 @@
 <meta name="theme-color" content="#2A9D8F">
 <link rel="manifest" href="/manifest.json">
 <title>VetID — Santé animale</title>
-<link rel="apple-touch-icon" href="/LOGO - PWA.png">
-<link rel="icon" href="/LOGO - PWA.png"><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -554,11 +554,11 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur ••• en bas à droite</strong><div class="tuto-visual">⬤ ⬤ ⬤ Barre du bas</div></div></div>
       <div class="tuto-step"><div class="tuto-num">3</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Partager" ↑</strong></div></div>
       <div class="tuto-step"><div class="tuto-num">4</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">"Plus" → "Sur l'écran d'accueil"</strong><div class="tuto-visual">⊕ Sur l'écran d'accueil</div></div></div>
-      <div class="tuto-step"><div class="tuto-num">5</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter"</strong><div class="tuto-visual">✅ L'icône apparaît !</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">5</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Appuyez sur "Ajouter"</strong><div class="tuto-visual">✅ L'icône 🐾 apparaît !</div></div></div>
     </div>
     <div class="os-content" id="os-android">
       <div class="tuto-step"><div class="tuto-num">1</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">Ouvrez dans Chrome</strong></div></div>
-      <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">⋮ → "Ajouter à l'écran d'accueil"</strong><div class="tuto-visual">📲 L'icône s'installe</div></div></div>
+      <div class="tuto-step"><div class="tuto-num">2</div><div><strong style="font-size:15px;color:var(--text);display:block;margin-bottom:4px">⋮ → "Ajouter à l'écran d'accueil"</strong><div class="tuto-visual">📲 L'icône 🐾 s'installe</div></div></div>
     </div>
     <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
       <button class="btn-primary" onclick="doneTuto()">J'ai installé VetID ✓</button>
@@ -636,7 +636,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <div class="new-balade-cta" id="balade-cta" onclick="demarrerBalade(selectedAnimalId)">
           <div class="new-balade-icon">🐾</div>
           <div class="new-balade-text">
-            <h3>Démarrer une balade</h3>
+            <h3>Logger une balade</h3>
             <p id="balade-last-text">Aucune balade enregistrée</p>
           </div>
           <div style="margin-left:auto;font-size:20px;opacity:.7">›</div>
@@ -709,6 +709,9 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       <div class="new-conseil-card">
         <div class="new-conseil-tag">✨ Conseil du jour</div>
         <div class="new-conseil-text" id="conseil-text">Complétez le profil de votre animal pour recevoir des conseils personnalisés.</div>
+        <div id="conseil-article-link" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid #DDD6FE">
+          <span id="conseil-article-btn" style="font-size:12px;font-weight:600;color:#534AB7;cursor:pointer">📖 Lire l'article associé →</span>
+        </div>
       </div>
 
       <!-- ⑧ BADGES -->
@@ -1706,12 +1709,53 @@ function toggleAnimalDetail(aid) {
 let selectedAnimalId = null;
 
 const CONSEILS_JOUR = [
-  { espece: 'cat', ageMin: 0, ageMax: 1, texte: "Chaton en croissance : des croquettes riches en protéines et un accès permanent à l'eau fraîche sont essentiels." },
-  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Chat adulte : une pesée mensuelle permet de détecter une prise de poids avant qu'elle devienne problématique." },
-  { espece: 'cat', ageMin: 7, ageMax: 99, texte: "Chat senior : à partir de 7 ans, un bilan vétérinaire annuel est recommandé même sans symptômes visibles." },
-  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Chiot : la socialisation avant 3 mois est cruciale pour son équilibre comportemental adulte." },
-  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "Chien adulte : l'activité physique régulière prévient l'obésité et maintient une bonne santé articulaire." },
-  { espece: 'dog', ageMin: 7, ageMax: 99, texte: "Chien senior : réduisez l'intensité des exercices et surveillez les signes de raideur au lever." },
+  // ── CHATON (0-1 an) ──
+  { espece: 'cat', ageMin: 0, ageMax: 1, texte: "Chaton en croissance : des croquettes riches en protéines sont indispensables. Privilégiez une alimentation spécifique Junior.", articleTag: 'Nutrition' },
+  { espece: 'cat', ageMin: 0, ageMax: 1, texte: "La socialisation du chaton entre 2 et 7 semaines est déterminante. Plus il est exposé à des humains, bruits et animaux, plus il sera équilibré adulte.", articleTag: 'Comportement' },
+  { espece: 'cat', ageMin: 0, ageMax: 1, texte: "Un chaton doit être vacciné dès 8 semaines. Le calendrier vaccinal est crucial pour le protéger dès ses premières semaines.", articleTag: 'Santé' },
+  { espece: 'cat', ageMin: 0, ageMax: 1, texte: "Accès permanent à l'eau fraîche dès le début. Les chats sont peu enclins à boire — une fontaine à eau peut considérablement augmenter leur consommation.", articleTag: 'Santé' },
+  { espece: 'cat', ageMin: 0, ageMax: 1, texte: "Le vermifuge doit commencer dès 3 semaines et se répéter toutes les 2 semaines jusqu'à 2 mois, puis tous les mois jusqu'à 6 mois.", articleTag: 'Santé' },
+  { espece: 'cat', ageMin: 0, ageMax: 1, texte: "Habituez votre chaton à la manipulation dès le début : pattes, oreilles, bouche. Cela facilitera enormément les visites chez le vétérinaire.", articleTag: 'Conseils' },
+
+  // ── CHAT ADULTE (1-7 ans) ──
+  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Une pesée mensuelle permet de détecter une prise de poids avant qu'elle ne devienne problématique. L'obésité touche 40% des chats domestiques.", articleTag: 'Santé' },
+  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Les chats d'intérieur ont besoin de stimulation mentale : jouets de chasse, arbres à chat, fenêtres avec vue. L'ennui peut générer des troubles du comportement.", articleTag: 'Comportement' },
+  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Brossez les dents de votre chat 2 à 3 fois par semaine. Les maladies dentaires sont la cause la plus fréquente de douleur chronique chez le chat adulte.", articleTag: 'Santé' },
+  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Un chat adulte dort entre 12 et 16 heures par jour. C'est normal — mais surveillez tout changement brutal dans ses habitudes de sommeil.", articleTag: 'Conseils' },
+  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Préférez plusieurs petits repas à un grand repas unique. Le chat est naturellement fait pour chasser et manger de petites proies fréquemment.", articleTag: 'Nutrition' },
+  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Pensez à la litière : changez-la au moins 1 fois par semaine et gardez-en une de plus que le nombre de chats. Une litière négligée est source de stress.", articleTag: 'Conseils' },
+  { espece: 'cat', ageMin: 1, ageMax: 7, texte: "Le rappel vaccinal annuel est essentiel même pour un chat vivant uniquement en intérieur. Certains virus se transmettent sans contact direct.", articleTag: 'Santé' },
+
+  // ── CHAT SENIOR (7+ ans) ──
+  { espece: 'cat', ageMin: 7, ageMax: 99, texte: "À partir de 7 ans, un bilan vétérinaire annuel est recommandé même sans symptôme. La détection précoce change tout pour les maladies rénales ou thyroïdiennes.", articleTag: 'Santé' },
+  { espece: 'cat', ageMin: 7, ageMax: 99, texte: "Les chats seniors ont tendance à moins boire. Une alimentation humide (pâtée) peut compenser et protéger les reins, souvent fragilisés avec l'âge.", articleTag: 'Nutrition' },
+  { espece: 'cat', ageMin: 7, ageMax: 99, texte: "Surveillance du poids senior : une perte de poids progressive peut signaler une hyperthyroïdie, très fréquente chez les chats de plus de 10 ans.", articleTag: 'Santé' },
+  { espece: 'cat', ageMin: 7, ageMax: 99, texte: "Facilitez l'accès aux zones favorites : des marches ou rampes permettent à un chat arthritique de continuer ses routines sans souffrir.", articleTag: 'Conseils' },
+  { espece: 'cat', ageMin: 7, ageMax: 99, texte: "Un chat senior qui miaule davantage la nuit peut souffrir d'hypertension ou de déclin cognitif. Un bilan sanguin peut identifier la cause rapidement.", articleTag: 'Santé' },
+
+  // ── CHIOT (0-1 an) ──
+  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "La socialisation avant 3 mois est cruciale. Exposez votre chiot à un maximum de situations, personnes et animaux différents dans un cadre sécurisé.", articleTag: 'Comportement' },
+  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Ne laissez pas un chiot seul trop longtemps. Sa capacité à rester seul se construit progressivement — commencez par quelques minutes et augmentez graduellement.", articleTag: 'Comportement' },
+  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Alimentation chiot : 3 à 4 repas par jour jusqu'à 6 mois, puis 2 repas. Les croquettes Junior sont formulées pour soutenir une croissance rapide.", articleTag: 'Nutrition' },
+  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Le calendrier vaccinal du chiot est dense : primo-vaccination à 8-12 semaines, rappel à 16 semaines. Enregistrez chaque injection dans VetId.", articleTag: 'Santé' },
+  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Les balades du chiot doivent rester courtes avant 6 mois. Une règle simple : 5 minutes par mois d'âge, deux fois par jour maximum pour protéger les articulations.", articleTag: 'Conseils' },
+  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Habituez votre chiot à rester seul dès les premières semaines. Partir sans cérémonie et revenir calmement aide à prévenir l'anxiété de séparation.", articleTag: 'Comportement' },
+
+  // ── CHIEN ADULTE (1-7 ans) ──
+  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "L'activité physique régulière prévient l'obésité et maintient une bonne santé articulaire. Adaptez la durée à la race — un Border Collie a des besoins très différents d'un Bouledogue.", articleTag: 'Conseils' },
+  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "L'hygiène dentaire est souvent négligée chez le chien. Les maladies dentaires touchent 80% des chiens de plus de 3 ans et peuvent affecter le coeur et les reins.", articleTag: 'Santé' },
+  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "Variez les activités pour stimuler mentalement votre chien. Le jeu de flair, les parcours d'agility ou les jeux de recherche fatiguent autant qu'une longue balade.", articleTag: 'Comportement' },
+  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "Contrôlez le poids de votre chien régulièrement. On doit sentir ses côtes en appuyant légèrement — si on ne les sent pas, il est en surpoids.", articleTag: 'Nutrition' },
+  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "Pensez à la protection anti-tiques de mars à novembre. Les tiques peuvent transmettre la piroplasmose en moins de 24 heures.", articleTag: 'Santé' },
+  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "Un chien adulte a besoin de 2 repas par jour à horaires fixes. La régularité des repas favorise une bonne digestion et réduit les comportements alimentaires anxieux.", articleTag: 'Nutrition' },
+  { espece: 'dog', ageMin: 1, ageMax: 7, texte: "Nettoyez les oreilles de votre chien une fois par semaine, surtout si elles sont tombantes. L'humidité accumulée favorise les otites chroniques.", articleTag: 'Santé' },
+
+  // ── CHIEN SENIOR (7+ ans) ──
+  { espece: 'dog', ageMin: 7, ageMax: 99, texte: "Réduisez l'intensité des exercices mais maintenez l'activité quotidienne. Une marche douce régulière vaut mieux qu'une longue balade épisodique pour les articulations.", articleTag: 'Conseils' },
+  { espece: 'dog', ageMin: 7, ageMax: 99, texte: "Les chiens seniors dorment plus — c'est normal. En revanche, une désorientation ou des changements de personnalité peuvent signaler un syndrome cognitif, consultez votre véto.", articleTag: 'Santé' },
+  { espece: 'dog', ageMin: 7, ageMax: 99, texte: "Passez à une alimentation Senior adaptée. Moins calorique, enrichie en oméga-3 et glucosamine, elle soutient les articulations et la fonction rénale.", articleTag: 'Nutrition' },
+  { espece: 'dog', ageMin: 7, ageMax: 99, texte: "Un bilan sanguin annuel est recommandé dès 7 ans. Il permet de détecter précocement des problèmes rénaux, hépatiques ou thyroïdiens souvent silencieux.", articleTag: 'Santé' },
+  { espece: 'dog', ageMin: 7, ageMax: 99, texte: "Vérifiez régulièrement la présence de grosseurs sur le corps de votre chien senior. Les tumeurs cutanées sont plus fréquentes avec l'âge — plus tôt détectées, mieux traitées.", articleTag: 'Santé' },
 ];
 
 function getDaysUntil(dateStr) {
@@ -1720,12 +1764,14 @@ function getDaysUntil(dateStr) {
 }
 
 function getConseilDuJour(animal) {
-  if (!animal || !animal.birth) return "Complétez le profil de votre animal pour recevoir des conseils personnalisés.";
+  if (!animal || !animal.birth) return { texte: "Complétez le profil de votre animal pour recevoir des conseils personnalisés.", articleTag: null };
   const ageAns = Math.floor((Date.now() - new Date(animal.birth)) / (365.25 * 86400000));
   const sp = animal.species === 'chien' ? 'dog' : (animal.species === 'chat' ? 'cat' : animal.species);
   const matching = CONSEILS_JOUR.filter(function(c) { return c.espece === sp && ageAns >= c.ageMin && ageAns < c.ageMax; });
-  if (!matching.length) return "Prenez soin de votre compagnon au quotidien — chaque attention compte !";
-  return matching[Math.floor(Date.now() / 86400000) % matching.length].texte;
+  if (!matching.length) return { texte: "Prenez soin de votre compagnon au quotidien — chaque attention compte !", articleTag: null };
+  // Rotation quotidienne sur tous les conseils du profil
+  const idx = Math.floor(Date.now() / 86400000) % matching.length;
+  return matching[idx];
 }
 
 function getHeroBadge(animalId) {
@@ -1818,7 +1864,7 @@ function renderDashboardWidgets(animalId) {
   renderPoidsWidget(animalId);
 
   // ⑦ CONSEIL
-  document.getElementById('conseil-text').textContent = getConseilDuJour(animal);
+  renderConseilWidget(animal);
 
   // ⑧ BADGES
   renderBadgesDash();
@@ -1829,6 +1875,32 @@ function renderDashboardWidgets(animalId) {
   // BLOG PREVIEW
   const blogPreview = document.getElementById('blog-preview');
   if (blogPreview) blogPreview.style.display = allArticles.length ? 'block' : 'none';
+}
+
+function renderConseilWidget(animal) {
+  const conseil = getConseilDuJour(animal);
+  const texteEl = document.getElementById('conseil-text');
+  const linkEl = document.getElementById('conseil-article-link');
+  const btnEl = document.getElementById('conseil-article-btn');
+
+  if (texteEl) texteEl.textContent = conseil.texte;
+
+  // Chercher un article lié dans le blog
+  if (linkEl && btnEl && conseil.articleTag && allArticles.length) {
+    const article = allArticles.find(function(a) {
+      return a.category === conseil.articleTag;
+    });
+    if (article) {
+      const idx = allArticles.indexOf(article);
+      linkEl.style.display = 'block';
+      btnEl.textContent = '📖 ' + article.title + ' →';
+      btnEl.onclick = function() { openArticle(idx); };
+    } else {
+      linkEl.style.display = 'none';
+    }
+  } else if (linkEl) {
+    linkEl.style.display = 'none';
+  }
 }
 
 function renderStatsBand(animalId) {
@@ -4033,8 +4105,7 @@ async function loadBlogPreview() {
   allArticles = await fetchNotionArticles();
   const preview = document.getElementById('blog-preview-list');
   const catColors = { 'Santé': 'var(--teal-light)', 'Nutrition': '#FAECE7', 'Comportement': '#EAF3DE', 'Conseils': '#fef3c7' };
-  preview.innerHTML = allArticles const sorted = [...allArticles].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-preview.innerHTML = sorted.slice(0, 5).map((a, i) => 
+  preview.innerHTML = allArticles.slice(0, 5).map((a, i) =>
     '<div class="blog-preview-card" onclick="openArticle(' + i + ')">'
     + '<div class="blog-preview-img" style="background:' + (catColors[a.category] || 'var(--teal-light)') + '">' + a.emoji + '</div>'
     + '<div class="blog-preview-info"><div style="font-size:9px;color:var(--teal);font-weight:600">' + (a.category || '').toUpperCase() + '</div>'
@@ -4048,7 +4119,6 @@ function renderBlog(articles) {
   const catColors = { 'Santé': 'var(--teal-light)', 'Nutrition': '#FAECE7', 'Comportement': '#EAF3DE', 'Conseils': '#fef3c7' };
   const list = document.getElementById('blog-list');
   if (!articles.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Aucun article</div>'; return; }
-  articles = [...articles].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
   list.innerHTML = articles.map((a) => {
     const idx = allArticles.indexOf(a);
     return '<div class="blog-article" onclick="openArticle(' + idx + ')">'
