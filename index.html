@@ -4033,7 +4033,8 @@ async function loadBlogPreview() {
   allArticles = await fetchNotionArticles();
   const preview = document.getElementById('blog-preview-list');
   const catColors = { 'Santé': 'var(--teal-light)', 'Nutrition': '#FAECE7', 'Comportement': '#EAF3DE', 'Conseils': '#fef3c7' };
-  preview.innerHTML = allArticles.slice(0, 5).map((a, i) =>
+  preview.innerHTML = allArticles const sorted = [...allArticles].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+preview.innerHTML = sorted.slice(0, 5).map((a, i) => 
     '<div class="blog-preview-card" onclick="openArticle(' + i + ')">'
     + '<div class="blog-preview-img" style="background:' + (catColors[a.category] || 'var(--teal-light)') + '">' + a.emoji + '</div>'
     + '<div class="blog-preview-info"><div style="font-size:9px;color:var(--teal);font-weight:600">' + (a.category || '').toUpperCase() + '</div>'
@@ -4047,6 +4048,7 @@ function renderBlog(articles) {
   const catColors = { 'Santé': 'var(--teal-light)', 'Nutrition': '#FAECE7', 'Comportement': '#EAF3DE', 'Conseils': '#fef3c7' };
   const list = document.getElementById('blog-list');
   if (!articles.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Aucun article</div>'; return; }
+  articles = [...articles].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
   list.innerHTML = articles.map((a) => {
     const idx = allArticles.indexOf(a);
     return '<div class="blog-article" onclick="openArticle(' + idx + ')">'
