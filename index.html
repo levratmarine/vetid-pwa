@@ -2,204 +2,192 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="VetID">
+<meta name="theme-color" content="#2A9D8F">
+<link rel="manifest" href="/manifest.json">
 <title>VetID — Prototype V0</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:#f0f0ee;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:32px 16px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
 :root{
   --teal:#2A9D8F;--teal-l:#E1F5EE;--teal-m:#1D9E75;--teal-d:#0F6E56;
-  --t:#1a1a1a;--tm:#888;--bg:#fff;--bg2:#f7f7f5;--bd:rgba(0,0,0,.1);--bds:rgba(0,0,0,.2);
-  --r:14px;--warn-bg:#FAEEDA;--warn-t:#854F0B;--ok-bg:#E1F5EE;--ok-t:#0F6E56;
+  --t:#1a1a2e;--tm:#6B7280;--bg:#F8F9FA;--white:#fff;--bd:#E5E7EB;
+  --warn-bg:#FAEEDA;--warn-t:#854F0B;--ok-bg:#E1F5EE;--ok-t:#0F6E56;
   --danger-bg:#FCEBEB;--danger-t:#A32D2D;--info-bg:#E6F1FB;--info-t:#185FA5;
+  --r:16px;
 }
-h1{font-size:15px;font-weight:500;color:#555;margin-bottom:20px;letter-spacing:.02em}
-.phone{width:340px;height:680px;background:var(--bg2);border-radius:40px;border:2px solid rgba(0,0,0,.12);overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.15)}
-.screen{width:100%;height:100%;display:none;flex-direction:column;overflow:hidden;background:var(--bg2)}
+html,body{height:100%;background:var(--bg);overflow:hidden}
+.screen{display:none;height:100vh;height:100dvh;flex-direction:column;overflow:hidden;background:var(--bg)}
 .screen.active{display:flex}
-.sb{display:flex;justify-content:space-between;padding:12px 22px 2px;font-size:11px;color:var(--tm);flex-shrink:0;font-weight:500}
-.body{flex:1;overflow-y:auto;padding-bottom:80px}
+.body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px}
 .body::-webkit-scrollbar{display:none}
-.tab{position:absolute;bottom:0;left:0;right:0;height:78px;background:var(--bg);border-top:0.5px solid var(--bd);display:flex;align-items:flex-start;padding-top:10px;z-index:10}
-.ti{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
-.ti i{font-size:22px;color:var(--tm)}
-.ti span{font-size:9px;color:var(--tm)}
-.ti.on i,.ti.on span{color:var(--teal)}
-.hdr{padding:10px 20px 12px;flex-shrink:0}
-.htitle{font-size:22px;font-weight:600;color:var(--t)}
-.hsub{font-size:13px;color:var(--tm);margin-top:2px}
-.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 16px 0;flex-shrink:0}
-.back{display:flex;align-items:center;gap:3px;font-size:14px;color:var(--teal);cursor:pointer}
-.card{background:var(--bg);border-radius:var(--r);border:0.5px solid var(--bd);margin:0 14px 10px;overflow:hidden}
-.ch{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;border-bottom:0.5px solid var(--bd)}
-.ct{font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.05em}
-.ca{font-size:12px;color:var(--teal);cursor:pointer}
-.row{display:flex;align-items:center;padding:11px 14px;border-bottom:0.5px solid var(--bd);gap:10px;cursor:pointer}
+.dash-header{background:var(--teal);padding:20px 20px 24px;color:#fff;flex-shrink:0}
+.page-header{background:var(--teal);padding:16px 20px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.page-title{font-size:18px;font-weight:600}
+.page-sub{font-size:13px;opacity:.8;margin-top:2px}
+.back-btn{font-size:24px;cursor:pointer;line-height:1;color:#fff}
+.bottom-nav{height:76px;background:var(--white);border-top:1px solid var(--bd);display:flex;align-items:flex-start;padding-top:10px;flex-shrink:0;position:sticky;bottom:0}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0}
+.nav-item i{font-size:24px;color:var(--tm)}
+.nav-item span{font-size:10px;color:var(--tm);font-weight:500}
+.nav-item.active i,.nav-item.active span{color:var(--teal)}
+.card{background:var(--white);border-radius:var(--r);border:1px solid var(--bd);margin:0 16px 12px;overflow:hidden}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 9px;border-bottom:1px solid var(--bd)}
+.card-title{font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.05em}
+.card-action{font-size:13px;color:var(--teal);cursor:pointer}
+.row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bd);gap:12px;cursor:pointer}
 .row:last-child{border-bottom:none}
-.ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .ri{flex:1}
 .rn{font-size:14px;font-weight:500;color:var(--t)}
 .rd{font-size:12px;color:var(--tm);margin-top:1px}
-.badge{font-size:11px;padding:3px 8px;border-radius:10px;font-weight:500;white-space:nowrap}
+.bdg{font-size:11px;padding:3px 9px;border-radius:9px;font-weight:500;white-space:nowrap}
 .bw{background:var(--warn-bg);color:var(--warn-t)}
 .bo{background:var(--ok-bg);color:var(--ok-t)}
-.bd2{background:var(--danger-bg);color:var(--danger-t)}
 .bi{background:var(--info-bg);color:var(--info-t)}
-.fab{position:absolute;bottom:88px;right:16px;width:46px;height:46px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;box-shadow:0 4px 12px rgba(42,157,143,.4)}
-.fab i{font-size:22px;color:#fff}
-.hero{margin:0 14px 12px;background:var(--teal);border-radius:var(--r);padding:18px;display:flex;align-items:center;gap:14px}
-.hav{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
-.hn{font-size:19px;font-weight:600;color:#fff}
-.hb{font-size:12px;color:rgba(255,255,255,.75);margin-top:2px}
-.hchip{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);border-radius:7px;padding:3px 8px;font-size:10px;color:#fff;margin-top:5px}
-.stat2{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 14px}
-.sc{background:var(--bg2);border-radius:10px;padding:11px}
-.sl{font-size:11px;color:var(--tm)}
-.sv{font-size:18px;font-weight:600;color:var(--t);margin-top:1px}
-.ss{font-size:11px;color:var(--tm);margin-top:1px}
-.chips{display:flex;gap:8px;padding:0 14px 12px;overflow-x:auto;flex-shrink:0}
+.chips{display:flex;gap:8px;padding:16px 16px 0;overflow-x:auto;flex-shrink:0}
 .chips::-webkit-scrollbar{display:none}
-.chip{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:18px;background:var(--bg);border:0.5px solid var(--bd);cursor:pointer;white-space:nowrap;font-size:12px;color:var(--tm);flex-shrink:0}
+.chip{display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;background:var(--white);border:1px solid var(--bd);cursor:pointer;white-space:nowrap;font-size:13px;color:var(--tm);flex-shrink:0}
 .chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
-.chip .av{width:20px;height:20px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:12px}
+.chip .av{width:22px;height:22px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:13px}
 .chip.on .av{background:rgba(255,255,255,.25)}
-.notifbar{background:var(--teal);margin:0 14px 10px;border-radius:11px;padding:10px 13px;display:flex;align-items:center;gap:9px}
-.notifbar i{color:#fff;font-size:18px}
+.notifbar{background:var(--teal);margin:12px 16px;border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px}
+.notifbar i{color:#fff;font-size:19px}
 .nbt{font-size:12px;color:#fff;flex:1}
-.nbt strong{display:block;font-weight:600}
-.je{padding:12px 14px;border-bottom:0.5px solid var(--bd);display:flex;gap:10px;cursor:pointer}
+.nbt strong{display:block;font-weight:600;font-size:13px}
+.je{padding:13px 16px;border-bottom:1px solid var(--bd);display:flex;gap:12px;cursor:pointer}
 .je:last-child{border-bottom:none}
-.jd{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:var(--bg2)}
+.jd{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--bg)}
 .jm{flex:1}
 .jt{font-size:14px;font-weight:500;color:var(--t)}
 .jn{font-size:12px;color:var(--tm);margin-top:1px}
 .jdate{font-size:11px;color:var(--tm);margin-top:3px}
-.jtag{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--teal);background:var(--teal-l);padding:2px 6px;border-radius:6px;margin-top:3px}
-.vr{display:flex;align-items:center;padding:11px 14px;border-bottom:0.5px solid var(--bd);gap:10px}
+.jtag{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--teal);background:var(--teal-l);padding:2px 7px;border-radius:6px;margin-top:3px}
+.hero{margin:16px 16px 12px;background:var(--teal);border-radius:var(--r);padding:20px;display:flex;align-items:center;gap:16px}
+.hav{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
+.hn{font-size:20px;font-weight:600;color:#fff}
+.hb{font-size:13px;color:rgba(255,255,255,.75);margin-top:2px}
+.hchip{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);border-radius:8px;padding:3px 9px;font-size:10px;color:#fff;margin-top:5px}
+.stat2{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px}
+.sc{background:var(--bg);border-radius:12px;padding:12px}
+.sl{font-size:11px;color:var(--tm)}
+.sv{font-size:19px;font-weight:600;color:var(--t);margin-top:2px}
+.ss{font-size:11px;color:var(--tm);margin-top:1px}
+.vr{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bd);gap:12px}
 .vr:last-child{border-bottom:none}
-.vdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.vdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .vi{flex:1}
 .vn{font-size:14px;font-weight:500;color:var(--t)}
 .vd{font-size:12px;color:var(--tm);margin-top:1px}
 .vnext{font-size:11px;color:var(--teal);margin-top:2px}
-.chart-area{height:72px;display:flex;align-items:flex-end;gap:7px}
+.chart-area{height:80px;display:flex;align-items:flex-end;gap:8px}
 .cbw{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
 .cb{width:100%;border-radius:4px 4px 0 0;background:var(--teal-l)}
 .cb.lat{background:var(--teal)}
 .clabel{font-size:10px;color:var(--tm)}
 .cval{font-size:10px;font-weight:500;color:var(--tm)}
-.blog-card{margin:0 14px 10px;background:var(--bg);border-radius:var(--r);border:0.5px solid var(--bd);overflow:hidden;cursor:pointer}
-.bimg{height:80px;background:linear-gradient(135deg,var(--teal-l),#9FE1CB);display:flex;align-items:center;justify-content:center;font-size:30px}
-.bbody{padding:10px 13px}
+.blog-card{margin:0 16px 12px;background:var(--white);border-radius:var(--r);border:1px solid var(--bd);overflow:hidden;cursor:pointer}
+.bimg{height:90px;background:linear-gradient(135deg,var(--teal-l),#9FE1CB);display:flex;align-items:center;justify-content:center;font-size:32px}
+.bbody{padding:12px 14px}
 .btag{font-size:10px;color:var(--teal);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-.bttl{font-size:13px;font-weight:500;color:var(--t);margin-top:2px;line-height:1.3}
-.blead{font-size:11px;color:var(--tm);margin-top:3px;line-height:1.4}
-.sec{font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.05em;padding:10px 18px 6px;flex-shrink:0}
-.ob{flex:1;display:flex;flex-direction:column;padding:18px 20px 24px;overflow-y:auto}
-.ob::-webkit-scrollbar{display:none}
-.obicon{width:56px;height:56px;background:var(--teal-l);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:16px}
-.obtitle{font-size:20px;font-weight:600;color:var(--t);line-height:1.2}
-.obsub{font-size:13px;color:var(--tm);margin-top:6px;line-height:1.5}
-.fl{margin-top:14px}
-.fl label{font-size:11px;color:var(--tm);font-weight:600;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:5px}
-.fi{width:100%;padding:10px 13px;border-radius:10px;border:0.5px solid var(--bd);background:var(--bg);font-size:14px;color:var(--t);font-family:inherit}
-.sppick{display:flex;gap:8px;margin-top:5px}
-.spb{flex:1;padding:10px;border-radius:11px;border:0.5px solid var(--bd);background:var(--bg);display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
+.bttl{font-size:14px;font-weight:500;color:var(--t);margin-top:3px;line-height:1.3}
+.blead{font-size:12px;color:var(--tm);margin-top:4px;line-height:1.4}
+.sec{font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.05em;padding:12px 20px 6px}
+.ra-card{margin:12px 16px;background:var(--white);border-radius:var(--r);border:1.5px solid var(--teal);padding:16px}
+.ra-top{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.ra-ico{font-size:28px}
+.ra-n{font-size:16px;font-weight:600;color:var(--t)}
+.ra-a{font-size:13px;color:var(--tm)}
+.ra-btns{display:flex;gap:8px}
+.ra-done{flex:1;padding:12px;background:var(--teal);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.ra-later{flex:1;padding:12px;background:var(--bg);color:var(--t);border:1px solid var(--bd);border-radius:12px;font-size:15px;cursor:pointer;font-family:inherit}
+.add-row{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--bd)}
+.add-row:last-child{border-bottom:none}
+.add-ico{width:36px;height:36px;border-radius:10px;background:var(--teal-l);display:flex;align-items:center;justify-content:center}
+.add-ico i{color:var(--teal);font-size:19px}
+.add-label{font-size:14px;color:var(--teal);font-weight:500}
+.pres-ph{width:40px;height:40px;border-radius:10px;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.locked{opacity:.38;pointer-events:none}
+.lock-wrap{position:relative;margin:0 16px 12px}
+.lock-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:5px;pointer-events:none}
+.lock-overlay span{font-size:11px;color:var(--tm);font-weight:500;background:rgba(248,249,250,.92);padding:3px 12px;border-radius:20px}
+.ob-wrap{flex:1;display:flex;flex-direction:column;padding:24px 20px 32px;overflow-y:auto}
+.ob-wrap::-webkit-scrollbar{display:none}
+.ob-icon{width:64px;height:64px;background:var(--teal-l);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:20px}
+.ob-title{font-size:22px;font-weight:600;color:var(--t);line-height:1.2}
+.ob-sub{font-size:14px;color:var(--tm);margin-top:8px;line-height:1.5}
+.fl{margin-top:16px}
+.fl label{font-size:12px;color:var(--tm);font-weight:600;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:6px}
+.fi{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--bd);background:var(--white);font-size:15px;color:var(--t);font-family:inherit}
+.sppick{display:flex;gap:10px;margin-top:6px}
+.spb{flex:1;padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--white);display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
 .spb.on{border-color:var(--teal);border-width:1.5px;background:var(--teal-l)}
-.spb span:first-child{font-size:24px}
-.spb span:last-child{font-size:12px;color:var(--tm)}
+.spb span:first-child{font-size:26px}
+.spb span:last-child{font-size:13px;color:var(--tm)}
 .spb.on span:last-child{color:var(--teal-d)}
-.aha{background:var(--teal-l);border-radius:11px;padding:12px 14px;margin-top:14px;display:flex;gap:10px;align-items:flex-start}
-.aha i{font-size:18px;color:var(--teal);flex-shrink:0;margin-top:1px}
-.aha p{font-size:12px;color:var(--teal-d);line-height:1.5}
-.pbtn{width:100%;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:13px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:18px}
-.steps{display:flex;gap:5px;justify-content:center;margin-top:14px}
-.step{height:4px;border-radius:2px;background:var(--bd)}
-.step.done{background:var(--teal)}
-.ra-card{margin:0 14px 10px;background:var(--bg);border-radius:var(--r);border:1.5px solid var(--teal);padding:14px}
-.ra-top{display:flex;align-items:center;gap:9px;margin-bottom:11px}
-.ra-ico{font-size:26px}
-.ra-n{font-size:15px;font-weight:600;color:var(--t)}
-.ra-a{font-size:12px;color:var(--tm)}
-.ra-btns{display:flex;gap:7px}
-.ra-done{flex:1;padding:10px;background:var(--teal);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
-.ra-later{flex:1;padding:10px;background:var(--bg2);color:var(--t);border:0.5px solid var(--bd);border-radius:10px;font-size:14px;cursor:pointer;font-family:inherit}
-.modal-bg{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:20}
-.modal{background:var(--bg);border-radius:20px 20px 0 0;padding:20px;width:100%;max-height:85%;overflow-y:auto}
-.modal::-webkit-scrollbar{display:none}
-.modal-handle{width:36px;height:4px;background:var(--bd);border-radius:2px;margin:0 auto 16px}
-.modal-title{font-size:17px;font-weight:600;color:var(--t);margin-bottom:16px}
+.aha{background:var(--teal-l);border-radius:12px;padding:14px;margin-top:16px;display:flex;gap:12px;align-items:flex-start}
+.aha i{font-size:19px;color:var(--teal);flex-shrink:0;margin-top:1px}
+.aha p{font-size:13px;color:var(--teal-d);line-height:1.5}
+.pbtn{width:100%;padding:15px;background:var(--teal);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:20px}
+.steps{display:flex;gap:6px;justify-content:center;margin-top:16px}
+.step{height:4px;border-radius:2px;background:var(--bd);width:24px}
+.step.done{background:var(--teal);width:40px}
 .mood-row{display:flex;gap:8px;margin-top:6px}
-.mood-btn{flex:1;padding:10px;border-radius:11px;border:0.5px solid var(--bd);background:var(--bg2);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-size:11px;color:var(--tm)}
+.mood-btn{flex:1;padding:11px 8px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-size:11px;color:var(--tm)}
 .mood-btn.on{border-color:var(--teal);border-width:1.5px;background:var(--teal-l);color:var(--teal-d)}
-.mood-btn span:first-child{font-size:22px}
-.pres-img-placeholder{width:38px;height:38px;border-radius:9px;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.locked{opacity:.4;pointer-events:none}
-.lock-wrap{position:relative;margin:0 14px 10px}
-.lock-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:5px;z-index:2;pointer-events:none}
-.lock-overlay span{font-size:11px;color:var(--tm);font-weight:500;background:rgba(247,247,245,.9);padding:3px 10px;border-radius:20px}
-.add-row-btn{display:flex;align-items:center;gap:8px;padding:11px 14px;cursor:pointer;border-bottom:0.5px solid var(--bd)}
-.add-row-btn:last-child{border-bottom:none}
-.add-ico{width:34px;height:34px;border-radius:9px;background:var(--teal-l);display:flex;align-items:center;justify-content:center}
-.add-ico i{color:var(--teal);font-size:18px}
-.add-label{font-size:14px;color:var(--teal)}
-.coming-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
-.badges-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 14px}
-.badge-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:default}
-.badge-circle{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative}
-.badge-circle.unlocked{background:var(--teal-l);box-shadow:0 0 0 2px var(--teal)}
-.badge-circle.locked{background:var(--bg2);filter:grayscale(1);opacity:.45}
-.badge-circle.progress{background:var(--warn-bg);box-shadow:0 0 0 2px #EF9F27}
-.badge-label{font-size:10px;color:var(--t);font-weight:500;text-align:center;line-height:1.3}
-.badge-label.locked{color:var(--tm)}
-.badge-prog{font-size:9px;color:var(--teal);margin-top:1px}
-.badge-prog.locked{color:var(--tm)}
-/* Rangée badges horizontale */
-.badges-shelf{display:flex;gap:10px;padding:14px 14px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.badges-shelf::-webkit-scrollbar{display:none}
-.badge-card{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:76px;cursor:pointer}
-.badge-ring{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;transition:transform .15s}
-.badge-card:active .badge-ring{transform:scale(.93)}
-.badge-ring.on{background:var(--teal-l);box-shadow:0 0 0 2.5px var(--teal)}
-.badge-ring.off{background:var(--bg2);filter:grayscale(1);opacity:.38}
-.badge-name{font-size:10px;font-weight:500;color:var(--t);text-align:center;line-height:1.3}
-.badge-name.off{color:var(--tm)}
-.badge-cat{font-size:9px;color:var(--teal);text-align:center;margin-top:1px}
-.badge-cat.off{color:var(--tm)}
-/* Pop-up badge débloqué */
-.badge-toast{position:absolute;bottom:90px;left:14px;right:14px;background:var(--t);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;z-index:30;animation:slideUp .3s ease}
+.mood-btn span:first-child{font-size:24px}
+.modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;z-index:50}
+.modal{background:var(--white);border-radius:22px 22px 0 0;padding:22px 20px;width:100%;max-height:88vh;overflow-y:auto}
+.modal::-webkit-scrollbar{display:none}
+.modal-handle{width:38px;height:4px;background:var(--bd);border-radius:2px;margin:0 auto 18px}
+.modal-title{font-size:18px;font-weight:600;color:var(--t);margin-bottom:16px}
+.badge-toast{position:fixed;bottom:88px;left:16px;right:16px;background:var(--t);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:13px;z-index:60;animation:slideUp .3s ease}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.badge-toast-icon{width:42px;height:42px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.badge-toast-text{flex:1}
+.badge-toast-icon{width:44px;height:44px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .badge-toast-title{font-size:13px;font-weight:600;color:#fff}
 .badge-toast-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px}
-/* Modal badge detail */
-.badge-modal{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:25}
-.badge-modal-inner{background:var(--bg);border-radius:20px 20px 0 0;padding:24px;width:100%;text-align:center}
-.badge-modal-ring{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px}
+.badges-shelf{display:flex;gap:12px;padding:14px 16px 18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.badges-shelf::-webkit-scrollbar{display:none}
+.badge-card{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:80px;cursor:pointer}
+.badge-ring{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform .15s}
+.badge-card:active .badge-ring{transform:scale(.92)}
+.badge-ring.on{background:var(--teal-l);box-shadow:0 0 0 2.5px var(--teal)}
+.badge-ring.off{background:var(--bg);filter:grayscale(1);opacity:.35}
+.badge-name{font-size:10px;font-weight:500;color:var(--t);text-align:center;line-height:1.3}
+.badge-name.off{color:var(--tm)}
+.badge-cat{font-size:9px;color:var(--teal);text-align:center;margin-top:1px;font-weight:600}
+.badge-cat.off{color:var(--tm)}
+.badge-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;z-index:55}
+.badge-modal-inner{background:var(--white);border-radius:22px 22px 0 0;padding:28px 24px;width:100%;text-align:center}
+.badge-modal-ring{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 16px}
 .badge-modal-ring.on{background:var(--teal-l);box-shadow:0 0 0 3px var(--teal)}
-.badge-modal-ring.off{background:var(--bg2);filter:grayscale(1);opacity:.4}
-.badge-modal-name{font-size:17px;font-weight:600;color:var(--t)}
-.badge-modal-cat{font-size:11px;color:var(--teal);margin-top:3px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
-.badge-modal-desc{font-size:13px;color:var(--tm);margin-top:10px;line-height:1.5}
-.badge-modal-date{font-size:12px;color:var(--teal);margin-top:8px;font-weight:500}
-.badge-modal-close{margin-top:18px;width:100%;padding:12px;background:var(--bg2);border:none;border-radius:12px;font-size:14px;color:var(--t);cursor:pointer;font-family:inherit}
-/* nav pills */
-.nav-pills{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:360px}
-.npill{font-size:11px;padding:5px 11px;border-radius:20px;border:0.5px solid rgba(0,0,0,.15);background:#fff;color:#666;cursor:pointer;font-family:inherit;transition:all .15s}
-.npill:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+.badge-modal-ring.off{background:var(--bg);filter:grayscale(1);opacity:.4}
+.badge-modal-name{font-size:19px;font-weight:600;color:var(--t)}
+.badge-modal-cat{font-size:11px;color:var(--teal);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.badge-modal-desc{font-size:14px;color:var(--tm);margin-top:12px;line-height:1.6}
+.badge-modal-date{font-size:13px;margin-top:10px;font-weight:500}
+.badge-modal-close{margin-top:20px;width:100%;padding:14px;background:var(--bg);border:none;border-radius:14px;font-size:15px;color:var(--t);cursor:pointer;font-family:inherit;font-weight:500}
+.coming{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center}
+.share-locked-wrap{position:relative;margin:12px 16px 0}
+.share-locked{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--r);border:1px solid var(--bd);padding:14px 16px}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--bd)}
+.toggle-row:last-child{border-bottom:none}
+.toggle{width:44px;height:26px;border-radius:13px;background:var(--bd);position:relative;flex-shrink:0}
+.toggle::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:2px;left:2px}
 </style>
 </head>
 <body>
-<h1>VetID — Prototype V0</h1>
-
-<div class="phone">
 
 <!-- ACCUEIL -->
 <div id="s-home" class="screen active">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="hdr"><div class="htitle">Bonjour 👋</div><div class="hsub">Voici ce qui se passe pour tes animaux</div></div>
+  <div class="dash-header">
+    <div style="font-size:22px;font-weight:600">Bonjour 👋</div>
+    <div style="font-size:13px;opacity:.8;margin-top:3px">Voici ce qui se passe pour tes animaux</div>
+  </div>
   <div class="chips">
     <div class="chip on"><div class="av">🐕</div>Charly</div>
     <div class="chip"><div class="av">🐈</div>Luna</div>
@@ -208,109 +196,107 @@ h1{font-size:15px;font-weight:500;color:#555;margin-bottom:20px;letter-spacing:.
   <div class="body">
     <div class="notifbar"><i class="ti ti-bell"></i><div class="nbt"><strong>Anti-puces de Charly</strong>Dans 3 jours — pense à y jeter un œil</div></div>
     <div class="card" onclick="go('s-rappels')">
-      <div class="ch"><div class="ct">Rappels actifs</div><div class="ca">Tout voir</div></div>
-      <div class="row"><div class="ico" style="background:var(--warn-bg)"><i class="ti ti-bug" style="color:#EF9F27"></i></div><div class="ri"><div class="rn">Anti-puces Frontline</div><div class="rd">Dernier : 5 mai</div></div><div class="badge bw">3 j</div></div>
-      <div class="row"><div class="ico" style="background:var(--ok-bg)"><i class="ti ti-virus-off" style="color:var(--teal)"></i></div><div class="ri"><div class="rn">Vermifuge trimestriel</div><div class="rd">Prochain : 12 juil.</div></div><div class="badge bo">65 j</div></div>
-      <div class="row"><div class="ico" style="background:var(--info-bg)"><i class="ti ti-syringe" style="color:#378ADD"></i></div><div class="ri"><div class="rn">Vaccin Rage — rappel</div><div class="rd">Prochain : nov. 2026</div></div><div class="badge bo">6 mois</div></div>
+      <div class="card-header"><div class="card-title">Rappels actifs</div><div class="card-action">Tout voir</div></div>
+      <div class="row"><div class="ico" style="background:var(--warn-bg)"><i class="ti ti-bug" style="color:#EF9F27"></i></div><div class="ri"><div class="rn">Anti-puces Frontline</div><div class="rd">Dernier : 5 mai</div></div><div class="bdg bw">3 j</div></div>
+      <div class="row"><div class="ico" style="background:var(--ok-bg)"><i class="ti ti-virus-off" style="color:var(--teal)"></i></div><div class="ri"><div class="rn">Vermifuge trimestriel</div><div class="rd">Prochain : 12 juil.</div></div><div class="bdg bo">65 j</div></div>
+      <div class="row"><div class="ico" style="background:var(--info-bg)"><i class="ti ti-syringe" style="color:#378ADD"></i></div><div class="ri"><div class="rn">Vaccin Rage — rappel</div><div class="rd">Prochain : nov. 2026</div></div><div class="bdg bo">6 mois</div></div>
     </div>
     <div class="card" onclick="go('s-journal')">
-      <div class="ch"><div class="ct">Journal santé</div><div class="ca">Voir tout</div></div>
+      <div class="card-header"><div class="card-title">Journal santé</div><div class="card-action">Voir tout</div></div>
       <div class="je"><div class="jd">🌟</div><div class="jm"><div class="jt">Forme olympique</div><div class="jn">Il a bien mangé, super joueur ce matin</div><div class="jdate">Aujourd'hui, 8h12 · Toi</div></div></div>
       <div class="je"><div class="jd">📷</div><div class="jm"><div class="jt">Normal</div><div class="jn">Ballade faite, mange bien, RAS 😊</div><div class="jdate">Hier, 18h30</div><div class="jtag"><i class="ti ti-share" style="font-size:10px"></i>Sarah (petsitter)</div></div></div>
     </div>
     <div class="card" onclick="go('s-profil')">
-      <div class="ch"><div class="ct">Profil Charly</div><div class="ca">Voir</div></div>
+      <div class="card-header"><div class="card-title">Profil Charly</div><div class="card-action">Voir</div></div>
       <div class="stat2">
         <div class="sc"><div class="sl">Poids actuel</div><div class="sv">12,4 kg</div><div class="ss">+0,2 kg ce mois</div></div>
         <div class="sc"><div class="sl">Âge</div><div class="sv">3 ans</div><div class="ss">Labrador mâle</div></div>
       </div>
     </div>
     <div class="card" onclick="go('s-blog')">
-      <div class="ch"><div class="ct">À lire</div><div class="ca">Blog</div></div>
-      <div style="padding:11px 14px"><div class="btag">Prévention</div><div class="bttl">Les tiques : ce que tout proprio devrait savoir avant l'été</div></div>
+      <div class="card-header"><div class="card-title">À lire</div><div class="card-action">Blog</div></div>
+      <div style="padding:12px 16px"><div class="btag">Prévention</div><div class="bttl">Les tiques : ce que tout proprio devrait savoir avant l'été</div></div>
     </div>
   </div>
-  <div class="tab">
-    <div class="ti on" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
-    <div class="ti" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
-    <div class="ti" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
-    <div class="ti" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
-    <div class="ti" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
+    <div class="nav-item" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
+    <div class="nav-item" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
+    <div class="nav-item" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
+    <div class="nav-item" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
   </div>
 </div>
 
 <!-- RAPPELS -->
 <div id="s-rappels" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="nav"><div class="back" onclick="go('s-home')"><i class="ti ti-chevron-left"></i>Accueil</div><div class="ca" style="font-size:13px" onclick="go('s-params')"><i class="ti ti-settings" style="font-size:16px"></i></div></div>
-  <div class="hdr"><div class="htitle">Rappels</div><div class="hsub">Charly · 3 actifs</div></div>
+  <div class="page-header">
+    <div onclick="go('s-home')" class="back-btn"><i class="ti ti-chevron-left"></i></div>
+    <div><div class="page-title">Rappels</div><div class="page-sub">Charly · 3 actifs</div></div>
+    <div onclick="go('s-params')" style="color:#fff;font-size:22px;cursor:pointer"><i class="ti ti-settings"></i></div>
+  </div>
   <div class="body">
     <div class="ra-card">
       <div class="ra-top"><div class="ra-ico">🦟</div><div><div class="ra-n">Anti-puces Frontline</div><div class="ra-a">Charly — dans 3 jours</div></div></div>
-      <div class="ra-btns">
-        <button class="ra-done" onclick="markDone(this)">✓ Fait !</button>
-        <button class="ra-later">Reporter</button>
-      </div>
+      <div class="ra-btns"><button class="ra-done" onclick="markDone(this)">✓ Fait !</button><button class="ra-later">Reporter</button></div>
     </div>
     <div class="sec">Carnet vaccinal</div>
     <div class="card">
-      <div class="vr"><div class="vdot" style="background:#1D9E75"></div><div class="vi"><div class="vn">Maladie de Carré</div><div class="vd">Fait le 3 mars 2024</div><div class="vnext">Prochain : mars 2025 ✓</div></div><div class="badge bo">À jour</div></div>
-      <div class="vr"><div class="vdot" style="background:#EF9F27"></div><div class="vi"><div class="vn">Vaccin Rage</div><div class="vd">Fait le 10 nov. 2024</div><div class="vnext">Prochain : nov. 2026</div></div><div class="badge bo">6 mois</div></div>
-      <div class="vr"><div class="vdot" style="background:#E24B4A"></div><div class="vi"><div class="vn">Vermifuge</div><div class="vd">Dernier : 12 avr. 2025</div><div class="vnext">Prochain : 12 juil.</div></div><div class="badge bo">65 j</div></div>
-      <div class="vr"><div class="vdot" style="background:#BA7517"></div><div class="vi"><div class="vn">Anti-puces Frontline</div><div class="vd">Dernier : 5 mai 2025</div><div class="vnext">Prochain : 8 mai ⚠️</div></div><div class="badge bw">3 j</div></div>
-      <div class="add-row-btn" onclick="go('s-add-traitement')"><div class="add-ico"><i class="ti ti-plus"></i></div><div class="add-label">Ajouter un traitement</div></div>
+      <div class="vr"><div class="vdot" style="background:#1D9E75"></div><div class="vi"><div class="vn">Maladie de Carré</div><div class="vd">Fait le 3 mars 2024</div><div class="vnext">Prochain : mars 2025 ✓</div></div><div class="bdg bo">À jour</div></div>
+      <div class="vr"><div class="vdot" style="background:#EF9F27"></div><div class="vi"><div class="vn">Vaccin Rage</div><div class="vd">Fait le 10 nov. 2024</div><div class="vnext">Prochain : nov. 2026</div></div><div class="bdg bo">6 mois</div></div>
+      <div class="vr"><div class="vdot" style="background:#E24B4A"></div><div class="vi"><div class="vn">Vermifuge</div><div class="vd">Dernier : 12 avr. 2025</div><div class="vnext">Prochain : 12 juil.</div></div><div class="bdg bo">65 j</div></div>
+      <div class="vr"><div class="vdot" style="background:#BA7517"></div><div class="vi"><div class="vn">Anti-puces Frontline</div><div class="vd">Dernier : 5 mai 2025</div><div class="vnext">Prochain : 8 mai ⚠️</div></div><div class="bdg bw">3 j</div></div>
+      <div class="add-row" onclick="go('s-add-traitement')"><div class="add-ico"><i class="ti ti-plus"></i></div><div class="add-label">Ajouter un traitement</div></div>
     </div>
     <div class="sec">Consommables</div>
     <div class="card">
-      <div class="row"><div class="ico" style="font-size:18px">🥣</div><div class="ri"><div class="rn">Croquettes Royal Canin</div><div class="rd">Sac 12 kg — acheté le 2 mai</div></div><div class="badge bo">~18 j</div></div>
+      <div class="row"><div class="ico" style="font-size:20px">🥣</div><div class="ri"><div class="rn">Croquettes Royal Canin</div><div class="rd">Sac 12 kg — acheté le 2 mai</div></div><div class="bdg bo">~18 j</div></div>
     </div>
     <div class="sec">Ordonnances</div>
     <div class="card">
-      <div class="row" onclick="go('s-ordonnances')"><div class="pres-img-placeholder">💊</div><div class="ri"><div class="rn">Métronidazole 250mg</div><div class="rd">Dr. Moreau · 3 mai 2025</div></div><div class="badge bi">En cours</div></div>
-      <div class="add-row-btn" onclick="go('s-ordonnances')"><div class="add-ico"><i class="ti ti-plus"></i></div><div class="add-label">Ajouter une ordonnance</div></div>
+      <div class="row" onclick="go('s-ordonnances')"><div class="pres-ph">💊</div><div class="ri"><div class="rn">Métronidazole 250mg</div><div class="rd">Dr. Moreau · 3 mai 2025</div></div><div class="bdg bi">En cours</div></div>
+      <div class="add-row" onclick="go('s-ordonnances')"><div class="add-ico"><i class="ti ti-plus"></i></div><div class="add-label">Ajouter une ordonnance</div></div>
     </div>
   </div>
-  <div class="tab">
-    <div class="ti" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
-    <div class="ti" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
-    <div class="ti on"><i class="ti ti-bell"></i><span>Rappels</span></div>
-    <div class="ti" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
-    <div class="ti" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
+    <div class="nav-item" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
+    <div class="nav-item active"><i class="ti ti-bell"></i><span>Rappels</span></div>
+    <div class="nav-item" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
+    <div class="nav-item" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
   </div>
 </div>
 
 <!-- JOURNAL -->
 <div id="s-journal" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="nav"><div class="back" onclick="go('s-home')"><i class="ti ti-chevron-left"></i>Accueil</div></div>
-  <div class="hdr"><div class="htitle">Journal santé</div><div class="hsub">Charly</div></div>
+  <div class="page-header">
+    <div onclick="go('s-home')" class="back-btn"><i class="ti ti-chevron-left"></i></div>
+    <div><div class="page-title">Journal santé</div><div class="page-sub">Charly</div></div>
+    <div></div>
+  </div>
   <div class="body">
-    <!-- PARTAGE GRISÉ -->
-    <div class="lock-wrap">
-      <div class="card locked" style="margin:0">
-        <div style="display:flex;align-items:center;gap:10px;padding:13px 14px">
-          <i class="ti ti-share" style="font-size:20px;color:var(--teal)"></i>
-          <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--teal-d)">Partager avec l'entourage</div><div style="font-size:11px;color:var(--teal-m);margin-top:1px">Petsitter, véto, conjoint, famille…</div></div>
-          <i class="ti ti-chevron-right" style="font-size:15px;color:var(--teal)"></i>
-        </div>
+    <div class="share-locked-wrap">
+      <div class="share-locked locked">
+        <i class="ti ti-share" style="font-size:22px;color:var(--teal);flex-shrink:0"></i>
+        <div style="flex:1"><div style="font-size:14px;font-weight:500;color:var(--teal-d)">Partager avec l'entourage</div><div style="font-size:12px;color:var(--teal-m);margin-top:1px">Petsitter, véto, conjoint, famille…</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--teal);font-size:16px"></i>
       </div>
       <div class="lock-overlay"><i class="ti ti-lock" style="font-size:13px;color:var(--tm)"></i><span>Prochainement</span></div>
     </div>
-    <div class="card" style="margin-top:10px">
-      <div class="ch"><div class="ct">Cette semaine</div></div>
+    <div class="card" style="margin-top:12px">
+      <div class="card-header"><div class="card-title">Cette semaine</div></div>
       <div class="je"><div class="jd">🌟</div><div class="jm"><div class="jt">Forme olympique</div><div class="jn">Il a bien mangé, super joueur ce matin</div><div class="jdate">Aujourd'hui, 8h12 · Toi</div></div></div>
       <div class="je"><div class="jd">📷</div><div class="jm"><div class="jt">Normal</div><div class="jn">Ballade faite, mange bien, RAS 😊</div><div class="jdate">Hier, 18h30</div><div class="jtag"><i class="ti ti-share" style="font-size:10px"></i>Sarah (petsitter)</div></div></div>
       <div class="je"><div class="jd">😐</div><div class="jm"><div class="jt">Pas en forme</div><div class="jn">Peu d'appétit ce matin, a vomi une fois</div><div class="jdate">4 mai · Toi</div></div></div>
       <div class="je"><div class="jd">🏥</div><div class="jm"><div class="jt">Visite vétérinaire</div><div class="jn">Check-up annuel — tout va bien, +0,2 kg</div><div class="jdate">3 mai · Dr. Moreau</div></div></div>
     </div>
   </div>
-  <div class="fab" onclick="showModal('modal-journal')"><i class="ti ti-plus"></i></div>
-  <div class="tab">
-    <div class="ti" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
-    <div class="ti on"><i class="ti ti-notebook"></i><span>Journal</span></div>
-    <div class="ti" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
-    <div class="ti" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
-    <div class="ti" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
+  <button onclick="showModal('modal-journal')" style="position:fixed;bottom:88px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:40">+</button>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
+    <div class="nav-item active"><i class="ti ti-notebook"></i><span>Journal</span></div>
+    <div class="nav-item" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
+    <div class="nav-item" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
+    <div class="nav-item" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
   </div>
   <div id="modal-journal" class="modal-bg" style="display:none" onclick="closeModal('modal-journal',event)">
     <div class="modal" onclick="event.stopPropagation()">
@@ -325,7 +311,7 @@ h1{font-size:15px;font-weight:500;color:#555;margin-bottom:20px;letter-spacing:.
       </div>
       <div class="fl"><label>Note libre (optionnel)</label><input class="fi" type="text" placeholder="Ex : a bien mangé ce matin…"></div>
       <div class="fl"><label>Photo (optionnel)</label>
-        <div style="border:0.5px dashed rgba(0,0,0,.2);border-radius:10px;padding:18px;text-align:center;cursor:pointer;color:var(--tm);font-size:13px"><i class="ti ti-camera" style="font-size:22px;display:block;margin-bottom:4px"></i>Appuyer pour ajouter</div>
+        <div style="border:1px dashed var(--bd);border-radius:12px;padding:20px;text-align:center;cursor:pointer;color:var(--tm);font-size:13px"><i class="ti ti-camera" style="font-size:26px;display:block;margin-bottom:5px"></i>Appuyer pour ajouter</div>
       </div>
       <button class="pbtn" onclick="closeModal('modal-journal',null);addJe()">Enregistrer</button>
     </div>
@@ -334,156 +320,136 @@ h1{font-size:15px;font-weight:500;color:#555;margin-bottom:20px;letter-spacing:.
 
 <!-- PROFIL -->
 <div id="s-profil" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="nav"><div class="back" onclick="go('s-home')"><i class="ti ti-chevron-left"></i>Accueil</div><div class="ca" style="font-size:13px">Modifier</div></div>
-  <div class="body" style="padding-top:8px">
+  <div class="page-header">
+    <div onclick="go('s-home')" class="back-btn"><i class="ti ti-chevron-left"></i></div>
+    <div class="page-title">Profil</div>
+    <div style="font-size:14px;color:#fff;cursor:pointer;font-weight:500">Modifier</div>
+  </div>
+  <div class="body">
     <div class="hero">
       <div class="hav">🐕</div>
-      <div>
-        <div class="hn">Charly</div>
-        <div class="hb">Labrador · Mâle · 3 ans</div>
-        <div class="hchip"><i class="ti ti-cpu" style="font-size:10px"></i>Puce : 250268731854920</div>
-      </div>
+      <div><div class="hn">Charly</div><div class="hb">Labrador · Mâle · 3 ans</div><div class="hchip"><i class="ti ti-cpu" style="font-size:10px"></i>Puce : 250268731854920</div></div>
     </div>
     <div class="card" onclick="go('s-poids')">
-      <div class="ch"><div class="ct">Poids</div><div class="ca">Ajouter</div></div>
-      <div style="padding:10px 14px 14px">
-        <div style="font-size:20px;font-weight:600;color:var(--t);margin-bottom:8px">12,4 kg</div>
+      <div class="card-header"><div class="card-title">Poids</div><div class="card-action">Ajouter</div></div>
+      <div style="padding:12px 16px 16px">
+        <div style="font-size:22px;font-weight:600;color:var(--t);margin-bottom:10px">12,4 kg</div>
         <div class="chart-area">
-          <div class="cbw"><div class="cval">11,8</div><div class="cb" style="height:48px"></div><div class="clabel">Fév</div></div>
-          <div class="cbw"><div class="cval">12,1</div><div class="cb" style="height:57px"></div><div class="clabel">Mar</div></div>
-          <div class="cbw"><div class="cval">12,2</div><div class="cb" style="height:61px"></div><div class="clabel">Avr</div></div>
-          <div class="cbw"><div class="cval">12,4</div><div class="cb lat" style="height:72px"></div><div class="clabel">Mai</div></div>
+          <div class="cbw"><div class="cval">11,8</div><div class="cb" style="height:52px"></div><div class="clabel">Fév</div></div>
+          <div class="cbw"><div class="cval">12,1</div><div class="cb" style="height:62px"></div><div class="clabel">Mar</div></div>
+          <div class="cbw"><div class="cval">12,2</div><div class="cb" style="height:66px"></div><div class="clabel">Avr</div></div>
+          <div class="cbw"><div class="cval">12,4</div><div class="cb lat" style="height:80px"></div><div class="clabel">Mai</div></div>
         </div>
       </div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Vétérinaire</div><div class="ca">Modifier</div></div>
-      <div class="row"><div class="ico" style="background:var(--info-bg)"><i class="ti ti-stethoscope" style="color:#378ADD"></i></div><div class="ri"><div class="rn">Dr. Sophie Moreau</div><div class="rd">Cabinet du Parc · Paris 11e</div></div><i class="ti ti-phone-call" style="color:var(--teal);font-size:20px"></i></div>
+      <div class="card-header"><div class="card-title">Vétérinaire</div><div class="card-action">Modifier</div></div>
+      <div class="row"><div class="ico" style="background:var(--info-bg)"><i class="ti ti-stethoscope" style="color:#378ADD"></i></div><div class="ri"><div class="rn">Dr. Sophie Moreau</div><div class="rd">Cabinet du Parc · Paris 11e</div></div><i class="ti ti-phone-call" style="color:var(--teal);font-size:22px"></i></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Santé</div><div class="ca">Modifier</div></div>
-      <div style="padding:11px 14px;font-size:13px;color:var(--tm);line-height:1.5">
+      <div class="card-header"><div class="card-title">Santé</div><div class="card-action">Modifier</div></div>
+      <div style="padding:12px 16px;font-size:13px;color:var(--tm);line-height:1.5">
         <div style="margin-bottom:6px"><span style="font-weight:500;color:var(--t)">Allergies :</span> Poulet (croquettes), herbe des prés</div>
         <div><span style="font-weight:500;color:var(--t)">Antécédents :</span> Entorse genou gauche (2023)</div>
       </div>
     </div>
     <div class="card" onclick="go('s-ordonnances')">
-      <div class="ch"><div class="ct">Ordonnances</div><div class="ca">Voir tout</div></div>
-      <div class="row"><div class="pres-img-placeholder">💊</div><div class="ri"><div class="rn">Métronidazole 250mg</div><div class="rd">Dr. Moreau · 3 mai 2025</div></div><div class="badge bi">En cours</div></div>
+      <div class="card-header"><div class="card-title">Ordonnances</div><div class="card-action">Voir tout</div></div>
+      <div class="row"><div class="pres-ph">💊</div><div class="ri"><div class="rn">Métronidazole 250mg</div><div class="rd">Dr. Moreau · 3 mai 2025</div></div><div class="bdg bi">En cours</div></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Carnet de Charly</div><div style="font-size:11px;color:var(--tm)">2 / 7 débloqués</div></div>
+      <div class="card-header"><div class="card-title">Carnet de Charly</div><div style="font-size:11px;color:var(--tm)">2 / 7 débloqués</div></div>
       <div class="badges-shelf">
-        <!-- Débloqué -->
-        <div class="badge-card" onclick="showBadge('Carnet ouvert','Santé','📋','on','Premier vaccin enregistré dans le carnet de santé de Charly.','Débloqué le 3 mars 2024')">
-          <div class="badge-ring on">📋</div>
-          <div class="badge-name">Carnet ouvert</div>
-          <div class="badge-cat">Santé</div>
+        <div class="badge-card" onclick="showBadge('Carnet ouvert','Santé','📋','on','Premier vaccin ou rappel enregistré dans le carnet de santé de Charly.','Débloqué le 3 mars 2024')">
+          <div class="badge-ring on">📋</div><div class="badge-name">Carnet ouvert</div><div class="badge-cat">Santé</div>
         </div>
-        <!-- Débloqué -->
         <div class="badge-card" onclick="showBadge('Tout en un','Santé','💊','on','Première ordonnance ajoutée au carnet de Charly.','Débloqué le 3 mai 2025')">
-          <div class="badge-ring on">💊</div>
-          <div class="badge-name">Tout en un</div>
-          <div class="badge-cat">Santé</div>
+          <div class="badge-ring on">💊</div><div class="badge-name">Tout en un</div><div class="badge-cat">Santé</div>
         </div>
-        <!-- Verrouillé -->
-        <div class="badge-card" onclick="showBadge('Suivi en or','Santé','🏅','off','6 mois consécutifs avec tous les rappels honorés à temps.','Non encore débloqué')">
-          <div class="badge-ring off">🏅</div>
-          <div class="badge-name off">Suivi en or</div>
-          <div class="badge-cat off">Santé</div>
+        <div class="badge-card" onclick="showBadge('Suivi en or','Santé','🏅','off','6 mois consécutifs avec tous les rappels honorés à temps.','Pas encore débloqué')">
+          <div class="badge-ring off">🏅</div><div class="badge-name off">Suivi en or</div><div class="badge-cat off">Santé</div>
         </div>
-        <!-- Verrouillé -->
-        <div class="badge-card" onclick="showBadge('Anniversaire de Charly','Histoire','🎂','off','Débloqué automatiquement chaque année à la date de naissance, avec une photo souvenir tirée de la timeline.','Non encore débloqué')">
-          <div class="badge-ring off">🎂</div>
-          <div class="badge-name off">Anniversaire de Charly</div>
-          <div class="badge-cat off">Histoire</div>
+        <div class="badge-card" onclick="showBadge('Anniversaire de Charly','Histoire','🎂','off','Débloqué automatiquement chaque année à la date de naissance, avec une photo souvenir tirée de la timeline.','Pas encore débloqué')">
+          <div class="badge-ring off">🎂</div><div class="badge-name off">Anniversaire de Charly</div><div class="badge-cat off">Histoire</div>
         </div>
-        <!-- Verrouillé -->
-        <div class="badge-card" onclick="showBadge('Une année ensemble','Histoire','🗓️','off','1 an depuis l\'ajout de Charly dans l\'app.','Non encore débloqué')">
-          <div class="badge-ring off">🗓️</div>
-          <div class="badge-name off">Une année ensemble</div>
-          <div class="badge-cat off">Histoire</div>
+        <div class="badge-card" onclick="showBadge('Une année ensemble','Histoire','🗓️','off','1 an depuis l\'ajout de Charly dans l\'app.','Pas encore débloqué')">
+          <div class="badge-ring off">🗓️</div><div class="badge-name off">Une année ensemble</div><div class="badge-cat off">Histoire</div>
         </div>
-        <!-- Verrouillé -->
-        <div class="badge-card" onclick="showBadge('Premiers souvenirs','Journal','📸','off','5 photos enregistrées dans la timeline du journal de Charly.','Non encore débloqué')">
-          <div class="badge-ring off">📸</div>
-          <div class="badge-name off">Premiers souvenirs</div>
-          <div class="badge-cat off">Journal</div>
+        <div class="badge-card" onclick="showBadge('Premiers souvenirs','Journal','📸','off','5 photos enregistrées dans la timeline du journal de Charly.','Pas encore débloqué')">
+          <div class="badge-ring off">📸</div><div class="badge-name off">Premiers souvenirs</div><div class="badge-cat off">Journal</div>
         </div>
-        <!-- Verrouillé -->
-        <div class="badge-card" onclick="showBadge('Une année gravée','Journal','🌿','off','12 mois avec au moins une entrée dans le journal — pas de série stricte, juste une présence régulière.','Non encore débloqué')">
-          <div class="badge-ring off">🌿</div>
-          <div class="badge-name off">Une année gravée</div>
-          <div class="badge-cat off">Journal</div>
+        <div class="badge-card" onclick="showBadge('Une année gravée','Journal','🌿','off','12 mois avec au moins une entrée dans le journal — pas de série stricte, juste une présence régulière.','Pas encore débloqué')">
+          <div class="badge-ring off">🌿</div><div class="badge-name off">Une année gravée</div><div class="badge-cat off">Journal</div>
         </div>
-      </div>
-    </div>
-    <!-- Modal détail badge -->
-    <div id="badge-modal" class="badge-modal" style="display:none" onclick="closeBadgeModal(event)">
-      <div class="badge-modal-inner" onclick="event.stopPropagation()">
-        <div id="bm-ring" class="badge-modal-ring on"></div>
-        <div id="bm-name" class="badge-modal-name"></div>
-        <div id="bm-cat" class="badge-modal-cat"></div>
-        <div id="bm-desc" class="badge-modal-desc"></div>
-        <div id="bm-date" class="badge-modal-date"></div>
-        <button class="badge-modal-close" onclick="closeBadgeModal(null)">Fermer</button>
       </div>
     </div>
   </div>
-  <div class="tab">
-    <div class="ti" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
-    <div class="ti" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
-    <div class="ti" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
-    <div class="ti" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
-    <div class="ti" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
+    <div class="nav-item" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
+    <div class="nav-item" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
+    <div class="nav-item" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
+    <div class="nav-item" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
+  </div>
+  <div id="badge-modal" class="badge-modal" style="display:none" onclick="closeBadgeModal(event)">
+    <div class="badge-modal-inner" onclick="event.stopPropagation()">
+      <div id="bm-ring" class="badge-modal-ring on"></div>
+      <div id="bm-name" class="badge-modal-name"></div>
+      <div id="bm-cat" class="badge-modal-cat"></div>
+      <div id="bm-desc" class="badge-modal-desc"></div>
+      <div id="bm-date" class="badge-modal-date"></div>
+      <button class="badge-modal-close" onclick="closeBadgeModal(null)">Fermer</button>
+    </div>
   </div>
 </div>
 
 <!-- BLOG -->
 <div id="s-blog" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="hdr"><div class="htitle">À lire</div><div class="hsub">Conseils vétérinaires & bien-être</div></div>
+  <div class="dash-header"><div style="font-size:22px;font-weight:600">À lire</div><div style="font-size:13px;opacity:.8;margin-top:3px">Conseils vétérinaires & bien-être</div></div>
   <div class="body">
+    <div style="height:12px"></div>
     <div class="blog-card"><div class="bimg">🕷️</div><div class="bbody"><div class="btag">Prévention · Saisonnier</div><div class="bttl">Les tiques : ce que tout proprio devrait savoir avant l'été</div><div class="blead">Détection, retrait, risques — le guide sans panique.</div></div></div>
     <div class="blog-card"><div class="bimg">🥦</div><div class="bbody"><div class="btag">Nutrition</div><div class="bttl">Alimentation du chien senior : ce qui change après 7 ans</div><div class="blead">Besoins caloriques, protéines, suppléments — ce qu'en dit la science vétérinaire.</div></div></div>
     <div class="blog-card"><div class="bimg">😿</div><div class="bbody"><div class="btag">Comportement</div><div class="bttl">Mon chat ne mange plus : quand faut-il vraiment s'inquiéter ?</div><div class="blead">Les signaux qui méritent une consultation vs ceux qu'on peut attendre.</div></div></div>
   </div>
-  <div class="tab">
-    <div class="ti" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
-    <div class="ti" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
-    <div class="ti" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
-    <div class="ti on"><i class="ti ti-article"></i><span>Blog</span></div>
-    <div class="ti" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
+    <div class="nav-item" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
+    <div class="nav-item" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
+    <div class="nav-item active"><i class="ti ti-article"></i><span>Blog</span></div>
+    <div class="nav-item" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
   </div>
 </div>
 
 <!-- COMMUNAUTÉ -->
 <div id="s-communaute" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="hdr"><div class="htitle">Communauté</div></div>
-  <div class="coming-screen">
-    <div style="font-size:52px;margin-bottom:18px">🐾</div>
-    <div style="font-size:19px;font-weight:600;color:var(--t);margin-bottom:8px">Bientôt disponible</div>
-    <div style="font-size:13px;color:var(--tm);line-height:1.6;margin-bottom:22px">Un espace pour partager, poser tes questions et retrouver d'autres proprios de chats et chiens.</div>
-    <div style="background:var(--teal-l);border-radius:11px;padding:13px 18px;font-size:12px;color:var(--teal-d)">Tu seras prévenu(e) en avant-première 🎉</div>
+  <div class="dash-header"><div style="font-size:22px;font-weight:600">Communauté</div></div>
+  <div class="coming">
+    <div style="font-size:56px;margin-bottom:20px">🐾</div>
+    <div style="font-size:20px;font-weight:600;color:var(--t);margin-bottom:10px">Bientôt disponible</div>
+    <div style="font-size:14px;color:var(--tm);line-height:1.6;margin-bottom:24px">Un espace pour partager, poser tes questions et retrouver d'autres proprios de chats et chiens.</div>
+    <div style="background:var(--teal-l);border-radius:14px;padding:14px 20px;font-size:13px;color:var(--teal-d)">Tu seras prévenu(e) en avant-première 🎉</div>
   </div>
-  <div class="tab">
-    <div class="ti" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
-    <div class="ti" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
-    <div class="ti" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
-    <div class="ti" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
-    <div class="ti on"><i class="ti ti-users"></i><span>Communauté</span></div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
+    <div class="nav-item" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
+    <div class="nav-item" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
+    <div class="nav-item" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
+    <div class="nav-item active"><i class="ti ti-users"></i><span>Communauté</span></div>
   </div>
 </div>
 
 <!-- ONBOARDING -->
 <div id="s-ob" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="ob">
-    <div class="obicon">🐾</div>
-    <div class="obtitle">Ajoute ton premier animal</div>
-    <div class="obsub">Quelques infos suffisent — on calcule les rappels automatiquement.</div>
+  <div class="page-header">
+    <div onclick="go('s-home')" class="back-btn"><i class="ti ti-chevron-left"></i></div>
+    <div class="page-title">Ajouter un animal</div>
+    <div></div>
+  </div>
+  <div class="ob-wrap">
+    <div class="ob-icon">🐾</div>
+    <div class="ob-title">Ajoute ton premier animal</div>
+    <div class="ob-sub">Quelques infos suffisent — on calcule les rappels automatiquement.</div>
     <div class="fl"><label>Chien ou chat ?</label>
       <div class="sppick">
         <div class="spb on" id="spdog" onclick="pickSp('dog')"><span>🐕</span><span>Chien</span></div>
@@ -493,29 +459,32 @@ h1{font-size:15px;font-weight:500;color:#555;margin-bottom:20px;letter-spacing:.
     <div class="fl"><label>Prénom</label><input class="fi" id="ob-name" type="text" placeholder="Ex : Charly"></div>
     <div class="fl"><label>Date de naissance</label><input class="fi" type="text" placeholder="Ex : mars 2022 (approximatif ok)"></div>
     <div class="fl"><label>Numéro de puce (optionnel)</label><input class="fi" type="text" placeholder="Ex : 250268731854920"></div>
+    <div class="aha"><i class="ti ti-shield-check"></i><p>Le numéro de puce, c'est le seul moyen de retrouver <strong id="preview-name">ton animal</strong> s'il se perd. En l'enregistrant ici, tu l'as toujours sous la main — même en cas d'urgence.</p></div>
     <button class="pbtn" onclick="go('s-home')">Créer le profil →</button>
-    <div class="steps"><div class="step done" style="width:38px"></div><div class="step" style="width:22px"></div><div class="step" style="width:22px"></div></div>
+    <div class="steps"><div class="step done"></div><div class="step"></div><div class="step"></div></div>
   </div>
 </div>
 
 <!-- AJOUT TRAITEMENT -->
 <div id="s-add-traitement" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="nav"><div class="back" onclick="go('s-rappels')"><i class="ti ti-chevron-left"></i>Rappels</div></div>
-  <div class="hdr"><div class="htitle">Ajouter un traitement</div><div class="hsub">Charly</div></div>
-  <div class="ob" style="padding-top:8px">
-    <div class="fl"><label>Type de traitement</label>
-      <div style="display:flex;flex-direction:column;gap:7px;margin-top:5px">
-        <div class="mood-btn on" style="flex-direction:row;justify-content:flex-start;gap:10px;padding:11px 14px" onclick="pickType(this)"><span>💉</span><span style="font-size:13px">Vaccin</span></div>
-        <div class="mood-btn" style="flex-direction:row;justify-content:flex-start;gap:10px;padding:11px 14px" onclick="pickType(this)"><span>🦟</span><span style="font-size:13px">Antiparasitaire (puces / tiques)</span></div>
-        <div class="mood-btn" style="flex-direction:row;justify-content:flex-start;gap:10px;padding:11px 14px" onclick="pickType(this)"><span>🐛</span><span style="font-size:13px">Vermifuge</span></div>
-        <div class="mood-btn" style="flex-direction:row;justify-content:flex-start;gap:10px;padding:11px 14px" onclick="pickType(this)"><span>💊</span><span style="font-size:13px">Autre médicament</span></div>
+  <div class="page-header">
+    <div onclick="go('s-rappels')" class="back-btn"><i class="ti ti-chevron-left"></i></div>
+    <div><div class="page-title">Ajouter un traitement</div><div class="page-sub">Charly</div></div>
+    <div></div>
+  </div>
+  <div class="ob-wrap">
+    <div class="fl" style="margin-top:0"><label>Type de traitement</label>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+        <div class="mood-btn on" style="flex-direction:row;justify-content:flex-start;gap:12px;padding:13px 16px" onclick="pickType(this)"><span>💉</span><span style="font-size:14px">Vaccin</span></div>
+        <div class="mood-btn" style="flex-direction:row;justify-content:flex-start;gap:12px;padding:13px 16px" onclick="pickType(this)"><span>🦟</span><span style="font-size:14px">Antiparasitaire (puces / tiques)</span></div>
+        <div class="mood-btn" style="flex-direction:row;justify-content:flex-start;gap:12px;padding:13px 16px" onclick="pickType(this)"><span>🐛</span><span style="font-size:14px">Vermifuge</span></div>
+        <div class="mood-btn" style="flex-direction:row;justify-content:flex-start;gap:12px;padding:13px 16px" onclick="pickType(this)"><span>💊</span><span style="font-size:14px">Autre médicament</span></div>
       </div>
     </div>
     <div class="fl"><label>Nom du produit</label><input class="fi" type="text" placeholder="Ex : Frontline Combo"></div>
     <div class="fl"><label>Date du traitement</label><input class="fi" type="text" placeholder="Ex : 5 mai 2025"></div>
     <div class="fl"><label>Fréquence du rappel</label>
-      <select class="fi" style="appearance:auto;margin-top:0"><option>Mensuel</option><option>Trimestriel</option><option>Annuel</option><option>Pas de rappel</option></select>
+      <select class="fi" style="appearance:auto"><option>Mensuel</option><option>Trimestriel</option><option>Annuel</option><option>Pas de rappel</option></select>
     </div>
     <button class="pbtn" onclick="go('s-rappels')">Enregistrer</button>
   </div>
@@ -523,75 +492,81 @@ h1{font-size:15px;font-weight:500;color:#555;margin-bottom:20px;letter-spacing:.
 
 <!-- ORDONNANCES -->
 <div id="s-ordonnances" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="nav"><div class="back" onclick="go('s-rappels')"><i class="ti ti-chevron-left"></i>Rappels</div></div>
-  <div class="hdr"><div class="htitle">Ordonnances</div><div class="hsub">Charly</div></div>
+  <div class="page-header">
+    <div onclick="go('s-rappels')" class="back-btn"><i class="ti ti-chevron-left"></i></div>
+    <div><div class="page-title">Ordonnances</div><div class="page-sub">Charly</div></div>
+    <div></div>
+  </div>
   <div class="body">
+    <div style="height:12px"></div>
     <div class="card">
-      <div class="ch"><div class="ct">En cours</div></div>
-      <div class="row"><div class="pres-img-placeholder">💊</div><div class="ri"><div class="rn">Métronidazole 250mg</div><div class="rd">Dr. Moreau · 3 mai 2025</div><div style="font-size:11px;color:var(--tm);margin-top:1px">10 jours · 2x/jour</div></div><div class="badge bi">En cours</div></div>
+      <div class="card-header"><div class="card-title">En cours</div></div>
+      <div class="row"><div class="pres-ph">💊</div><div class="ri"><div class="rn">Métronidazole 250mg</div><div class="rd">Dr. Moreau · 3 mai 2025</div><div style="font-size:11px;color:var(--tm);margin-top:1px">10 jours · 2x/jour</div></div><div class="bdg bi">En cours</div></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Archivées</div></div>
-      <div class="row"><div class="pres-img-placeholder" style="background:var(--bg2)">📄</div><div class="ri"><div class="rn">Amoxicilline 50mg</div><div class="rd">Dr. Moreau · 12 jan. 2025</div></div><div class="badge" style="background:var(--bg2);color:var(--tm)">Terminée</div></div>
+      <div class="card-header"><div class="card-title">Archivées</div></div>
+      <div class="row"><div class="pres-ph" style="background:var(--bg)">📄</div><div class="ri"><div class="rn">Amoxicilline 50mg</div><div class="rd">Dr. Moreau · 12 jan. 2025</div></div><div class="bdg" style="background:var(--bg);color:var(--tm)">Terminée</div></div>
     </div>
     <div class="card" onclick="showModal('modal-ordo')">
-      <div class="add-row-btn"><div class="add-ico"><i class="ti ti-plus"></i></div><div class="add-label">Ajouter une ordonnance</div></div>
+      <div class="add-row"><div class="add-ico"><i class="ti ti-plus"></i></div><div class="add-label">Ajouter une ordonnance</div></div>
     </div>
   </div>
-  <div class="tab">
-    <div class="ti" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
-    <div class="ti" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
-    <div class="ti on" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
-    <div class="ti" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
-    <div class="ti" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
+    <div class="nav-item" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
+    <div class="nav-item active" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
+    <div class="nav-item" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
+    <div class="nav-item" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
   </div>
   <div id="modal-ordo" class="modal-bg" style="display:none" onclick="closeModal('modal-ordo',event)">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="modal-handle"></div>
       <div class="modal-title">Nouvelle ordonnance</div>
       <div class="fl"><label>Photo de l'ordonnance</label>
-        <div style="border:0.5px dashed rgba(0,0,0,.2);border-radius:10px;padding:22px;text-align:center;cursor:pointer;color:var(--tm);font-size:13px"><i class="ti ti-camera" style="font-size:26px;display:block;margin-bottom:5px"></i>Prends en photo ou importe</div>
+        <div style="border:1px dashed var(--bd);border-radius:12px;padding:24px;text-align:center;cursor:pointer;color:var(--tm);font-size:13px"><i class="ti ti-camera" style="font-size:28px;display:block;margin-bottom:6px"></i>Prends en photo ou importe</div>
       </div>
       <div class="fl"><label>Nom du médicament</label><input class="fi" type="text" placeholder="Ex : Métronidazole 250mg"></div>
       <div class="fl"><label>Vétérinaire prescripteur</label><input class="fi" type="text" placeholder="Ex : Dr. Moreau"></div>
       <div class="fl"><label>Date</label><input class="fi" type="text" placeholder="Ex : 3 mai 2025"></div>
-      <div class="fl"><label>Note libre (posologie…)</label><input class="fi" type="text" placeholder="Ex : 2x/jour pendant 10 jours"></div>
+      <div class="fl"><label>Posologie</label><input class="fi" type="text" placeholder="Ex : 2x/jour pendant 10 jours"></div>
       <button class="pbtn" onclick="closeModal('modal-ordo',null)">Enregistrer</button>
     </div>
   </div>
 </div>
 
-<!-- AJOUT POIDS -->
+<!-- POIDS -->
 <div id="s-poids" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="nav"><div class="back" onclick="go('s-profil')"><i class="ti ti-chevron-left"></i>Profil</div></div>
-  <div class="hdr"><div class="htitle">Suivi du poids</div><div class="hsub">Charly</div></div>
+  <div class="page-header">
+    <div onclick="go('s-profil')" class="back-btn"><i class="ti ti-chevron-left"></i></div>
+    <div><div class="page-title">Suivi du poids</div><div class="page-sub">Charly</div></div>
+    <div></div>
+  </div>
   <div class="body">
+    <div style="height:12px"></div>
     <div class="card">
-      <div class="ch"><div class="ct">Ajouter une pesée</div></div>
-      <div style="padding:14px">
+      <div class="card-header"><div class="card-title">Ajouter une pesée</div></div>
+      <div style="padding:16px">
         <div class="fl" style="margin-top:0"><label>Poids aujourd'hui</label>
-          <div style="display:flex;align-items:center;gap:10px;margin-top:5px">
-            <input type="number" value="12.4" step="0.1" style="flex:1;padding:12px;border-radius:10px;border:0.5px solid var(--bd);background:var(--bg);font-size:22px;font-weight:600;color:var(--t);text-align:center;font-family:inherit">
-            <div style="font-size:16px;color:var(--tm);font-weight:500">kg</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:6px">
+            <input type="number" value="12.4" step="0.1" style="flex:1;padding:14px;border-radius:12px;border:1px solid var(--bd);background:var(--white);font-size:26px;font-weight:600;color:var(--t);text-align:center;font-family:inherit">
+            <div style="font-size:18px;color:var(--tm);font-weight:500">kg</div>
           </div>
         </div>
         <div class="fl"><label>Date</label><input class="fi" type="text" value="8 mai 2025"></div>
-        <button class="pbtn" style="margin-top:14px" onclick="go('s-profil')">Enregistrer</button>
+        <button class="pbtn" style="margin-top:16px" onclick="go('s-profil')">Enregistrer</button>
       </div>
     </div>
     <div class="sec">Historique</div>
     <div class="card">
-      <div class="vr"><div class="vdot" style="background:var(--teal)"></div><div class="vi"><div class="vn">12,4 kg</div><div class="vd">8 mai 2025</div></div><div class="badge bo">Dernier</div></div>
-      <div class="vr"><div class="vdot" style="background:rgba(0,0,0,.15)"></div><div class="vi"><div class="vn">12,2 kg</div><div class="vd">12 avr. 2025</div></div></div>
-      <div class="vr"><div class="vdot" style="background:rgba(0,0,0,.15)"></div><div class="vi"><div class="vn">12,1 kg</div><div class="vd">15 mar. 2025</div></div></div>
-      <div class="vr"><div class="vdot" style="background:rgba(0,0,0,.15)"></div><div class="vi"><div class="vn">11,8 kg</div><div class="vd">5 fév. 2025</div></div></div>
+      <div class="vr"><div class="vdot" style="background:var(--teal)"></div><div class="vi"><div class="vn">12,4 kg</div><div class="vd">8 mai 2025</div></div><div class="bdg bo">Dernier</div></div>
+      <div class="vr"><div class="vdot" style="background:var(--bd)"></div><div class="vi"><div class="vn">12,2 kg</div><div class="vd">12 avr. 2025</div></div></div>
+      <div class="vr"><div class="vdot" style="background:var(--bd)"></div><div class="vi"><div class="vn">12,1 kg</div><div class="vd">15 mar. 2025</div></div></div>
+      <div class="vr"><div class="vdot" style="background:var(--bd)"></div><div class="vi"><div class="vn">11,8 kg</div><div class="vd">5 fév. 2025</div></div></div>
     </div>
     <div class="card">
-      <div style="padding:12px 14px;display:flex;align-items:flex-start;gap:9px">
-        <i class="ti ti-info-circle" style="color:var(--teal);font-size:17px;flex-shrink:0;margin-top:1px"></i>
-        <div style="font-size:12px;color:var(--tm);line-height:1.5">Une variation supérieure à <strong style="color:var(--t)">10% en un mois</strong> peut être un signal à surveiller. En cas de doute, consulte ton vétérinaire.</div>
+      <div style="padding:14px 16px;display:flex;align-items:flex-start;gap:10px">
+        <i class="ti ti-info-circle" style="color:var(--teal);font-size:18px;flex-shrink:0;margin-top:1px"></i>
+        <div style="font-size:13px;color:var(--tm);line-height:1.5">Une variation supérieure à <strong style="color:var(--t)">10% en un mois</strong> peut être un signal à surveiller. En cas de doute, consulte ton vétérinaire.</div>
       </div>
     </div>
   </div>
@@ -599,82 +574,77 @@ h1{font-size:15px;font-weight:500;color:#555;margin-bottom:20px;letter-spacing:.
 
 <!-- PARAMÈTRES -->
 <div id="s-params" class="screen">
-  <div class="sb"><span>9:41</span><span>◉◉◉</span></div>
-  <div class="hdr"><div class="htitle">Paramètres</div></div>
+  <div class="dash-header"><div style="font-size:22px;font-weight:600">Paramètres</div></div>
   <div class="body">
     <div class="sec">Mon compte</div>
     <div class="card">
-      <div class="row"><div class="ico" style="background:var(--bg2)"><i class="ti ti-user" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Marine D.</div><div class="rd">marine@vetid.app</div></div></div>
-      <div class="row"><div class="ico" style="background:var(--bg2)"><i class="ti ti-lock" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Changer le mot de passe</div></div><i class="ti ti-chevron-right" style="color:var(--tm);font-size:15px"></i></div>
+      <div class="row"><div class="ico" style="background:var(--bg)"><i class="ti ti-user" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Marine D.</div><div class="rd">marine@vetid.app</div></div></div>
+      <div class="row"><div class="ico" style="background:var(--bg)"><i class="ti ti-lock" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Changer le mot de passe</div></div><i class="ti ti-chevron-right" style="color:var(--tm);font-size:16px"></i></div>
     </div>
     <div class="sec">Notifications <span style="font-size:10px;color:var(--tm);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">— Prochainement</span></div>
-    <div class="lock-wrap" style="margin:0 14px 10px">
+    <div class="lock-wrap">
       <div class="card locked" style="margin:0">
-        <div class="row" style="cursor:default"><div class="ico" style="background:var(--bg2)"><i class="ti ti-bell" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Rappels traitements</div><div class="rd">Notif avant chaque rappel</div></div><div style="width:36px;height:22px;background:rgba(0,0,0,.12);border-radius:11px;position:relative"><div style="position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%"></div></div></div>
-        <div class="row" style="cursor:default;border-bottom:none"><div class="ico" style="background:var(--bg2)"><i class="ti ti-notebook" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Journal partagé</div><div class="rd">Notif quand l'entourage ajoute</div></div><div style="width:36px;height:22px;background:rgba(0,0,0,.12);border-radius:11px;position:relative"><div style="position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%"></div></div></div>
+        <div class="toggle-row" style="cursor:default"><div><div style="font-size:14px;font-weight:500;color:var(--t)">Rappels traitements</div><div style="font-size:12px;color:var(--tm);margin-top:1px">Notif avant chaque rappel</div></div><div class="toggle"></div></div>
+        <div class="toggle-row" style="cursor:default;border-bottom:none"><div><div style="font-size:14px;font-weight:500;color:var(--t)">Journal partagé</div><div style="font-size:12px;color:var(--tm);margin-top:1px">Notif quand l'entourage ajoute</div></div><div class="toggle"></div></div>
       </div>
       <div class="lock-overlay"><i class="ti ti-lock" style="font-size:13px;color:var(--tm)"></i><span>Prochainement</span></div>
     </div>
     <div class="sec">Partage & accès <span style="font-size:10px;color:var(--tm);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">— Prochainement</span></div>
-    <div class="lock-wrap" style="margin:0 14px 10px">
+    <div class="lock-wrap">
       <div class="card locked" style="margin:0">
-        <div class="row" style="cursor:default"><div class="ico" style="background:var(--bg2)"><i class="ti ti-share" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Petsitter</div><div class="rd">Accès temporaire, révocable</div></div><i class="ti ti-chevron-right" style="color:var(--tm);font-size:15px"></i></div>
-        <div class="row" style="cursor:default"><div class="ico" style="background:var(--bg2)"><i class="ti ti-stethoscope" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Vétérinaire</div><div class="rd">Accès journal & traitements</div></div><i class="ti ti-chevron-right" style="color:var(--tm);font-size:15px"></i></div>
-        <div class="row" style="cursor:default;border-bottom:none"><div class="ico" style="background:var(--bg2)"><i class="ti ti-heart" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Proche (conjoint, famille…)</div><div class="rd">Dog walker, famille…</div></div><i class="ti ti-chevron-right" style="color:var(--tm);font-size:15px"></i></div>
+        <div class="row" style="cursor:default"><div class="ico" style="background:var(--bg)"><i class="ti ti-share" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Petsitter</div><div class="rd">Accès temporaire, révocable</div></div><i class="ti ti-chevron-right" style="color:var(--tm);font-size:16px"></i></div>
+        <div class="row" style="cursor:default"><div class="ico" style="background:var(--bg)"><i class="ti ti-stethoscope" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Vétérinaire</div><div class="rd">Accès journal & traitements</div></div><i class="ti ti-chevron-right" style="color:var(--tm);font-size:16px"></i></div>
+        <div class="row" style="cursor:default;border-bottom:none"><div class="ico" style="background:var(--bg)"><i class="ti ti-heart" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">Proche (conjoint, famille…)</div><div class="rd">Dog walker, famille…</div></div><i class="ti ti-chevron-right" style="color:var(--tm);font-size:16px"></i></div>
       </div>
       <div class="lock-overlay"><i class="ti ti-lock" style="font-size:13px;color:var(--tm)"></i><span>Prochainement</span></div>
     </div>
     <div class="sec">Application</div>
     <div class="card">
-      <div class="row"><div class="ico" style="background:var(--bg2)"><i class="ti ti-star" style="color:#EF9F27"></i></div><div class="ri"><div class="rn">Donner un avis</div><div class="rd">Ça nous aide vraiment 🙏</div></div><i class="ti ti-external-link" style="color:var(--tm);font-size:15px"></i></div>
-      <div class="row"><div class="ico" style="background:var(--bg2)"><i class="ti ti-brand-instagram" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">@vetid.app</div><div class="rd">Suis-nous sur Instagram</div></div><i class="ti ti-external-link" style="color:var(--tm);font-size:15px"></i></div>
+      <div class="row"><div class="ico" style="background:var(--bg)"><i class="ti ti-star" style="color:#EF9F27"></i></div><div class="ri"><div class="rn">Donner un avis</div><div class="rd">Ça nous aide vraiment 🙏</div></div><i class="ti ti-external-link" style="color:var(--tm);font-size:16px"></i></div>
+      <div class="row"><div class="ico" style="background:var(--bg)"><i class="ti ti-brand-instagram" style="color:var(--tm)"></i></div><div class="ri"><div class="rn">@vetid.app</div><div class="rd">Suis-nous sur Instagram</div></div><i class="ti ti-external-link" style="color:var(--tm);font-size:16px"></i></div>
       <div class="row" style="border-bottom:none"><div class="ico" style="background:var(--danger-bg)"><i class="ti ti-logout" style="color:#A32D2D"></i></div><div class="ri"><div class="rn" style="color:#A32D2D">Se déconnecter</div></div></div>
     </div>
-    <div style="text-align:center;padding:14px 0 6px;font-size:11px;color:var(--tm)">VetID V0 · Fait avec ❤️ pour les proprios</div>
+    <div style="text-align:center;padding:16px 0 8px;font-size:11px;color:var(--tm)">VetID V0 · Fait avec ❤️ pour les proprios</div>
   </div>
-  <div class="tab">
-    <div class="ti" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
-    <div class="ti" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
-    <div class="ti" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
-    <div class="ti" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
-    <div class="ti" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Accueil</span></div>
+    <div class="nav-item" onclick="go('s-journal')"><i class="ti ti-notebook"></i><span>Journal</span></div>
+    <div class="nav-item" onclick="go('s-rappels')"><i class="ti ti-bell"></i><span>Rappels</span></div>
+    <div class="nav-item" onclick="go('s-blog')"><i class="ti ti-article"></i><span>Blog</span></div>
+    <div class="nav-item" onclick="go('s-communaute')"><i class="ti ti-users"></i><span>Communauté</span></div>
   </div>
-</div>
-
-</div><!-- end phone -->
-
-<div class="nav-pills">
-  <button class="npill" onclick="go('s-home')">🏠 Accueil</button>
-  <button class="npill" onclick="go('s-rappels')">🔔 Rappels</button>
-  <button class="npill" onclick="go('s-journal')">📓 Journal</button>
-  <button class="npill" onclick="go('s-profil')">🐕 Profil</button>
-  <button class="npill" onclick="go('s-blog')">📖 Blog</button>
-  <button class="npill" onclick="go('s-add-traitement')">💉 Ajout traitement</button>
-  <button class="npill" onclick="go('s-ordonnances')">💊 Ordonnances</button>
-  <button class="npill" onclick="go('s-poids')">⚖️ Poids</button>
-  <button class="npill" onclick="go('s-ob')">➕ Onboarding</button>
-  <button class="npill" onclick="go('s-params')">⚙️ Paramètres</button>
-  <button class="npill" onclick="go('s-communaute')">👥 Communauté</button>
 </div>
 
 <script>
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById(id);
-  if(el){el.classList.add('active');const b=el.querySelector('.body,.ob');if(b)b.scrollTop=0}
+  if(el){el.classList.add('active');const b=el.querySelector('.body,.ob-wrap');if(b)b.scrollTop=0}
 }
 function showModal(id){document.getElementById(id).style.display='flex'}
 function closeModal(id,e){if(!e||e.target===document.getElementById(id))document.getElementById(id).style.display='none'}
 function markDone(btn){
   const c=btn.closest('.ra-card');
   c.style.borderColor='var(--teal)';
-  c.innerHTML='<div style="display:flex;align-items:center;gap:10px"><div style="font-size:26px">✅</div><div><div style="font-size:15px;font-weight:600;color:var(--t)">Anti-puces fait !</div><div style="font-size:12px;color:var(--tm);margin-top:2px">Prochain rappel créé → 8 juin 2025</div><div style="font-size:12px;color:var(--teal);margin-top:5px">Tu as encore du produit ? · Rappel consommable</div></div></div>';
-  const screen=document.getElementById('s-rappels');
+  c.innerHTML='<div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">✅</div><div><div style="font-size:16px;font-weight:600;color:var(--t)">Anti-puces fait !</div><div style="font-size:13px;color:var(--tm);margin-top:3px">Prochain rappel créé → 8 juin 2025</div><div style="font-size:12px;color:var(--teal);margin-top:6px">Tu as encore du produit ? · Rappel consommable</div></div></div>';
   const toast=document.createElement('div');
   toast.className='badge-toast';
-  toast.innerHTML='<div class="badge-toast-icon">📋</div><div class="badge-toast-text"><div class="badge-toast-title">La timeline de Charly s\'enrichit.</div><div class="badge-toast-sub">Tu viens de débloquer Carnet ouvert 🐾</div></div>';
-  screen.appendChild(toast);
+  toast.innerHTML='<div class="badge-toast-icon">📋</div><div><div class="badge-toast-title">La timeline de Charly s\'enrichit.</div><div class="badge-toast-sub">Tu viens de débloquer Carnet ouvert 🐾</div></div>';
+  document.body.appendChild(toast);
   setTimeout(()=>toast.remove(),3500);
+}
+function pickMood(el){document.querySelectorAll('#modal-journal .mood-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on')}
+function pickType(el){document.querySelectorAll('#s-add-traitement .mood-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on')}
+function pickSp(s){document.getElementById('spdog').classList.toggle('on',s==='dog');document.getElementById('spcat').classList.toggle('on',s==='cat')}
+document.getElementById('ob-name').addEventListener('input',function(){
+  const v=this.value.trim(),sp=document.getElementById('spdog').classList.contains('on')?'chien':'chat';
+  document.getElementById('preview-name').textContent=v||'ton '+sp;
+});
+function addJe(){
+  const card=document.querySelector('#s-journal .card');
+  const e=document.createElement('div');e.className='je';e.style.background='var(--teal-l)';
+  e.innerHTML='<div class="jd">🌟</div><div class="jm"><div class="jt">Forme olympique</div><div class="jn">Nouvelle entrée ajoutée</div><div class="jdate">Maintenant · Toi</div></div>';
+  card.querySelector('.card-header').after(e);
 }
 function showBadge(name,cat,emoji,state,desc,date){
   document.getElementById('bm-ring').textContent=emoji;
@@ -683,28 +653,24 @@ function showBadge(name,cat,emoji,state,desc,date){
   document.getElementById('bm-cat').textContent=cat;
   document.getElementById('bm-desc').textContent=desc;
   const d=document.getElementById('bm-date');
-  if(state==='on'){d.textContent=date;d.style.display='block'}else{d.textContent='Pas encore débloqué';d.style.color='var(--tm)';d.style.display='block'}
+  d.textContent=state==='on'?date:'Pas encore débloqué';
+  d.style.color=state==='on'?'var(--teal)':'var(--tm)';
   document.getElementById('badge-modal').style.display='flex';
 }
-function closeBadgeModal(e){
-  if(!e||e.target===document.getElementById('badge-modal'))document.getElementById('badge-modal').style.display='none';
-}
-function pickMood(el){document.querySelectorAll('#modal-journal .mood-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on')}
-function pickType(el){document.querySelectorAll('#s-add-traitement .mood-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on')}
-function pickSp(s){
-  document.getElementById('spdog').classList.toggle('on',s==='dog');
-  document.getElementById('spcat').classList.toggle('on',s==='cat');
-}
-document.getElementById('ob-name').addEventListener('input',function(){
-  const v=this.value.trim(),sp=document.getElementById('spdog').classList.contains('on')?'chien':'chat';
-  document.getElementById('preview-name').textContent=v||'ton '+sp;
-});
-function addJe(){
-  const c=document.querySelector('#s-journal .card');
-  const e=document.createElement('div');e.className='je';e.style.background='var(--teal-l)';
-  e.innerHTML='<div class="jd">🌟</div><div class="jm"><div class="jt">Forme olympique</div><div class="jn">Nouvelle entrée ajoutée</div><div class="jdate">Maintenant · Toi</div></div>';
-  c.querySelector('.ch').after(e);
-}
+function closeBadgeModal(e){if(!e||e.target===document.getElementById('badge-modal'))document.getElementById('badge-modal').style.display='none'}
+// Swipe navigation
+let sx=0,sy=0;
+const tabs=['s-home','s-journal','s-rappels','s-blog','s-communaute'];
+document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dy)>Math.abs(dx)||Math.abs(dx)<60)return;
+  if(document.querySelector('.modal-bg[style*="flex"],.badge-modal[style*="flex"]'))return;
+  const active=document.querySelector('.screen.active');if(!active)return;
+  const idx=tabs.indexOf(active.id);if(idx===-1)return;
+  if(dx<0&&idx<tabs.length-1)go(tabs[idx+1]);
+  else if(dx>0&&idx>0)go(tabs[idx-1]);
+},{passive:true});
 </script>
 </body>
 </html>
