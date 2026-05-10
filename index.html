@@ -146,20 +146,19 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .btn-primary:active{opacity:.85}
 .btn-ghost{background:transparent;color:var(--muted);border:none;font-size:14px;cursor:pointer;padding:8px;width:100%}
 .btn-outline{background:transparent;color:var(--teal);border:1.5px solid var(--teal);border-radius:14px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;width:100%}
-.field-input{border:1px solid var(--border);border-radius:12px;padding:13px 15px;font-size:16px;color:var(--text);outline:none;width:100%;background:var(--white);transition:border-color .2s}
+.field-input{border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;font-size:16px;color:var(--text);outline:none;width:100%;background:var(--white);transition:border-color .2s}
 .field-input:focus{border-color:var(--teal)}
-.field-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.04em}
+.field-label{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block}
 .form-row{display:flex;flex-direction:column;gap:6px}
-.section-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:16px}
-.page-header{background:var(--teal);padding:14px 20px;color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0}
-.back-btn{font-size:22px;cursor:pointer;line-height:1;color:#fff;display:flex;align-items:center}
+.section-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;margin-top:16px}
+.page-header{background:var(--teal);padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.back-btn{font-size:26px;cursor:pointer;line-height:1}
 .dash-header{background:var(--teal);padding:20px 20px 24px;color:#fff;flex-shrink:0}
-.bottom-nav{height:76px;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-around;padding:10px 8px 0;flex-shrink:0;position:sticky;bottom:0}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0}
-.nav-icon{font-size:24px;color:var(--muted);line-height:1}
-.nav-icon i{font-size:24px;color:var(--muted)}
-.nav-label{font-size:10px;color:var(--muted);font-weight:500}
-.nav-item.active .nav-icon i{color:var(--teal)}
+.bottom-nav{height:76px;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-around;padding:10px 4px 0;flex-shrink:0;position:sticky;bottom:0}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0}
+.nav-ti{font-size:24px;color:var(--muted)}
+.nav-label{font-size:9px;color:var(--muted);font-weight:500;text-align:center}
+.nav-item.active .nav-ti{color:var(--teal)}
 .nav-item.active .nav-label{color:var(--teal)}
 .animal-section{background:var(--white);border-radius:16px;border:1px solid var(--border);margin-bottom:12px;overflow:hidden}
 .animal-section-header{display:flex;align-items:center;gap:10px;padding:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -183,9 +182,9 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .badge-green{background:#dcfce7;color:#166534}
 .badge-orange{background:#fed7aa;color:#9a3412}
 .badge-red{background:#fee2e2;color:#991b1b}
-.fab{position:fixed;bottom:88px;right:20px;width:52px;height:52px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:100}
+.fab{position:fixed;bottom:90px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(42,157,143,.4);z-index:100}
 .species-row{display:flex;gap:8px;flex-wrap:wrap}
-.species-btn{padding:10px 14px;border-radius:10px;border:1px solid var(--border);font-size:14px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center;transition:all .2s}
+.species-btn{padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:14px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);text-align:center;transition:all .2s}
 .species-btn.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark)}
 .toggle-row{display:flex;justify-content:space-between;align-items:center}
 .toggle{width:48px;height:26px;border-radius:13px;background:var(--border);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
@@ -209,12 +208,12 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .settings-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
 .settings-row:last-child{border-bottom:none}
 .settings-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.disabled-section{opacity:.38;pointer-events:none}
+.disabled-section{opacity:.45;pointer-events:none}
 .coming-soon{background:var(--teal-light);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--teal-dark);margin-bottom:12px;line-height:1.5}
 .blog-article{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer}
 .blog-thumb{width:76px;height:76px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
 .sponsored-tag{font-size:10px;background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:6px;font-weight:500}
-.cat-pill{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--white);color:var(--muted);white-space:nowrap;flex-shrink:0}
+.cat-pill{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);white-space:nowrap;flex-shrink:0}
 .cat-pill.active{background:var(--teal);color:#fff;border-color:var(--teal)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
 .modal-overlay.open{display:flex}
@@ -400,12 +399,12 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .new-conseil-tag{display:inline-flex;align-items:center;gap:4px;background:var(--purple);color:white;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
 .new-conseil-text{font-size:13px;color:#4C1D95;line-height:1.55;font-weight:500}
 /* Badges dash */
-.new-badge-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.new-badge-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
 .new-badge-row::-webkit-scrollbar{display:none}
-.new-badge-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:56px;flex-shrink:0;cursor:pointer}
-.new-badge-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}
-.new-badge-circle.earned{background:var(--teal-light);box-shadow:0 0 0 2px var(--teal)}
-.new-badge-circle.locked{background:var(--bg);border:2px solid var(--border);filter:grayscale(1);opacity:.35}
+.new-badge-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:52px}
+.new-badge-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.new-badge-circle.earned{background:var(--teal-light);border:2px solid var(--teal)}
+.new-badge-circle.locked{background:var(--bg);border:2px solid var(--border);filter:grayscale(1);opacity:.45}
 .new-badge-name{font-size:9px;color:var(--muted);text-align:center;font-weight:500;line-height:1.2}
 
 /* ── BALADES ── */
@@ -424,11 +423,11 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 /* ── BADGES ── */
 .badges-grid{display:flex;gap:10px;overflow-x:auto;padding:12px 14px 16px;-webkit-overflow-scrolling:touch}
 .badges-grid::-webkit-scrollbar{display:none}
-.badge-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:4px;border-radius:12px;transition:background .15s;flex-shrink:0;width:72px}
+.badge-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:4px;border-radius:12px;transition:background .15s;flex-shrink:0;width:74px}
 .badge-item:active{background:var(--bg)}
 .badge-emoji-wrap{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;transition:all .2s}
-.badge-emoji-wrap.earned{background:var(--teal-light);box-shadow:0 0 0 2.5px var(--teal)}
-.badge-emoji-wrap.locked{background:var(--bg);border:2px solid var(--border);filter:grayscale(1);opacity:.35}
+.badge-emoji-wrap.earned{box-shadow:0 0 0 2.5px var(--teal)}
+.badge-emoji-wrap.locked{filter:grayscale(1);opacity:.35}
 .badge-name{font-size:10px;font-weight:500;color:var(--text);text-align:center;line-height:1.2}
 .badge-name.locked{color:var(--muted)}
 .badge-toast-wrap{display:flex;align-items:center;gap:8px}
@@ -455,10 +454,9 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .lieux-empty{text-align:center;padding:48px 24px;color:var(--muted)}
 
 @media(min-width:480px){
-  body{display:flex;justify-content:center;align-items:flex-start;background:#e0f0ee;min-height:100vh}
+  body{display:flex;justify-content:center;align-items:flex-start;background:#e8f5f3;min-height:100vh}
   .screen{max-width:430px;width:100%;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.12)}
   .fab{right:calc(50% - 215px + 20px)}
-  .toast{bottom:100px}
 }
 </style>
 </head>
@@ -579,7 +577,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div class="new-dash-header-top">
       <div class="new-app-name">VetID</div>
       <div class="new-notif-btn" onclick="checkNotifications()">
-        <i class="ti ti-bell" style="font-size:18px;color:var(--teal)"></i>
+        🔔
         <div class="new-notif-dot" id="notif-dot"></div>
       </div>
     </div>
@@ -592,7 +590,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <!-- EMPTY STATE -->
     <div id="dash-empty-state" style="display:none;text-align:center;padding:48px 0;color:var(--muted)">
       <div style="font-size:56px;margin-bottom:16px">🐾</div>
-      <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Bienvenue sur VetId !</div>
+      <div style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">Bienvenue sur VetID !</div>
       <div style="font-size:14px;line-height:1.7;margin-bottom:24px">Ajoutez votre premier compagnon<br>pour commencer le suivi.</div>
       <button class="btn-primary" style="max-width:240px;margin:0 auto" onclick="openAddAnimal()">+ Ajouter mon animal</button>
     </div>
@@ -635,43 +633,8 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         </div>
       </div>
 
-      <!-- ③ BALADE (chiens uniquement) -->
-      <div id="balade-widget-container" style="display:none;flex-direction:column;gap:10px">
-        <!-- CTA si pas de balade en cours -->
-        <div class="new-balade-cta" id="balade-cta" onclick="demarrerBalade(selectedAnimalId)">
-          <div class="new-balade-icon">🐾</div>
-          <div class="new-balade-text">
-            <h3>Enregistrer une balade</h3>
-            <p id="balade-last-text">Aucune balade enregistrée</p>
-          </div>
-          <div style="margin-left:auto;font-size:20px;opacity:.7">›</div>
-        </div>
-        <!-- Chrono si balade en cours -->
-        <div class="new-balade-active" id="balade-active-widget" style="display:none">
-          <div class="new-balade-timer" id="balade-timer-widget">00:00</div>
-          <div style="font-size:12px;color:var(--red);margin:4px 0 12px">Balade en cours 🔴</div>
-          <button class="new-balade-stop" onclick="terminerBalade()">⏹ Terminer la balade</button>
-        </div>
-        <!-- Historique + objectif -->
-        <div class="new-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <span class="new-card-title" style="margin:0">Dernières balades</span>
-            <span style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer" onclick="openBalades(selectedAnimalId)">Voir tout ›</span>
-          </div>
-          <div id="balade-history-list"></div>
-          <div style="margin-top:10px">
-            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px">
-              <span>Objectif semaine</span>
-              <span style="color:var(--teal);font-weight:700" id="balade-objectif-text">0/5 jours</span>
-            </div>
-            <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
-              <div style="height:100%;background:var(--teal);border-radius:3px;transition:width .3s" id="balade-objectif-bar"></div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- ⑤ CROQUETTES -->
+      <!-- ④ CROQUETTES -->
       <div id="croq-widget" style="display:none">
         <div class="new-croq-card">
           <div class="new-croq-icon">🥣</div>
@@ -742,17 +705,18 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 
   <div class="bottom-nav">
-    <div class="nav-item active" id="nav-home" onclick="goToTab('home')"><div class="nav-icon"><i class="ti ti-home"></i></div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item" id="nav-journal" onclick="goToTab('journal')"><div class="nav-icon"><i class="ti ti-notebook"></i></div><div class="nav-label">Journal</div></div>
-    <div class="nav-item" id="nav-lieux" onclick="goToTab('lieux')"><div class="nav-icon"><i class="ti ti-map-pin"></i></div><div class="nav-label">Lieux</div></div>
-    <div class="nav-item" id="nav-settings" onclick="goToTab('settings')"><div class="nav-icon"><i class="ti ti-settings"></i></div><div class="nav-label">Réglages</div></div>
+    <div class="nav-item active" onclick="goToTab('home')"><i class="ti ti-home nav-ti"></i><div class="nav-label">Accueil</div></div>
+    <div class="nav-item" onclick="goToTab('journal')"><i class="ti ti-notebook nav-ti"></i><div class="nav-label">Journal</div></div>
+    <div class="nav-item" onclick="goToTab('rappels')"><i class="ti ti-bell nav-ti"></i><div class="nav-label">Rappels</div></div>
+    <div class="nav-item" onclick="goToTab('blog')"><i class="ti ti-article nav-ti"></i><div class="nav-label">Blog</div></div>
+    <div class="nav-item" onclick="goToTab('communaute')"><i class="ti ti-users nav-ti"></i><div class="nav-label">Communauté</div></div>
   </div>
 </div>
 
 <!-- SOINS -->
 <div id="screen-soins" class="screen">
   <div class="page-header">
-    <div class="back-btn" onclick="showScreen('dashboard')"><i class="ti ti-chevron-left"></i></div>
+    <div class="back-btn" onclick="goToTab('home')"><i class="ti ti-chevron-left"></i></div>
     <div><div id="soins-title" style="font-size:18px;font-weight:700">Soins</div><div style="font-size:12px;opacity:.8">Traitements & rappels</div></div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:16px">
@@ -767,7 +731,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <!-- POIDS -->
 <div id="screen-poids" class="screen">
   <div class="page-header">
-    <div class="back-btn" onclick="showScreen('dashboard')"><i class="ti ti-chevron-left"></i></div>
+    <div class="back-btn" onclick="goToTab('home')"><i class="ti ti-chevron-left"></i></div>
     <div><div id="poids-title" style="font-size:18px;font-weight:700">Suivi du poids</div></div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:16px">
@@ -782,7 +746,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <!-- CROQUETTES -->
 <div id="screen-croquettes" class="screen">
   <div class="page-header">
-    <div class="back-btn" onclick="showScreen('dashboard')"><i class="ti ti-chevron-left"></i></div>
+    <div class="back-btn" onclick="goToTab('home')"><i class="ti ti-chevron-left"></i></div>
     <div><div id="croquettes-title" style="font-size:18px;font-weight:700">Croquettes</div></div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:16px">
@@ -794,35 +758,12 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <!-- VÉTÉRINAIRE -->
 <div id="screen-vet" class="screen">
   <div class="page-header">
-    <div class="back-btn" onclick="showScreen('dashboard')"><i class="ti ti-chevron-left"></i></div>
+    <div class="back-btn" onclick="goToTab('home')"><i class="ti ti-chevron-left"></i></div>
     <div><div id="vet-title" style="font-size:18px;font-weight:700">Mon vétérinaire</div></div>
   </div>
   <div style="flex:1;overflow-y:auto;padding:16px">
     <div id="vet-content"></div>
     <button class="btn-primary" onclick="openEditVet()" id="vet-edit-btn">✏️ Modifier les coordonnées</button>
-  </div>
-</div>
-
-<!-- BALADES -->
-<div id="screen-balades" class="screen">
-  <div class="page-header">
-    <div class="back-btn" onclick="showScreen('dashboard')"><i class="ti ti-chevron-left"></i></div>
-    <div>
-      <div id="balades-title" style="font-size:18px;font-weight:700">Balades</div>
-      <div style="font-size:12px;opacity:.8">Historique et suivi</div>
-    </div>
-  </div>
-  <div style="flex:1;overflow-y:auto;padding:16px">
-    <div id="balades-chrono-banner" style="display:none;background:var(--teal);border-radius:16px;padding:16px;margin-bottom:16px;color:#fff">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <div>
-          <div style="font-size:13px;opacity:.85">Balade en cours</div>
-          <div id="balades-chrono-display" style="font-size:32px;font-weight:800;font-variant-numeric:tabular-nums">00:00</div>
-        </div>
-        <button id="balades-stop-btn" onclick="terminerBalade()" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:12px;padding:12px 18px;font-size:14px;font-weight:700;cursor:pointer">Terminer</button>
-      </div>
-    </div>
-    <div id="balades-list"></div>
   </div>
 </div>
 
@@ -850,7 +791,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <!-- ARTICLE -->
 <div id="screen-article" class="screen">
   <div class="page-header">
-    <div class="back-btn" onclick="showScreen('blog')"><i class="ti ti-chevron-left"></i></div>
+    <div class="back-btn" onclick="goToTab('blog')"><i class="ti ti-chevron-left"></i></div>
     <div style="flex:1"><div id="article-cat" style="font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.5px"></div><div id="article-title-header" style="font-size:16px;font-weight:700"></div></div>
   </div>
   <div style="flex:1;overflow-y:auto">
@@ -899,17 +840,18 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 
   <div class="bottom-nav">
-    <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon"><i class="ti ti-home"></i></div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item active"><div class="nav-icon"><i class="ti ti-notebook"></i></div><div class="nav-label">Journal</div></div>
-    <div class="nav-item" onclick="goToTab('lieux')"><div class="nav-icon"><i class="ti ti-map-pin"></i></div><div class="nav-label">Lieux</div></div>
-    <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon"><i class="ti ti-settings"></i></div><div class="nav-label">Réglages</div></div>
+    <div class="nav-item" onclick="goToTab('home')"><i class="ti ti-home nav-ti"></i><div class="nav-label">Accueil</div></div>
+    <div class="nav-item active"><i class="ti ti-notebook nav-ti"></i><div class="nav-label">Journal</div></div>
+    <div class="nav-item" onclick="goToTab('rappels')"><i class="ti ti-bell nav-ti"></i><div class="nav-label">Rappels</div></div>
+    <div class="nav-item" onclick="goToTab('blog')"><i class="ti ti-article nav-ti"></i><div class="nav-label">Blog</div></div>
+    <div class="nav-item" onclick="goToTab('communaute')"><i class="ti ti-users nav-ti"></i><div class="nav-label">Communauté</div></div>
   </div>
 </div>
 
 <!-- JOURNAL DETAIL -->
 <div id="screen-journal-detail" class="screen">
   <div class="page-header">
-    <div class="back-btn" onclick="showScreen('journal')"><i class="ti ti-chevron-left"></i></div>
+    <div class="back-btn" onclick="goToTab('journal')"><i class="ti ti-chevron-left"></i></div>
     <div style="flex:1;font-size:16px;font-weight:700" id="jdetail-title">Entrée</div>
     <div style="font-size:13px;color:rgba(255,255,255,.8);cursor:pointer" onclick="deleteJournalEntry()">🗑</div>
   </div>
@@ -951,50 +893,13 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     LIEUX PET-FRIENDLY
-     ══════════════════════════════════════ -->
-<div id="screen-lieux" class="screen">
-  <div class="dash-header">
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-size:22px;font-weight:700">Lieux pet-friendly</div>
-        <div style="font-size:13px;opacity:.8;margin-top:2px">Restos, parcs, hôtels, vétos…</div>
-      </div>
-      <button onclick="openAddLieu()" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer">＋ Ajouter</button>
-    </div>
-    <input class="lieux-search" id="lieux-search" type="text" placeholder="🔍 Rechercher un lieu ou une ville…" oninput="filterLieux()">
-  </div>
-
-  <!-- Filtres catégorie -->
-  <div class="lieux-filter-row" id="lieux-filter-row">
-    <button class="lieu-chip active" onclick="selectLieuCat('',this)">🐾 Tous</button>
-    <button class="lieu-chip inactive" onclick="selectLieuCat('resto',this)">🍽️ Restos</button>
-    <button class="lieu-chip inactive" onclick="selectLieuCat('hotel',this)">🏨 Hôtels</button>
-    <button class="lieu-chip inactive" onclick="selectLieuCat('parc',this)">🌳 Parcs</button>
-    <button class="lieu-chip inactive" onclick="selectLieuCat('veto',this)">🩺 Vétos</button>
-    <button class="lieu-chip inactive" onclick="selectLieuCat('shop',this)">🛍️ Shops</button>
-  </div>
-
-  <div style="flex:1;overflow-y:auto;padding:14px" id="lieux-list">
-    <div style="text-align:center;padding:40px;color:var(--muted)">Chargement…</div>
-  </div>
-
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon"><i class="ti ti-home"></i></div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item" onclick="goToTab('journal')"><div class="nav-icon"><i class="ti ti-notebook"></i></div><div class="nav-label">Journal</div></div>
-    <div class="nav-item active"><div class="nav-icon"><i class="ti ti-map-pin"></i></div><div class="nav-label">Lieux</div></div>
-    <div class="nav-item" onclick="goToTab('settings')"><div class="nav-icon"><i class="ti ti-settings"></i></div><div class="nav-label">Réglages</div></div>
-  </div>
-</div>
-
 <!-- RÉGLAGES -->
 <div id="screen-settings" class="screen">
   <div class="dash-header"><div style="font-size:22px;font-weight:700">Réglages</div><div id="settings-email" style="font-size:13px;opacity:.8;margin-top:2px"></div></div>
   <div style="flex:1;overflow-y:auto;padding:16px">
-    <div class="section-title">Carnet de badges 🏆</div>
+    <div class="section-title">Mes badges 🏆</div>
     <div class="settings-group">
-      <div style="padding:4px 0 6px">
+      <div style="padding:14px">
         <div id="badges-grid" class="badges-grid"></div>
       </div>
     </div>
@@ -1021,7 +926,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
         <span style="color:var(--border)">›</span>
       </div>
     </div>
-    <div class="coming-soon">🔒 Le partage avec un proche arrive en V2 — prochainement !</div>
+    <div class="coming-soon">🔒 Le partage avec l'entourage (petsitter, véto, famille) arrive en V1 — prochainement !</div>
     <div class="section-title">Nous contacter</div>
     <div class="settings-group">
       <div class="settings-row" onclick="openFeedback()">
@@ -1058,16 +963,17 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <button class="btn-outline" style="margin-top:8px;margin-bottom:32px" onclick="logout()">Se déconnecter</button>
   </div>
   <div class="bottom-nav">
-    <div class="nav-item" onclick="goToTab('home')"><div class="nav-icon"><i class="ti ti-home"></i></div><div class="nav-label">Accueil</div></div>
-    <div class="nav-item" onclick="goToTab('journal')"><div class="nav-icon"><i class="ti ti-notebook"></i></div><div class="nav-label">Journal</div></div>
-    <div class="nav-item" onclick="goToTab('lieux')"><div class="nav-icon"><i class="ti ti-map-pin"></i></div><div class="nav-label">Lieux</div></div>
-    <div class="nav-item active"><div class="nav-icon"><i class="ti ti-settings"></i></div><div class="nav-label">Réglages</div></div>
+    <div class="nav-item" onclick="goToTab('home')"><i class="ti ti-home nav-ti"></i><div class="nav-label">Accueil</div></div>
+    <div class="nav-item" onclick="goToTab('journal')"><i class="ti ti-notebook nav-ti"></i><div class="nav-label">Journal</div></div>
+    <div class="nav-item" onclick="goToTab('rappels')"><i class="ti ti-bell nav-ti"></i><div class="nav-label">Rappels</div></div>
+    <div class="nav-item" onclick="goToTab('blog')"><i class="ti ti-article nav-ti"></i><div class="nav-label">Blog</div></div>
+    <div class="nav-item active" onclick="goToTab('communaute')"><i class="ti ti-users nav-ti"></i><div class="nav-label">Communauté</div></div>
   </div>
 </div>
 
 <!-- PRIVACY -->
 <div id="screen-privacy" class="screen">
-  <div class="page-header"><div class="back-btn" onclick="showScreen('settings')"><i class="ti ti-chevron-left"></i></div><div style="font-size:18px;font-weight:700">Politique de confidentialité</div></div>
+  <div class="page-header"><div class="back-btn" onclick="goToTab('settings')"><i class="ti ti-chevron-left"></i></div><div style="font-size:18px;font-weight:700">Politique de confidentialité</div></div>
   <div style="flex:1;overflow-y:auto;padding:20px;font-size:14px;line-height:1.8;color:var(--text)">
     <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Dernière mise à jour : juin 2026</p>
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">1. Qui sommes-nous ?</h2>
@@ -1080,6 +986,25 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <p style="margin-bottom:12px;color:var(--muted)">Vous disposez des droits d'accès, rectification, effacement et portabilité. Utilisez les options dans Réglages.</p>
     <h2 style="font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--teal-dark)">5. Sécurité</h2>
     <p style="margin-bottom:12px;color:var(--muted)">Votre mot de passe est chiffré par Firebase. Les données animaux restent sur votre appareil.</p>
+  </div>
+</div>
+
+
+<!-- COMMUNAUTÉ -->
+<div id="screen-communaute" class="screen">
+  <div class="dash-header"><div style="font-size:22px;font-weight:700">Communauté</div></div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center">
+    <div style="font-size:56px;margin-bottom:20px">🐾</div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:10px">Bientôt disponible</div>
+    <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:24px">Un espace pour partager, poser tes questions et retrouver d'autres proprios de chats et chiens.</div>
+    <div style="background:var(--teal-light);border-radius:14px;padding:14px 20px;font-size:13px;color:var(--teal-dark);line-height:1.5">Tu seras prévenu(e) en avant-première 🎉<br><span style="font-size:11px;opacity:.8">Suis-nous sur @vetid.app</span></div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="goToTab('home')"><i class="ti ti-home nav-ti"></i><div class="nav-label">Accueil</div></div>
+    <div class="nav-item" onclick="goToTab('journal')"><i class="ti ti-notebook nav-ti"></i><div class="nav-label">Journal</div></div>
+    <div class="nav-item" onclick="goToTab('rappels')"><i class="ti ti-bell nav-ti"></i><div class="nav-label">Rappels</div></div>
+    <div class="nav-item" onclick="goToTab('blog')"><i class="ti ti-article nav-ti"></i><div class="nav-label">Blog</div></div>
+    <div class="nav-item active"><i class="ti ti-users nav-ti"></i><div class="nav-label">Communauté</div></div>
   </div>
 </div>
 
@@ -1407,41 +1332,6 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
   </div>
 </div>
 
-<!-- MODAL LOG BALADE -->
-<div class="modal-overlay" id="modal-balade">
-  <div class="modal-sheet" id="sheet-balade">
-    <div class="modal-handle" id="handle-balade"></div>
-    <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">&#128062; Enregistrer la balade</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:20px" id="modal-balade-sub">Durée automatique depuis le chrono</div>
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div style="display:flex;gap:10px">
-        <div class="form-row" style="flex:1">
-          <label class="field-label">Durée (min)</label>
-          <input class="field-input" id="b-duree" type="number" placeholder="30" min="1">
-        </div>
-        <div class="form-row" style="flex:1">
-          <label class="field-label">Distance (km)</label>
-          <input class="field-input" id="b-distance" type="number" step="0.1" placeholder="2.5">
-        </div>
-      </div>
-      <div class="form-row">
-        <label class="field-label">Lieu (optionnel)</label>
-        <input class="field-input" id="b-lieu" type="text" placeholder="Parc de la Visitation">
-      </div>
-      <div class="form-row">
-        <label class="field-label">Notes (optionnel)</label>
-        <textarea class="field-input" id="b-notes" rows="2" placeholder="Il a adoré rencontrer d'autres chiens..." style="resize:none"></textarea>
-      </div>
-      <button class="btn-primary" onclick="sauvegarderBalade()">Enregistrer la balade</button>
-      <!-- Séparateur -->
-      <div style="display:flex;gap:8px">
-        <button onclick="reprendreBalade()" style="flex:1;padding:12px;border-radius:12px;background:var(--teal-light);color:var(--teal-dark);border:none;font-size:13px;font-weight:600;cursor:pointer">&#9654; Reprendre</button>
-        <button onclick="annulerBaladeDefinitivement()" style="flex:1;padding:12px;border-radius:12px;background:#fee2e2;color:#991b1b;border:none;font-size:13px;font-weight:600;cursor:pointer">&#128465; Ne pas enregistrer</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1489,8 +1379,6 @@ let state = {
   journalTags: [],
   journalPhotoData: null,
   // Chrono balade
-  baladeEnCours: null,   // { animalId, startTime }
-  baladeInterval: null,
   viewingEntryId: null,
   badges: []  // [ badgeId, … ]
 };
@@ -1561,7 +1449,7 @@ function saveState() {
     localStorage.setItem('vetid_' + state.user.uid, JSON.stringify({
       animals: state.animals, treatments: state.treatments,
       weights: state.weights, croquettes: state.croquettes, vets: state.vets,
-      journal: state.journal, balades: state.balades, badges: state.badges
+      journal: state.journal, badges: state.badges
     }));
   }
 }
@@ -1677,17 +1565,16 @@ function goToDashboard() {
   showScreen('dashboard');
   updateDashboard();
   loadBlogPreview();
-  // Charger les lieux pour la preview dashboard
-  if (!allLieux.length) chargerLieux().then(function() { renderLieuxPreview(); });
   setTimeout(checkCroquettesAlert, 2000);
-  restaurerChronoBalade();
   setTimeout(checkAndAwardBadges, 1000);
 }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
 function goToTab(tab) {
   if (tab === 'journal') { openJournal(); return; }
-  if (tab === 'lieux') { openLieux(); return; }
+  if (tab === 'blog') { loadBlog(); showScreen('blog'); return; }
+  if (tab === 'communaute') { showScreen('communaute'); return; }
+  if (tab === 'rappels') { if (selectedAnimalId) openSoins(selectedAnimalId); else showScreen('dashboard'); return; }
   const map = { home: 'dashboard', settings: 'settings' };
   showScreen(map[tab] || tab);
   if (tab === 'settings') {
@@ -1742,7 +1629,7 @@ const CONSEILS_JOUR = [
   { espece: 'dog', ageMin: 0, ageMax: 1, texte: "La socialisation avant 3 mois est cruciale. Exposez votre chiot à un maximum de situations, personnes et animaux différents dans un cadre sécurisé.", articleTag: 'Comportement' },
   { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Ne laissez pas un chiot seul trop longtemps. Sa capacité à rester seul se construit progressivement — commencez par quelques minutes et augmentez graduellement.", articleTag: 'Comportement' },
   { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Alimentation chiot : 3 à 4 repas par jour jusqu'à 6 mois, puis 2 repas. Les croquettes Junior sont formulées pour soutenir une croissance rapide.", articleTag: 'Nutrition' },
-  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Le calendrier vaccinal du chiot est dense : primo-vaccination à 8-12 semaines, rappel à 16 semaines. Enregistrez chaque injection dans VetId.", articleTag: 'Santé' },
+  { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Le calendrier vaccinal du chiot est dense : primo-vaccination à 8-12 semaines, rappel à 16 semaines. Enregistrez chaque injection dans VetID.", articleTag: 'Santé' },
   { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Les balades du chiot doivent rester courtes avant 6 mois. Une règle simple : 5 minutes par mois d'âge, deux fois par jour maximum pour protéger les articulations.", articleTag: 'Conseils' },
   { espece: 'dog', ageMin: 0, ageMax: 1, texte: "Habituez votre chiot à rester seul dès les premières semaines. Partir sans cérémonie et revenir calmement aide à prévenir l'anxiété de séparation.", articleTag: 'Comportement' },
 
@@ -1996,114 +1883,6 @@ function renderRappelsDash(animalId) {
       item.onclick = function() { openSoins(animalId); };
     }
     row.appendChild(item);
-  });
-}
-
-function renderBaladeDashWidget(animalId) {
-  const enCours = state.baladeEnCours && state.baladeEnCours.animalId === animalId;
-  const ctaEl = document.getElementById('balade-cta');
-  const activeEl = document.getElementById('balade-active-widget');
-  if (ctaEl) ctaEl.style.display = enCours ? 'none' : 'flex';
-  if (activeEl) activeEl.style.display = enCours ? 'block' : 'none';
-
-  // Chrono live dans le widget
-  if (enCours) {
-    const elapsed = Date.now() - state.baladeEnCours.startTime;
-    const timerEl = document.getElementById('balade-timer-widget');
-    if (timerEl) timerEl.textContent = formatChrono(elapsed);
-    if (state.baladeInterval) clearInterval(state.baladeInterval);
-    state.baladeInterval = setInterval(function() {
-      const el = document.getElementById('balade-timer-widget');
-      if (el) el.textContent = formatChrono(Date.now() - state.baladeEnCours.startTime);
-    }, 1000);
-  }
-
-  // Dernière balade
-  const derniere = getDerniereBaladesAid(animalId);
-  const lastTextEl = document.getElementById('balade-last-text');
-  if (lastTextEl) {
-    lastTextEl.textContent = derniere
-      ? 'Dernière : ' + formatDateShort(derniere.date) + (derniere.dureeMin ? ' · ' + derniere.dureeMin + ' min' : '')
-      : 'Aucune balade enregistrée';
-  }
-
-  // Historique (3 dernières)
-  const histEl = document.getElementById('balade-history-list');
-  if (histEl) {
-    histEl.innerHTML = '';
-    const recent = state.balades.filter(function(b) { return b.animalId === animalId; })
-      .sort(function(a, b) { return new Date(b.date) - new Date(a.date); }).slice(0, 3);
-    if (!recent.length) {
-      histEl.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0">Aucune balade encore</div>';
-    } else {
-      recent.forEach(function(b) {
-        const row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)';
-        const d = document.createElement('div');
-        d.style.flex = '1';
-        const dt = document.createElement('div');
-        dt.style.cssText = 'font-size:12px;font-weight:600;color:var(--text)';
-        dt.textContent = formatDateShort(b.date);
-        const sub = document.createElement('div');
-        sub.style.cssText = 'font-size:10px;color:var(--muted)';
-        sub.textContent = (b.dureeMin ? b.dureeMin + ' min' : '') + (b.distanceKm ? ' · ' + b.distanceKm + ' km' : '');
-        d.appendChild(dt); d.appendChild(sub);
-        row.appendChild(d);
-        if (b.lieu) {
-          const lieu = document.createElement('div');
-          lieu.style.cssText = 'font-size:10px;color:var(--muted)';
-          lieu.textContent = b.lieu;
-          row.appendChild(lieu);
-        }
-        histEl.appendChild(row);
-      });
-    }
-  }
-
-  // Objectif
-  const baladesWeek = getBaladesSemaine(animalId);
-  const objectif = getObjectifBalade(animalId);
-  const pct = Math.min(100, Math.round((baladesWeek.length / objectif) * 100));
-  const objText = document.getElementById('balade-objectif-text');
-  const objBar = document.getElementById('balade-objectif-bar');
-  if (objText) objText.textContent = baladesWeek.length + '/' + objectif + ' jours';
-  if (objBar) objBar.style.width = pct + '%';
-}
-
-function renderLieuxPreview() {
-  const el = document.getElementById('lieux-preview-list');
-  if (!el) return;
-  el.innerHTML = '';
-  const LIEU_CFG = {
-    resto: { icon: '🍽️' }, hotel: { icon: '🏨' }, parc: { icon: '🌳' },
-    veto: { icon: '🩺' }, shop: { icon: '🛍️' }
-  };
-  const preview = allLieux.filter(function(l) { return l.statut === 'valide'; }).slice(0, 2);
-  if (!preview.length) {
-    const empty = document.createElement('div');
-    empty.style.cssText = 'font-size:12px;color:var(--muted);text-align:center;padding:8px 0';
-    empty.textContent = 'Aucun lieu pour le moment';
-    el.appendChild(empty);
-    return;
-  }
-  preview.forEach(function(lieu) {
-    const cfg = LIEU_CFG[lieu.categorie] || { icon: '📍' };
-    const item = document.createElement('div');
-    item.className = 'new-lieu-item';
-    item.onclick = function() { goToTab('lieux'); };
-    const emoji = document.createElement('div');
-    emoji.className = 'new-lieu-emoji';
-    emoji.textContent = cfg.icon;
-    const info = document.createElement('div');
-    const name = document.createElement('div');
-    name.className = 'new-lieu-name';
-    name.textContent = lieu.nom;
-    const sub = document.createElement('div');
-    sub.className = 'new-lieu-sub';
-    sub.textContent = lieu.ville + (lieu.categorie ? ' · ' + lieu.categorie : '');
-    info.appendChild(name); info.appendChild(sub);
-    item.appendChild(emoji); item.appendChild(info);
-    el.appendChild(item);
   });
 }
 
@@ -3374,714 +3153,8 @@ function buildBaladeWidget(a) {
   const wrap = document.createElement('div');
   wrap.style.cssText = 'background:var(--teal-light);border-radius:14px;padding:12px';
 
-  const enCours = state.baladeEnCours && state.baladeEnCours.animalId === a.id;
-  const derniere = getDerniereBaladesAid(a.id);
-  const baladesWeek = getBaladesSemaine(a.id);
-  const objectif = getObjectifBalade(a.id);
-  const pct = Math.min(100, Math.round((baladesWeek.length / objectif) * 100));
-
-  // Titre
-  const titre = document.createElement('div');
-  titre.style.cssText = 'font-size:12px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px';
-  titre.textContent = '🐾 Balades';
-  wrap.appendChild(titre);
-
-  if (enCours) {
-    // Afficher chrono en cours
-    const chronoDiv = document.createElement('div');
-    chronoDiv.style.cssText = 'display:flex;align-items:center;justify-content:space-between';
-    const chronoLeft = document.createElement('div');
-    const chronoLabel = document.createElement('div');
-    chronoLabel.style.cssText = 'font-size:11px;color:var(--teal-dark)';
-    chronoLabel.textContent = 'En cours…';
-    const chronoTime = document.createElement('div');
-    chronoTime.id = 'chrono-dash-' + a.id;
-    chronoTime.style.cssText = 'font-size:22px;font-weight:800;color:var(--teal-dark);font-variant-numeric:tabular-nums';
-    chronoTime.textContent = formatChrono(Date.now() - state.baladeEnCours.startTime);
-    chronoLeft.appendChild(chronoLabel);
-    chronoLeft.appendChild(chronoTime);
-    const stopBtn = document.createElement('button');
-    stopBtn.style.cssText = 'background:var(--teal);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer';
-    stopBtn.textContent = 'Terminer';
-    stopBtn.onclick = function(e) { e.stopPropagation(); terminerBalade(); };
-    chronoDiv.appendChild(chronoLeft);
-    chronoDiv.appendChild(stopBtn);
-    wrap.appendChild(chronoDiv);
-  } else {
-    // Objectif semaine
-    const objRow = document.createElement('div');
-    objRow.className = 'objectif-bar-wrap';
-    const objLabel = document.createElement('div');
-    objLabel.className = 'objectif-label';
-    const objLeft = document.createElement('span');
-    objLeft.textContent = baladesWeek.length + '/' + objectif + ' balades cette semaine';
-    const objRight = document.createElement('span');
-    objRight.textContent = pct + '%';
-    objLabel.appendChild(objLeft);
-    objLabel.appendChild(objRight);
-    const bar = document.createElement('div');
-    bar.className = 'progress-bar';
-    const fill = document.createElement('div');
-    fill.className = 'progress-fill';
-    fill.style.cssText = 'width:' + pct + '%;background:' + (pct >= 100 ? 'var(--green)' : 'var(--teal)');
-    bar.appendChild(fill);
-    objRow.appendChild(objLabel);
-    objRow.appendChild(bar);
-    wrap.appendChild(objRow);
-
-    // Dernière balade
-    if (derniere) {
-      const lastDiv = document.createElement('div');
-      lastDiv.style.cssText = 'font-size:11px;color:var(--teal-dark);margin:6px 0 8px';
-      const dist = derniere.distanceKm ? ' · ' + derniere.distanceKm + ' km' : '';
-      const duree = derniere.dureeMin ? derniere.dureeMin + ' min' : '';
-      lastDiv.textContent = 'Dernière : ' + formatDateShort(derniere.date) + (duree ? ' · ' + duree : '') + dist;
-      wrap.appendChild(lastDiv);
-    }
-
-    // Bouton démarrer
-    const startBtn = document.createElement('button');
-    startBtn.className = 'chrono-btn-start';
-    startBtn.style.marginTop = '6px';
-    startBtn.innerHTML = '&#128062; Démarrer une balade';
-    startBtn.onclick = function(e) { e.stopPropagation(); demarrerBalade(a.id); };
-    wrap.appendChild(startBtn);
-  }
-
-  // Lien historique — toujours visible
-  const histLink = document.createElement('div');
-  histLink.style.cssText = 'text-align:center;margin-top:8px';
-  const histBtn = document.createElement('button');
-  histBtn.style.cssText = 'background:none;border:none;color:var(--teal-dark);font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;padding:4px';
-  const nbBalades = state.balades.filter(function(b) { return b.animalId === a.id; }).length;
-  histBtn.textContent = nbBalades > 0
-    ? 'Voir les ' + nbBalades + ' balade' + (nbBalades > 1 ? 's' : '') + ' ›'
-    : "Voir l'historique ›";
-  histBtn.onclick = function(e) { e.stopPropagation(); openBalades(a.id); };
-  histLink.appendChild(histBtn);
-  wrap.appendChild(histLink);
 
   return wrap;
-}
-
-function formatChrono(ms) {
-  const totalSec = Math.floor(ms / 1000);
-  const h = Math.floor(totalSec / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-  if (h > 0) {
-    return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-  }
-  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-}
-
-function demarrerBalade(aid) {
-  // Sauvegarder startTime dans localStorage pour résister au verrouillage écran iOS
-  const startTime = Date.now();
-  state.baladeEnCours = { animalId: aid, startTime };
-  localStorage.setItem('vetid_balade_en_cours', JSON.stringify({ animalId: aid, startTime }));
-
-  // Lancer le chrono
-  if (state.baladeInterval) clearInterval(state.baladeInterval);
-  state.baladeInterval = setInterval(function() {
-    const elapsed = Date.now() - state.baladeEnCours.startTime;
-    const txt = formatChrono(elapsed);
-    // Mettre à jour dans le dashboard
-    const el = document.getElementById('chrono-dash-' + aid);
-    if (el) el.textContent = txt;
-    // Mettre à jour dans l'écran balades si ouvert
-    const el2 = document.getElementById('balades-chrono-display');
-    if (el2) el2.textContent = txt;
-  }, 1000);
-
-  updateDashboard();
-  showToast('Balade démarrée ! 🐾');
-}
-
-function terminerBalade() {
-  if (!state.baladeEnCours) return;
-  if (state.baladeInterval) { clearInterval(state.baladeInterval); state.baladeInterval = null; }
-
-  const dureeMs = Date.now() - state.baladeEnCours.startTime;
-  const dureeMin = Math.max(1, Math.round(dureeMs / 60000));
-  const aid = state.baladeEnCours.animalId;
-
-  // Pré-remplir le modal
-  document.getElementById('b-duree').value = dureeMin;
-  document.getElementById('b-distance').value = '';
-  document.getElementById('b-lieu').value = '';
-  document.getElementById('b-notes').value = '';
-
-  const a = state.animals.find(function(x) { return x.id === aid; });
-  const sub = document.getElementById('modal-balade-sub');
-  if (sub) sub.textContent = a ? 'Balade de ' + a.name + ' — ' + dureeMin + ' min' : dureeMin + ' min';
-
-  openModal('modal-balade');
-}
-
-function reprendreBalade() {
-  // Fermer le modal — le chrono continue en arrière-plan
-  closeModal('modal-balade');
-  showToast('Balade reprise &#9654;');
-  updateDashboard();
-}
-
-function annulerBaladeDefinitivement() {
-  // Stopper le chrono et effacer la balade sans enregistrer
-  if (state.baladeInterval) { clearInterval(state.baladeInterval); state.baladeInterval = null; }
-  state.baladeEnCours = null;
-  localStorage.removeItem('vetid_balade_en_cours');
-  closeModal('modal-balade');
-  updateDashboard();
-  showToast('Balade annulée');
-}
-
-async function sauvegarderBalade() {
-  if (!state.baladeEnCours) { closeModal('modal-balade'); return; }
-
-  const aid = state.baladeEnCours.animalId;
-  const dureeMin = parseInt(document.getElementById('b-duree').value) || 1;
-  const distanceKm = parseFloat(document.getElementById('b-distance').value) || null;
-  const lieu = document.getElementById('b-lieu').value.trim();
-  const notes = document.getElementById('b-notes').value.trim();
-
-  const balade = {
-    id: Date.now().toString(),
-    animalId: aid,
-    date: new Date().toISOString(),
-    dureeMin,
-    distanceKm,
-    lieu,
-    notes
-  };
-
-  state.balades.push(balade);
-  state.baladeEnCours = null;
-  localStorage.removeItem('vetid_balade_en_cours');
-
-  // Sauvegarder dans Firestore en arrière-plan
-  const uid = state.user?.uid;
-  if (uid && window._db) {
-    try {
-      await window._setDoc(
-        window._doc(window._db, 'users', uid, 'balades', balade.id),
-        balade
-      );
-    } catch(e) { console.warn('Firestore balades write failed:', e); }
-  }
-
-  saveState();
-  closeModal('modal-balade');
-  updateDashboard();
-  showToast('Balade enregistrée 🐾');
-  checkAndAwardBadges();
-}
-
-function openBalades(aid) {
-  state.currentAnimalId = aid;
-  const a = state.animals.find(function(x) { return x.id === aid; });
-  document.getElementById('balades-title').textContent = (a ? a.emoji + ' ' + a.name : '') + ' — Balades';
-  renderBalades(aid);
-  showScreen('balades');
-}
-
-function renderBalades(aid) {
-  const list = document.getElementById('balades-list');
-  list.innerHTML = '';
-
-  const enCours = state.baladeEnCours && state.baladeEnCours.animalId === aid;
-  const banner = document.getElementById('balades-chrono-banner');
-  if (banner) banner.style.display = enCours ? 'block' : 'none';
-
-  const balades = state.balades
-    .filter(function(b) { return b.animalId === aid; })
-    .sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-
-  // Stats semaine
-  const baladesWeek = getBaladesSemaine(aid);
-  const objectif = getObjectifBalade(aid);
-  const totalKm = baladesWeek.reduce(function(s, b) { return s + (b.distanceKm || 0); }, 0);
-  const totalMin = baladesWeek.reduce(function(s, b) { return s + (b.dureeMin || 0); }, 0);
-
-  // Card stats semaine
-  const statsCard = document.createElement('div');
-  statsCard.style.cssText = 'background:var(--teal);border-radius:16px;padding:14px;margin-bottom:14px;color:#fff';
-  const statsTitle = document.createElement('div');
-  statsTitle.style.cssText = 'font-size:12px;opacity:.8;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px';
-  statsTitle.textContent = 'Cette semaine';
-  statsCard.appendChild(statsTitle);
-  const statsRow = document.createElement('div');
-  statsRow.style.cssText = 'display:flex;gap:8px;margin-bottom:10px';
-  [
-    [baladesWeek.length, 'Balades'],
-    [totalKm.toFixed(1) + ' km', 'Distance'],
-    [Math.round(totalMin / 60 * 10) / 10 + 'h', 'Durée']
-  ].forEach(function(item) {
-    const s = document.createElement('div');
-    s.style.cssText = 'flex:1;background:rgba(255,255,255,.15);border-radius:10px;padding:8px;text-align:center';
-    const v = document.createElement('div');
-    v.style.cssText = 'font-size:18px;font-weight:800';
-    v.textContent = item[0];
-    const l = document.createElement('div');
-    l.style.cssText = 'font-size:9px;opacity:.8;margin-top:2px';
-    l.textContent = item[1];
-    s.appendChild(v); s.appendChild(l);
-    statsRow.appendChild(s);
-  });
-  statsCard.appendChild(statsRow);
-  // Barre objectif
-  const pct = Math.min(100, Math.round((baladesWeek.length / objectif) * 100));
-  const objLabel = document.createElement('div');
-  objLabel.style.cssText = 'display:flex;justify-content:space-between;font-size:10px;opacity:.8;margin-bottom:4px';
-  objLabel.innerHTML = '<span>Objectif : ' + objectif + ' balades/semaine</span><span>' + pct + '%</span>';
-  const objBar = document.createElement('div');
-  objBar.style.cssText = 'height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden';
-  const objFill = document.createElement('div');
-  objFill.style.cssText = 'height:100%;width:' + pct + '%;background:#fff;border-radius:3px;transition:width .3s';
-  objBar.appendChild(objFill);
-  statsCard.appendChild(objLabel);
-  statsCard.appendChild(objBar);
-  list.appendChild(statsCard);
-
-  // Bouton démarrer si pas de balade en cours
-  if (!enCours) {
-    const startBtn = document.createElement('button');
-    startBtn.className = 'chrono-btn-start';
-    startBtn.style.marginBottom = '14px';
-    startBtn.innerHTML = '&#128062; Démarrer une balade';
-    startBtn.onclick = function() { demarrerBalade(aid); };
-    list.appendChild(startBtn);
-  }
-
-  // Historique
-  if (!balades.length) {
-    const empty = document.createElement('div');
-    empty.style.cssText = 'text-align:center;padding:32px;color:var(--muted);font-size:14px';
-    empty.textContent = 'Aucune balade enregistrée';
-    list.appendChild(empty);
-    return;
-  }
-
-  const histTitle = document.createElement('div');
-  histTitle.style.cssText = 'font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px';
-  histTitle.textContent = 'Historique';
-  list.appendChild(histTitle);
-
-  balades.forEach(function(b) {
-    const card = document.createElement('div');
-    card.className = 'balade-card';
-
-    const header = document.createElement('div');
-    header.className = 'balade-header';
-    const icon = document.createElement('div');
-    icon.className = 'balade-icon';
-    icon.textContent = '🐾';
-    const info = document.createElement('div');
-    info.style.flex = '1';
-    const dateEl = document.createElement('div');
-    dateEl.style.cssText = 'font-size:13px;font-weight:700;color:var(--text)';
-    dateEl.textContent = formatDate(b.date);
-    const lieuEl = document.createElement('div');
-    lieuEl.style.cssText = 'font-size:11px;color:var(--muted)';
-    lieuEl.textContent = b.lieu || 'Lieu non précisé';
-    info.appendChild(dateEl);
-    info.appendChild(lieuEl);
-    header.appendChild(icon);
-    header.appendChild(info);
-    card.appendChild(header);
-
-    const stats = document.createElement('div');
-    stats.className = 'balade-stats';
-    [
-      [b.dureeMin ? b.dureeMin + ' min' : '—', 'Durée'],
-      [b.distanceKm ? b.distanceKm + ' km' : '—', 'Distance'],
-    ].forEach(function(item) {
-      const s = document.createElement('div');
-      s.className = 'balade-stat';
-      const v = document.createElement('div');
-      v.className = 'balade-stat-val';
-      v.textContent = item[0];
-      const l = document.createElement('div');
-      l.className = 'balade-stat-label';
-      l.textContent = item[1];
-      s.appendChild(v); s.appendChild(l);
-      stats.appendChild(s);
-    });
-    card.appendChild(stats);
-
-    if (b.notes) {
-      const notes = document.createElement('div');
-      notes.style.cssText = 'font-size:12px;color:var(--muted);font-style:italic;margin-top:4px';
-      notes.textContent = b.notes;
-      card.appendChild(notes);
-    }
-
-    // Photo de balade (si présente)
-    if (b.photoData) {
-      const photoWrap = document.createElement('div');
-      photoWrap.style.cssText = 'margin-top:10px;border-radius:10px;overflow:hidden;height:120px';
-      const img = document.createElement('img');
-      img.src = b.photoData;
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover';
-      photoWrap.appendChild(img);
-      card.appendChild(photoWrap);
-    }
-
-    // Actions : ajouter photo + supprimer
-    const actionsRow = document.createElement('div');
-    actionsRow.style.cssText = 'display:flex;gap:8px;margin-top:10px';
-
-    const photoBtn = document.createElement('button');
-    photoBtn.style.cssText = 'flex:1;padding:8px;border-radius:10px;background:var(--teal-light);color:var(--teal-dark);border:none;font-size:12px;font-weight:600;cursor:pointer';
-    photoBtn.textContent = b.photoData ? '📸 Changer la photo' : '📸 Ajouter une photo';
-    photoBtn.onclick = (function(baladeId) {
-      return function() { ouvrirPhotoBalade(baladeId); };
-    })(b.id);
-
-    const delBtn = document.createElement('button');
-    delBtn.style.cssText = 'padding:8px 12px;border-radius:10px;background:#fee2e2;color:#991b1b;border:none;font-size:12px;font-weight:600;cursor:pointer';
-    delBtn.textContent = '🗑';
-    delBtn.onclick = (function(baladeId, animalId) {
-      return function() { supprimerBalade(baladeId, animalId); };
-    })(b.id, aid);
-
-    actionsRow.appendChild(photoBtn);
-    actionsRow.appendChild(delBtn);
-    card.appendChild(actionsRow);
-
-    // Input photo caché
-    const photoInput = document.createElement('input');
-    photoInput.type = 'file';
-    photoInput.accept = 'image/*';
-    photoInput.style.display = 'none';
-    photoInput.id = 'photo-input-balade-' + b.id;
-    photoInput.onchange = (function(baladeId, animalId) {
-      return function() { handlePhotoBalade(this, baladeId, animalId); };
-    })(b.id, aid);
-    card.appendChild(photoInput);
-
-    list.appendChild(card);
-  });
-}
-
-function ouvrirPhotoBalade(baladeId) {
-  const input = document.getElementById('photo-input-balade-' + baladeId);
-  if (input) input.click();
-}
-
-function handlePhotoBalade(input, baladeId, animalId) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    // Compression via canvas
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      const MAX = 800;
-      let w = img.width, h = img.height;
-      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-      if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const photoData = canvas.toDataURL('image/jpeg', 0.7);
-
-      // Mettre à jour la balade
-      const balade = state.balades.find(function(b) { return b.id === baladeId; });
-      if (!balade) return;
-      balade.photoData = photoData;
-      saveState();
-
-      // Synchroniser dans le journal : créer ou mettre à jour une entrée photo liée
-      syncBaladeToJournal(balade, animalId);
-
-      // Rafraîchir l'écran
-      renderBalades(animalId);
-      showToast('Photo ajoutée ✓');
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function syncBaladeToJournal(balade, animalId) {
-  if (!animalId) return;
-  if (!state.journal[animalId]) state.journal[animalId] = [];
-
-  // Chercher si une entrée journal existe déjà pour cette balade
-  const existing = state.journal[animalId].find(function(e) {
-    return e.baladeId === balade.id;
-  });
-
-  const a = state.animals.find(function(x) { return x.id === animalId; });
-  const desc = [
-    balade.lieu ? 'Balade à ' + balade.lieu : 'Balade',
-    balade.dureeMin ? balade.dureeMin + ' min' : '',
-    balade.distanceKm ? balade.distanceKm + ' km' : '',
-    balade.notes || ''
-  ].filter(Boolean).join(' · ');
-
-  if (existing) {
-    // Mettre à jour la photo dans l'entrée existante
-    existing.photoData = balade.photoData;
-    existing.description = desc;
-  } else {
-    // Créer une nouvelle entrée journal
-    const entry = {
-      id: 'balade-' + balade.id,
-      baladeId: balade.id,
-      animalId: animalId,
-      animalName: a ? a.name : '',
-      animalEmoji: a ? (a.emoji || '🐾') : '🐾',
-      type: 'photo',
-      date: balade.date,
-      description: desc,
-      mood: '😸',
-      tags: ['Balade'],
-      photoData: balade.photoData,
-      photoUrl: null,
-      shareToken: (typeof crypto !== 'undefined' && crypto.randomUUID)
-        ? crypto.randomUUID()
-        : 'balade-' + balade.id + '-' + Date.now(),
-      createdAt: new Date().toISOString()
-    };
-    state.journal[animalId].push(entry);
-  }
-  saveState();
-}
-
-async function supprimerBalade(baladeId, animalId) {
-  if (!confirm('Supprimer cette balade ?')) return;
-
-  // Retirer du state
-  state.balades = state.balades.filter(function(b) { return b.id !== baladeId; });
-
-  // Retirer aussi du journal si une entrée liée existe
-  if (animalId && state.journal[animalId]) {
-    state.journal[animalId] = state.journal[animalId].filter(function(e) {
-      return e.baladeId !== baladeId;
-    });
-  }
-
-  saveState();
-
-  // Supprimer de Firestore
-  const uid = state.user && state.user.uid;
-  if (uid && window._db) {
-    try {
-      await window._deleteDoc(window._doc(window._db, 'users', uid, 'balades', baladeId));
-    } catch(e) { console.warn('Firestore balade delete failed:', e); }
-  }
-
-  renderBalades(animalId);
-  updateDashboard();
-  showToast('Balade supprimée');
-}
-
-// Reprendre le chrono si l'app était fermée pendant une balade
-function restaurerChronoBalade() {
-  const saved = localStorage.getItem('vetid_balade_en_cours');
-  if (!saved) return;
-  try {
-    const data = JSON.parse(saved);
-    state.baladeEnCours = data;
-    if (state.baladeInterval) clearInterval(state.baladeInterval);
-    state.baladeInterval = setInterval(function() {
-      const elapsed = Date.now() - state.baladeEnCours.startTime;
-      const txt = formatChrono(elapsed);
-      const el = document.getElementById('chrono-dash-' + data.animalId);
-      if (el) el.textContent = txt;
-      const el2 = document.getElementById('balades-chrono-display');
-      if (el2) el2.textContent = txt;
-    }, 1000);
-    showToast('Balade en cours restaurée ⏱');
-  } catch(e) { localStorage.removeItem('vetid_balade_en_cours'); }
-}
-
-// ─── LIEUX PET-FRIENDLY ──────────────────────────────────────────────────────
-
-const LIEU_CONFIG = {
-  resto:  { icon: '🍽️', label: 'Restaurant', bg: '#FFF0EB', color: 'var(--orange)' },
-  hotel:  { icon: '🏨', label: 'Hôtel',       bg: 'var(--blue-light)', color: 'var(--blue)' },
-  parc:   { icon: '🌳', label: 'Parc',         bg: '#ECFDF5', color: '#16A34A' },
-  veto:   { icon: '🩺', label: 'Vétérinaire',  bg: 'var(--teal-light)', color: 'var(--teal-dark)' },
-  shop:   { icon: '🛍️', label: 'Shop',         bg: '#F5F3FF', color: 'var(--purple)' }
-};
-
-// Lieux de démonstration pré-chargés pour la V0
-const LIEUX_DEMO = [
-  { id: 'demo1', nom: 'Le Petit Bistrot', adresse: '14 rue Montorgueil', ville: 'Paris', categorie: 'resto', description: "Terrasse couverte, bol d'eau fourni. Chiens acceptés en intérieur.", note: 5, statut: 'valide' },
-  { id: 'demo2', nom: 'Parc des Buttes-Chaumont', adresse: 'Entrée principale rue Botzaris', ville: 'Paris', categorie: 'parc', description: "Grand parc idéal pour les balades. Zone sans laisse autorisée.", note: 5, statut: 'valide' },
-  { id: 'demo3', nom: 'Hôtel Le Marais', adresse: '3 rue de Bretagne', ville: 'Paris', categorie: 'hotel', description: "Accepte les chiens jusqu'à 15 kg. Litière et gamelles fournies.", note: 4, statut: 'valide' },
-  { id: 'demo4', nom: 'Clinique Vétérinaire Bastille', adresse: '22 bd Beaumarchais', ville: 'Paris', categorie: 'veto', description: "Urgences 24h/24, 7j/7. Équipe spécialisée chiens et chats.", note: 5, statut: 'valide' },
-  { id: 'demo5', nom: 'Wanimo La Rochelle', adresse: 'Centre commercial La Pallice', ville: 'La Rochelle', categorie: 'shop', description: "Grande animalerie, gamme bio et naturelle.", note: 4, statut: 'valide' },
-  { id: 'demo6', nom: 'La Cabane à Toutou', adresse: '7 rue du Port', ville: 'La Rochelle', categorie: 'resto', description: "Bar à bières dog-friendly, snacks pour chiens offerts !", note: 5, statut: 'valide' },
-  { id: 'demo7', nom: 'Parc de la Visitation', adresse: 'Rue de la Visitation', ville: 'Lyon', categorie: 'parc', description: "Beau parc arboré, fontaine pour les chiens.", note: 4, statut: 'valide' },
-  { id: 'demo8', nom: 'Mon Vétérinaire', adresse: '45 cours Lafayette', ville: 'Lyon', categorie: 'veto', description: "Consultations sur rdv, urgences le week-end.", note: 4, statut: 'valide' },
-];
-
-// State lieux
-let allLieux = [];
-let lieuCatFiltre = '';
-let lieuNoteSelectionnee = 0;
-
-async function openLieux() {
-  showScreen('lieux');
-  // Toujours recharger depuis Firestore (pas de cache)
-  await chargerLieux();
-  renderLieux();
-}
-
-async function chargerLieux() {
-  try {
-    const db = window._db;
-    if (db) {
-      // Sans orderBy pour éviter l'index composite Firestore (non créé en V0)
-      const snap = await window._getDocs(
-        window._query(
-          window._collection(db, 'lieux'),
-          window._where('statut', '==', 'valide')
-        )
-      );
-      const lieuFirestore = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      // Fusionner démo + Firestore (démo en dernier)
-      allLieux = [...lieuFirestore];
-      // Ajouter les démos qui ne sont pas déjà dans Firestore
-      LIEUX_DEMO.forEach(demo => {
-        if (!allLieux.find(l => l.id === demo.id)) allLieux.push(demo);
-      });
-    } else {
-      allLieux = [...LIEUX_DEMO];
-    }
-  } catch(e) {
-    console.warn('Firestore lieux failed, using demo:', e);
-    allLieux = [...LIEUX_DEMO];
-  }
-}
-
-function renderLieux() {
-  const list = document.getElementById('lieux-list');
-  if (!list) return;
-  const search = (document.getElementById('lieux-search')?.value || '').toLowerCase().trim();
-
-  let filtered = allLieux.filter(l => l.statut === 'valide');
-  if (lieuCatFiltre) filtered = filtered.filter(l => l.categorie === lieuCatFiltre);
-  if (search) filtered = filtered.filter(l =>
-    l.nom.toLowerCase().includes(search) ||
-    l.ville.toLowerCase().includes(search) ||
-    (l.adresse || '').toLowerCase().includes(search)
-  );
-
-  if (!filtered.length) {
-    list.innerHTML = '<div class="lieux-empty"><div style="font-size:40px;margin-bottom:12px">📍</div><div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px">Aucun lieu trouvé</div><div style="font-size:13px">Soyez le premier à en proposer un !</div></div>';
-    return;
-  }
-
-  list.innerHTML = '';
-  filtered.forEach(lieu => {
-    const cfg = LIEU_CONFIG[lieu.categorie] || { icon: '📍', label: lieu.categorie, bg: 'var(--bg)', color: 'var(--muted)' };
-    const stars = '⭐'.repeat(Math.round(lieu.note || 0));
-    const card = document.createElement('div');
-    card.className = 'lieu-card';
-    card.innerHTML =
-      '<div class="lieu-icon-box" style="background:' + cfg.bg + '">' + cfg.icon + '</div>'
-      + '<div class="lieu-info">'
-      +   '<div class="lieu-nom">' + lieu.nom + '</div>'
-      +   '<div class="lieu-adresse">' + (lieu.adresse || '') + ' · ' + lieu.ville + '</div>'
-      +   (lieu.description ? '<div style="font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:6px">' + lieu.description + '</div>' : '')
-      +   '<div class="lieu-footer">'
-      +     '<span class="lieu-cat-badge" style="background:' + cfg.bg + ';color:' + cfg.color + '">' + cfg.icon + ' ' + cfg.label + '</span>'
-      +     (stars ? '<span class="lieu-stars">' + stars + '</span>' : '')
-      +   '</div>'
-      + '</div>';
-    list.appendChild(card);
-  });
-
-  // Compteur
-  const counter = document.createElement('div');
-  counter.style.cssText = 'text-align:center;padding:16px 0;font-size:12px;color:var(--muted)';
-  counter.textContent = filtered.length + ' lieu' + (filtered.length > 1 ? 'x' : '') + ' trouvé' + (filtered.length > 1 ? 's' : '');
-  list.appendChild(counter);
-
-  // Bouton flottant suggérer
-  const fab = document.createElement('button');
-  fab.style.cssText = 'display:block;width:100%;margin-top:8px;padding:14px;border-radius:14px;background:var(--teal-light);color:var(--teal-dark);border:1.5px dashed var(--teal);font-size:14px;font-weight:600;cursor:pointer';
-  fab.textContent = '➕ Proposer un lieu manquant';
-  fab.onclick = openAddLieu;
-  list.appendChild(fab);
-}
-
-function selectLieuCat(cat, el) {
-  lieuCatFiltre = cat;
-  document.querySelectorAll('.lieu-chip').forEach(c => { c.classList.remove('active'); c.classList.add('inactive'); });
-  el.classList.remove('inactive'); el.classList.add('active');
-  renderLieux();
-}
-
-function filterLieux() {
-  renderLieux();
-}
-
-function openAddLieu() {
-  lieuNoteSelectionnee = 0;
-  ['lieu-nom', 'lieu-adresse', 'lieu-ville', 'lieu-description'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  const sel = document.getElementById('lieu-categorie');
-  if (sel) sel.value = '';
-  document.querySelectorAll('#lieu-stars-input .star-btn').forEach(b => b.classList.remove('on'));
-  const success = document.getElementById('lieu-success');
-  if (success) success.style.display = 'none';
-  const btn = document.getElementById('lieu-submit-btn');
-  if (btn) { btn.style.display = 'block'; btn.disabled = false; btn.textContent = 'Envoyer ma suggestion'; }
-  openModal('modal-lieu');
-}
-
-function setLieuNote(val) {
-  lieuNoteSelectionnee = val;
-  document.querySelectorAll('#lieu-stars-input .star-btn').forEach(b => {
-    b.classList.toggle('on', parseInt(b.dataset.val) <= val);
-  });
-}
-
-async function soumettreUnLieu() {
-  const nom = document.getElementById('lieu-nom').value.trim();
-  const adresse = document.getElementById('lieu-adresse').value.trim();
-  const ville = document.getElementById('lieu-ville').value.trim();
-  const categorie = document.getElementById('lieu-categorie').value;
-
-  if (!nom || !adresse || !ville || !categorie) {
-    showToast('Remplissez les champs obligatoires *');
-    return;
-  }
-
-  const btn = document.getElementById('lieu-submit-btn');
-  btn.textContent = 'Envoi…'; btn.disabled = true;
-
-  const lieu = {
-    nom, adresse, ville, categorie,
-    description: document.getElementById('lieu-description').value.trim(),
-    note: lieuNoteSelectionnee || 0,
-    statut: 'en_attente',
-    ajoutePar: state.user?.uid || 'anonyme',
-    dateAjout: new Date().toISOString()
-  };
-
-  try {
-    const db = window._db;
-    if (db) {
-      await window._addDoc(window._collection(db, 'lieux'), lieu);
-    }
-    document.getElementById('lieu-success').style.display = 'block';
-    btn.style.display = 'none';
-    showToast('Merci ! Votre lieu sera vérifié avant publication 🐾');
-    setTimeout(() => closeModal('modal-lieu'), 2500);
-  } catch(e) {
-    console.error('Soumission lieu failed:', e);
-    showToast('Erreur envoi, réessayez');
-    btn.textContent = 'Envoyer ma suggestion'; btn.disabled = false;
-  }
 }
 
 // ─── BLOG ─────────────────────────────────────────────────────────────────────
@@ -4167,83 +3240,104 @@ function openArticle(idx) {
 
 const BADGES_CONFIG = [
   {
-    id: 'early_adopter',
-    emoji: '🌟',
-    nom: 'Fondateur VetID',
-    description: "Parmi les premiers utilisateurs de VetID. Merci d'y croire !",
-    couleur: '#FEF3C7',
-    condition: function() { return true; } // tous les bêta-testeurs
-  },
-  {
-    id: 'premier_animal',
-    emoji: '🐾',
-    nom: 'Premier compagnon',
-    description: "Vous avez ajouté votre premier animal.",
+    id: 'carnet_ouvert',
+    emoji: '📋',
+    nom: 'Carnet ouvert',
+    cat: 'Santé',
+    description: 'Premier vaccin ou rappel enregistré dans le carnet de santé.',
     couleur: '#E1F5EE',
-    condition: function() { return state.animals.length >= 1; }
+    condition: function() {
+      return state.treatments.length >= 1;
+    }
   },
   {
-    id: 'vaccins_ok',
-    emoji: '💉',
-    nom: 'Vaccins à jour',
-    description: "Tous vos vaccins sont à jour.",
-    couleur: '#EFF6FF',
+    id: 'tout_en_un',
+    emoji: '💊',
+    nom: 'Tout en un',
+    cat: 'Santé',
+    description: 'Première ordonnance ou photo ajoutée au journal.',
+    couleur: '#E6F1FB',
     condition: function() {
-      const vaccins = state.treatments.filter(function(t) { return t.type === 'vaccin'; });
-      return vaccins.length > 0 && vaccins.every(function(t) {
-        return t.nextDate && (new Date(t.nextDate) - new Date()) / 86400000 > 0;
+      return Object.values(state.journal).some(function(arr) {
+        return arr.some(function(e) { return e.type === 'photo' || e.photoData; });
       });
     }
   },
   {
-    id: 'dix_balades',
-    emoji: '🐶',
-    nom: '10 balades',
-    description: "10 balades enregistrées avec votre chien.",
-    couleur: '#E1F5EE',
-    condition: function() { return state.balades.length >= 10; }
-  },
-  {
-    id: 'memoire_vivante',
-    emoji: '📓',
-    nom: 'Mémoire vivante',
-    description: "20 entrées dans le journal de vie.",
-    couleur: '#F5F3FF',
+    id: 'suivi_en_or',
+    emoji: '🏅',
+    nom: 'Suivi en or',
+    cat: 'Santé',
+    description: '6 rappels honorés dans l\'app.',
+    couleur: '#FAEEDA',
     condition: function() {
-      return Object.values(state.journal).reduce(function(s, arr) { return s + arr.length; }, 0) >= 20;
+      // Approximation : au moins 6 soins avec une date de dernier traitement
+      return state.treatments.filter(function(t) { return t.lastDate; }).length >= 6;
     }
   },
   {
-    id: 'suivi_regulier',
-    emoji: '⚖️',
-    nom: 'Suivi régulier',
-    description: "4 pesées enregistrées.",
-    couleur: '#FFFBEB',
+    id: 'anniversaire',
+    emoji: '🎂',
+    nom: 'Anniversaire',
+    cat: 'Histoire',
+    description: 'Débloqué automatiquement à la date de naissance de ton animal.',
+    couleur: '#FDF2F8',
     condition: function() {
-      return Object.values(state.weights).reduce(function(s, arr) { return s + arr.length; }, 0) >= 4;
+      return state.animals.some(function(a) {
+        if (!a.birth) return false;
+        const b = new Date(a.birth);
+        const now = new Date();
+        return b.getDate() === now.getDate() && b.getMonth() === now.getMonth();
+      });
     }
   },
   {
-    id: 'photographe',
+    id: 'une_annee_ensemble',
+    emoji: '🗓️',
+    nom: 'Une année ensemble',
+    cat: 'Histoire',
+    description: '1 an depuis l\'ajout de ton animal dans VetID.',
+    couleur: '#EDE9FE',
+    condition: function() {
+      return state.animals.some(function(a) {
+        const created = a.createdAt || a.id;
+        if (!created) return false;
+        const ts = typeof created === 'string' && created.length < 15 ? parseInt(created) : new Date(created).getTime();
+        return (Date.now() - ts) > 365 * 86400000;
+      });
+    }
+  },
+  {
+    id: 'premiers_souvenirs',
     emoji: '📸',
-    nom: 'Photographe',
-    description: "5 photos ajoutées dans le journal.",
+    nom: 'Premiers souvenirs',
+    cat: 'Journal',
+    description: '5 photos enregistrées dans le journal.',
     couleur: '#FDF2F8',
     condition: function() {
       return Object.values(state.journal).reduce(function(s, arr) {
-        return s + arr.filter(function(e) { return e.type === 'photo'; }).length;
+        return s + arr.filter(function(e) { return e.type === 'photo' || e.photoData; }).length;
       }, 0) >= 5;
     }
   },
   {
-    id: 'six_mois',
-    emoji: '🥇',
-    nom: '6 mois de suivi',
-    description: "Compte actif depuis 6 mois. Bravo !",
-    couleur: '#FEF3C7',
+    id: 'une_annee_gravee',
+    emoji: '🌿',
+    nom: 'Une année gravée',
+    cat: 'Journal',
+    description: '12 mois avec au moins une entrée — pas de série stricte, juste une présence régulière.',
+    couleur: '#ECFDF5',
     condition: function() {
-      const created = state.user && state.user.createdAt;
-      return created && (Date.now() - new Date(created)) > 180 * 86400000;
+      const months = new Set();
+      Object.values(state.journal).forEach(function(arr) {
+        arr.forEach(function(e) {
+          if (e.date || e.createdAt) {
+            const d = new Date(e.date || e.createdAt);
+            months.add(d.getFullYear() + '-' + d.getMonth());
+          }
+        });
+      });
+      return months.size >= 12;
     }
   }
 ];
@@ -4325,17 +3419,22 @@ function renderBadgesGrid() {
     item.className = 'badge-item';
     item.onclick = function() { showBadgeDetail(badge, isEarned); };
 
-    const emojiWrap = document.createElement('div');
-    emojiWrap.className = 'badge-emoji-wrap ' + (isEarned ? 'earned' : 'locked');
-    emojiWrap.style.background = isEarned ? badge.couleur : '#F3F4F6';
-    emojiWrap.textContent = badge.emoji;
+    const ring = document.createElement('div');
+    ring.className = 'badge-emoji-wrap ' + (isEarned ? 'earned' : 'locked');
+    ring.style.background = isEarned ? badge.couleur : '#F3F4F6';
+    ring.textContent = badge.emoji;
 
     const name = document.createElement('div');
     name.className = 'badge-name' + (isEarned ? '' : ' locked');
     name.textContent = badge.nom;
 
-    item.appendChild(emojiWrap);
+    const cat = document.createElement('div');
+    cat.style.cssText = 'font-size:9px;text-align:center;margin-top:1px;font-weight:600;color:' + (isEarned ? 'var(--teal)' : 'var(--muted)');
+    cat.textContent = badge.cat || '';
+
+    item.appendChild(ring);
     item.appendChild(name);
+    item.appendChild(cat);
     grid.appendChild(item);
   });
 }
@@ -4494,7 +3593,7 @@ function initSwipeClose(handleId, overlayId) {
 
 // ─── SWIPE NAV ────────────────────────────────────────────────────────────────
 function initSwipeNav() {
-  const screens = ['dashboard', 'journal', 'lieux', 'settings'];
+  const screens = ['dashboard', 'journal', 'rappels', 'blog', 'communaute'];
   let startX = 0, startY = 0;
   document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, { passive: true });
   document.addEventListener('touchend', e => {
@@ -4515,7 +3614,7 @@ function initSwipeNav() {
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 loadState();
 showScreen('onboarding');
-['animal', 'soin', 'poids', 'croquette', 'vet', 'feedback', 'journal-entry', 'animal-picker', 'lieu', 'balade'].forEach(id => {
+['animal', 'soin', 'poids', 'croquette', 'vet', 'feedback', 'journal-entry', 'animal-picker'].forEach(id => {
   initSwipeClose('handle-' + id, 'modal-' + id);
 });
 initSwipeNav();
