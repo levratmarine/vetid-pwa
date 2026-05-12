@@ -151,7 +151,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .field-label{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block}
 .form-row{display:flex;flex-direction:column;gap:6px}
 .section-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;margin-top:16px}
-.page-header{background:var(--teal);padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.page-header{background:var(--teal);padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:100}
 .back-btn{font-size:26px;cursor:pointer;line-height:1}
 .dash-header{background:var(--teal);padding:20px 20px 24px;color:#fff;flex-shrink:0}
 .bottom-nav{height:76px;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-around;padding:10px 4px 0;flex-shrink:0;position:sticky;bottom:0}
@@ -312,6 +312,19 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .tag-added{background:var(--teal-light);color:var(--teal-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
 .tag-add-btn{background:var(--bg);color:var(--muted);font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px dashed #D1D5DB;cursor:pointer}
 .journal-empty{text-align:center;padding:48px 24px;color:var(--muted)}
+/* ── JOURNAL TIMELINE ── */
+.jt-entry{display:flex;gap:10px;margin-bottom:14px;cursor:pointer}
+.jt-left{display:flex;flex-direction:column;align-items:center;width:30px;flex-shrink:0}
+.jt-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.jt-line{width:2px;flex:1;background:var(--border);margin-top:5px;border-radius:1px;min-height:16px}
+.jt-card{flex:1;background:var(--white);border-radius:14px;border:1px solid var(--border);overflow:hidden;min-height:60px}
+.jt-photo{width:100%;height:110px;overflow:hidden;background:var(--bg)}
+.jt-body{padding:10px 12px}
+.jt-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.3}
+.jt-note{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+.jt-meta{display:flex;align-items:center;gap:8px;margin-top:6px}
+.jt-date{font-size:11px;color:var(--muted)}
+.jt-shared-tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--teal);background:var(--teal-light);padding:2px 7px;border-radius:6px}
 
 /* Detail vue */
 .jdetail-photo{width:100%;height:180px;background:linear-gradient(135deg,var(--teal-light),#B8E0DB);display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;flex-shrink:0}
@@ -596,6 +609,11 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     </div>
 
     <!-- WIDGETS (visibles uniquement si animal sélectionné) -->
+    <!-- Notification urgente -->
+    <div id="dash-urgent-banner" style="display:none;margin:8px 16px 0;background:var(--teal);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px">
+      <i class="ti ti-bell" style="color:#fff;font-size:18px;flex-shrink:0"></i>
+      <div id="dash-urgent-text" style="font-size:12px;color:#fff;flex:1;font-weight:500"></div>
+    </div>
     <div id="dash-animal-widgets" style="display:none;flex-direction:column;gap:12px">
 
       <!-- ① HERO CARD -->
@@ -674,7 +692,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       </div>
 
       <!-- ⑦ CONSEIL DU JOUR -->
-      <div class="new-conseil-card">
+      <div class="new-conseil-card" id="conseil-card">
         <div class="new-conseil-tag">✨ Conseil du jour</div>
         <div class="new-conseil-text" id="conseil-text">Complétez le profil de votre animal pour recevoir des conseils personnalisés.</div>
         <div id="conseil-article-link" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid #DDD6FE">
@@ -683,12 +701,21 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
       </div>
 
       <!-- ⑧ BADGES -->
-      <div class="new-card">
+      <div class="new-card" id="badges-dash-card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
           <span class="new-card-title" style="margin:0">Mes badges</span>
           <span style="font-size:11px;color:var(--teal);font-weight:600;cursor:pointer" onclick="goToTab('settings')">Tous ›</span>
         </div>
         <div class="new-badge-row" id="badges-row-dash"></div>
+      </div>
+
+      <!-- JOURNAL PREVIEW (dashboard) -->
+      <div id="journal-preview-dash" class="new-card" style="cursor:pointer" onclick="openJournal()">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span class="new-card-title" style="margin:0">Journal santé</span>
+          <span style="font-size:11px;color:var(--teal);font-weight:600">Voir tout ›</span>
+        </div>
+        <div id="journal-preview-list"></div>
       </div>
 
       <!-- BLOG PREVIEW -->
@@ -1758,15 +1785,97 @@ function renderDashboardWidgets(animalId) {
   // ⑦ CONSEIL
   renderConseilWidget(animal);
 
-  // ⑧ BADGES
-  renderBadgesDash();
-
   // ② BIS — BANDE STATS
   renderStatsBand(animalId);
 
-  // BLOG PREVIEW
+  // Masquer widgets hors spec V0 dashboard
+  const poidsWidget = document.getElementById('poids-widget');
+  if (poidsWidget) poidsWidget.style.display = 'none';
+  const conseilCard = document.getElementById('conseil-card');
+  if (conseilCard) conseilCard.style.display = 'none';
+  const badgesDash = document.getElementById('badges-dash-card');
+  if (badgesDash) badgesDash.style.display = 'none';
+  const croqW = document.getElementById('croq-widget');
+  if (croqW) croqW.style.display = 'none';
+  const croqEmpty = document.getElementById('croq-empty-widget');
+  if (croqEmpty) croqEmpty.style.display = 'none';
+
+  // Journal preview
+  renderJournalPreviewDash(animalId);
+
+  // Blog preview
   const blogPreview = document.getElementById('blog-preview');
   if (blogPreview) blogPreview.style.display = allArticles.length ? 'block' : 'none';
+
+  // Notif urgente
+  renderUrgentBanner(animalId);
+}
+
+function renderUrgentBanner(animalId) {
+  const banner = document.getElementById('dash-urgent-banner');
+  const textEl = document.getElementById('dash-urgent-text');
+  if (!banner || !textEl) return;
+  const animal = state.animals.find(function(a) { return a.id === animalId; });
+  const urgent = state.treatments.filter(function(t) {
+    return t.animalId === animalId && getDaysUntil(t.nextDate) <= 3 && getDaysUntil(t.nextDate) >= -7;
+  }).sort(function(a, b) { return getDaysUntil(a.nextDate) - getDaysUntil(b.nextDate); });
+  if (urgent.length && animal) {
+    const t = urgent[0];
+    const d = getDaysUntil(t.nextDate);
+    const msg = d < 0 ? 'En retard · ' : d === 0 ? 'Aujourd\'hui · ' : 'Dans ' + d + ' j · ';
+    textEl.textContent = msg + t.name + ' de ' + animal.name;
+    banner.style.display = 'flex';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function renderJournalPreviewDash(animalId) {
+  const container = document.getElementById('journal-preview-list');
+  const card = document.getElementById('journal-preview-dash');
+  if (!container || !card) return;
+  const entries = (state.journal[animalId] || []).slice().sort(function(a, b) {
+    return new Date(b.date) - new Date(a.date);
+  }).slice(0, 2);
+  if (!entries.length) {
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+  container.innerHTML = '';
+  const moodMap = {'😸': {emoji:'🌟', bg:'#DCFCE7', ring:'#16A34A'}, '😺': {emoji:'😊', bg:'#FEF3C7', ring:'#D97706'}, '😐': {emoji:'😐', bg:'#FEE2E2', ring:'#DC2626'}, '😿': {emoji:'😐', bg:'#FEE2E2', ring:'#DC2626'}};
+  entries.forEach(function(e, idx) {
+    const d = new Date(e.date);
+    const dateStr = d.toLocaleDateString('fr-FR', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+    const mood = moodMap[e.mood] || {emoji:'📝', bg:'var(--teal-light)', ring:'var(--teal)'};
+    const isLast = idx === entries.length - 1;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:10px;' + (isLast ? '' : 'margin-bottom:10px');
+    const dotCol = document.createElement('div');
+    dotCol.style.cssText = 'display:flex;flex-direction:column;align-items:center;width:26px;flex-shrink:0';
+    const dot = document.createElement('div');
+    dot.style.cssText = 'width:26px;height:26px;border-radius:50%;background:' + mood.bg + ';box-shadow:0 0 0 2px ' + mood.ring + ';display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0';
+    dot.textContent = mood.emoji;
+    dotCol.appendChild(dot);
+    if (!isLast) {
+      const line = document.createElement('div');
+      line.style.cssText = 'width:2px;flex:1;background:var(--border);margin-top:4px;border-radius:1px;min-height:14px';
+      dotCol.appendChild(line);
+    }
+    const info = document.createElement('div');
+    info.style.cssText = 'flex:1;padding-top:2px';
+    const title = document.createElement('div');
+    title.style.cssText = 'font-size:13px;font-weight:600;color:var(--text)';
+    title.textContent = e.description ? e.description.slice(0, 40) + (e.description.length > 40 ? '…' : '') : (e.type === 'veto' ? 'Visite vétérinaire' : e.type === 'traitement' ? 'Traitement' : 'Entrée journal');
+    const date = document.createElement('div');
+    date.style.cssText = 'font-size:11px;color:var(--muted);margin-top:1px';
+    date.textContent = dateStr;
+    info.appendChild(title);
+    info.appendChild(date);
+    row.appendChild(dotCol);
+    row.appendChild(info);
+    container.appendChild(row);
+  });
 }
 
 function renderConseilWidget(animal) {
@@ -2661,21 +2770,12 @@ function renderJournal() {
   let entries = (state.journal[state.journalAnimalId] || []).slice().sort((a, b) => new Date(b.date) - new Date(a.date));
 
   // Stats
-  const photos = entries.filter(e => e.type === 'photo').length;
-  const pesees = entries.filter(e => e.type === 'poids').length;
-  const moodEntries = entries.filter(e => e.mood);
-  let avgMoodEmoji = '—';
-  if (moodEntries.length) {
-    const moodOrder = ['😿','😐','😺','😸'];
-    const scores = moodEntries.map(e => moodOrder.indexOf(e.mood));
-    const avg = Math.round(scores.reduce((s,v) => s+v, 0) / scores.length);
-    avgMoodEmoji = moodOrder[Math.max(0, Math.min(3, avg))];
-  }
+  const photos = entries.filter(function(e) { return e.type === 'photo'; }).length;
+  const vetosCount = entries.filter(function(e) { return e.type === 'veto'; }).length;
   statsEl.innerHTML =
     '<div class="journal-stat"><div class="journal-stat-val" style="color:var(--teal)">' + entries.length + '</div><div class="journal-stat-label">Entrées</div></div>'
     + '<div class="journal-stat"><div class="journal-stat-val" style="color:var(--pink)">' + photos + '</div><div class="journal-stat-label">Photos</div></div>'
-    + '<div class="journal-stat"><div class="journal-stat-val" style="color:var(--amber)">' + pesees + '</div><div class="journal-stat-label">Pesées</div></div>'
-    + '<div class="journal-stat"><div class="journal-stat-val">' + avgMoodEmoji + '</div><div class="journal-stat-label">Humeur moy.</div></div>';
+    + '<div class="journal-stat"><div class="journal-stat-val" style="color:var(--blue)">' + vetosCount + '</div><div class="journal-stat-label">Visites véto</div></div>';
 
   // Filtre
   if (state.journalFilter !== 'all') entries = entries.filter(e => e.type === state.journalFilter);
@@ -2707,65 +2807,124 @@ function renderJournal() {
 }
 
 function buildJournalCard(entry) {
-  const cfg = JOURNAL_TYPES[entry.type] || JOURNAL_TYPES.note;
-  const card = document.createElement('div');
-  card.className = 'journal-card';
-  card.onclick = () => openJournalDetail(entry.id);
+  const moodCfg = {
+    '😸': {emoji:'🌟', bg:'#DCFCE7', ring:'#16A34A'},
+    '😺': {emoji:'😊', bg:'#FEF9C3', ring:'#CA8A04'},
+    '😐': {emoji:'😐', bg:'#FEE2E2', ring:'#DC2626'},
+    '😿': {emoji:'😞', bg:'#FEE2E2', ring:'#DC2626'}
+  };
+  const typeCfg = {
+    veto:       {emoji:'🏥', bg:'var(--teal-light)', ring:'var(--teal)'},
+    traitement: {emoji:'💊', bg:'#ECFDF5', ring:'#16A34A'},
+    poids:      {emoji:'⚖️', bg:'#EFF6FF', ring:'#3B82F6'},
+    note:       {emoji:'📝', bg:'#F5F3FF', ring:'#7C3AED'},
+    photo:      {emoji:'📷', bg:'#FDF4FF', ring:'#A855F7'}
+  };
+
+  const mood = entry.mood ? (moodCfg[entry.mood] || null) : null;
+  const typeConf = typeCfg[entry.type] || typeCfg.note;
+  const dot = mood || typeConf;
 
   const d = new Date(entry.date);
-  const dateStr = d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) + ' · ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  const dateStr = d.toLocaleDateString('fr-FR', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
 
-  let headerHTML = '<div class="journal-card-header">'
-    + '<div class="jtype-icon" style="background:' + cfg.bg + '">' + cfg.icon + '</div>'
-    + '<div class="jtype-meta"><div class="jtype-label" style="color:' + cfg.color + '">' + cfg.label + '</div>'
-    + '<div class="jtype-date">' + dateStr + '</div></div>'
-    + (entry.mood ? '<div class="jcard-mood">' + entry.mood + '</div>' : '')
-    + '</div>';
+  const wrap = document.createElement('div');
+  wrap.className = 'jt-entry';
+  wrap.onclick = function() { openJournalDetail(entry.id); };
 
-  let bodyHTML = '';
+  // Colonne gauche (dot + line)
+  const leftCol = document.createElement('div');
+  leftCol.className = 'jt-left';
+  const dotEl = document.createElement('div');
+  dotEl.className = 'jt-dot';
+  dotEl.style.background = dot.bg;
+  dotEl.style.boxShadow = '0 0 0 2px ' + dot.ring;
+  dotEl.textContent = dot.emoji;
+  leftCol.appendChild(dotEl);
+  const line = document.createElement('div');
+  line.className = 'jt-line';
+  leftCol.appendChild(line);
 
+  // Carte droite
+  const card = document.createElement('div');
+  card.className = 'jt-card';
+
+  // Photo en grand
   if (entry.type === 'photo') {
     const imgSrc = entry.photoUrl || entry.photoData;
     if (imgSrc) {
-      bodyHTML += '<div style="position:relative;width:100%;height:120px;overflow:hidden"><img src="' + imgSrc + '" style="width:100%;height:100%;object-fit:cover" loading="lazy"><div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.5));padding:20px 12px 8px"><div style="font-size:12px;color:#fff;font-weight:600">' + (entry.description || '') + '</div></div></div>';
-    } else if (entry.description) {
-      bodyHTML += '<div class="jcard-body">' + entry.description + '</div>';
+      const imgWrap = document.createElement('div');
+      imgWrap.className = 'jt-photo';
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+      img.loading = 'lazy';
+      imgWrap.appendChild(img);
+      card.appendChild(imgWrap);
     }
-  } else if (entry.type === 'poids') {
-    const weights = state.weights[state.journalAnimalId] || [];
-    const sorted = [...weights].sort((a,b) => new Date(a.date)-new Date(b.date));
-    const idx = sorted.findIndex(w => w.date === entry.date && w.value === entry.poidsVal);
-    let diffHTML = '';
-    if (idx > 0) {
-      const prev = sorted[idx-1].value;
-      const diff = (entry.poidsVal - prev).toFixed(1);
-      diffHTML = '<div class="jcard-weight-diff ' + (diff > 0 ? 'diff-up' : diff < 0 ? 'diff-down' : 'diff-same') + '">' + (diff > 0 ? '+' : '') + diff + ' kg</div>';
-    }
-    bodyHTML += '<div class="jcard-weight-big"><div class="jcard-weight-num">' + (entry.poidsVal||'—') + '</div><div class="jcard-weight-unit">kg</div>' + diffHTML + '</div>';
-    if (entry.description) bodyHTML += '<div class="jcard-body" style="padding-top:0">' + entry.description + '</div>';
-  } else if (entry.type === 'veto') {
-    bodyHTML += '<div class="jcard-vet-row"><div class="jcard-badge" style="background:var(--blue-light);color:var(--blue)">' + (entry.vetoDoc || 'Véto') + '</div>'
-      + '<div><div style="font-size:12px;font-weight:700;color:var(--text)">' + (entry.vetoMotif || '—') + '</div>'
-      + (entry.description ? '<div style="font-size:10px;color:var(--muted)">' + entry.description + '</div>' : '') + '</div></div>';
-  } else if (entry.type === 'traitement') {
-    bodyHTML += '<div class="jcard-treat-row"><div class="jcard-badge" style="background:#ECFDF5;color:#16A34A">✓ Fait</div>'
-      + '<div style="font-size:12px;font-weight:700;color:var(--text)">' + (entry.traitNom || '—') + '</div></div>';
-    if (entry.description) bodyHTML += '<div class="jcard-body" style="padding-top:0">' + entry.description + '</div>';
+  }
+
+  // Poids — affichage spécial
+  if (entry.type === 'poids' && entry.poidsVal) {
+    const poidsWrap = document.createElement('div');
+    poidsWrap.style.cssText = 'display:flex;align-items:baseline;gap:4px;padding:10px 12px 4px';
+    const bigNum = document.createElement('span');
+    bigNum.style.cssText = 'font-size:24px;font-weight:700;color:var(--text)';
+    bigNum.textContent = entry.poidsVal;
+    const unit = document.createElement('span');
+    unit.style.cssText = 'font-size:14px;color:var(--muted)';
+    unit.textContent = 'kg';
+    poidsWrap.appendChild(bigNum);
+    poidsWrap.appendChild(unit);
+    card.appendChild(poidsWrap);
+  }
+
+  // Body texte
+  const body = document.createElement('div');
+  body.className = 'jt-body';
+
+  // Titre contextuel
+  const titleMap = {veto:'Visite vétérinaire', traitement:'Traitement', poids:'Pesée', photo:'Photo', note:'Note'};
+  const titleEl = document.createElement('div');
+  titleEl.className = 'jt-title';
+  if (entry.type === 'veto' && entry.vetoMotif) {
+    titleEl.textContent = entry.vetoMotif;
+  } else if (entry.type === 'traitement' && entry.traitNom) {
+    titleEl.textContent = entry.traitNom;
+  } else if (entry.type === 'photo' && entry.description) {
+    titleEl.textContent = entry.description;
   } else {
-    bodyHTML += '<div class="jcard-note">"' + (entry.description || '') + '"</div>';
+    titleEl.textContent = titleMap[entry.type] || 'Note';
+  }
+  body.appendChild(titleEl);
+
+  // Note libre
+  if (entry.description && entry.type !== 'photo') {
+    const note = document.createElement('div');
+    note.className = 'jt-note';
+    note.textContent = entry.description;
+    body.appendChild(note);
   }
 
-  // Tags
-  if (entry.tags && entry.tags.length) {
-    bodyHTML += '<div class="jcard-body" style="padding-top:0"><div class="jcard-tags">';
-    entry.tags.forEach(tag => {
-      bodyHTML += '<span class="jtag" style="background:' + cfg.bg + ';color:' + cfg.color + '">' + tag + '</span>';
-    });
-    bodyHTML += '</div></div>';
+  // Meta (date + partage)
+  const meta = document.createElement('div');
+  meta.className = 'jt-meta';
+  const dateEl = document.createElement('span');
+  dateEl.className = 'jt-date';
+  dateEl.textContent = dateStr;
+  meta.appendChild(dateEl);
+  if (entry.sharedBy) {
+    const tag = document.createElement('span');
+    tag.className = 'jt-shared-tag';
+    tag.innerHTML = '<i class="ti ti-share" style="font-size:9px"></i> ' + entry.sharedBy;
+    meta.appendChild(tag);
   }
+  body.appendChild(meta);
+  card.appendChild(body);
 
-  card.innerHTML = headerHTML + bodyHTML;
-  return card;
+  wrap.appendChild(leftCol);
+  wrap.appendChild(card);
+  return wrap;
 }
 
 function openJournalDetail(entryId) {
