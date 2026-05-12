@@ -856,9 +856,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div class="journal-filter-row" id="journal-filters">
       <div class="jchip active" onclick="filterJournal('all',this)">Tout</div>
       <div class="jchip inactive" onclick="filterJournal('photo',this)">📸 Photos</div>
-      <div class="jchip inactive" onclick="filterJournal('poids',this)">⚖️ Poids</div>
       <div class="jchip inactive" onclick="filterJournal('veto',this)">🩺 Véto</div>
-      <div class="jchip inactive" onclick="filterJournal('traitement',this)">💊 Traitements</div>
       <div class="jchip inactive" onclick="filterJournal('note',this)">📝 Notes</div>
     </div>
     <!-- Contenu du journal -->
@@ -1944,13 +1942,14 @@ function renderStatsBand(animalId) {
   // Stat badges
   const statBadges = document.getElementById('stat-badges');
   if (statBadges) {
-    const earned = (state.badges || []).length;
-    const total = typeof BADGES_CONFIG !== 'undefined' ? BADGES_CONFIG.length : 7;
-    statBadges.textContent = earned + '/' + total;
-    statBadges.style.color = earned > 0 ? 'var(--purple)' : 'var(--muted)';
+    const validIds = typeof BADGES_CONFIG !== 'undefined' ? BADGES_CONFIG.map(function(b){return b.id;}) : [];
+    const earnedCount = (state.badges || []).filter(function(id){return validIds.includes(id);}).length;
+    const total = validIds.length || 7;
+    statBadges.textContent = earnedCount + ' / ' + total;
+    statBadges.style.color = earnedCount > 0 ? 'var(--purple)' : 'var(--muted)';
     const pill = statBadges.parentElement;
     const label = pill.querySelector('.new-stat-label');
-    if (label) label.textContent = 'badges obtenus';
+    if (label) label.textContent = earnedCount > 1 ? 'badges obtenus' : 'badge obtenu';
   }
 }
 
@@ -3573,8 +3572,9 @@ function renderBadgesGrid() {
   // Mettre à jour le titre de section avec le count
   const titleEl = document.getElementById('badges-section-title');
   if (titleEl) {
-    const total = BADGES_CONFIG.length;
-    titleEl.textContent = 'Mes badges — ' + earned.length + '/' + total + ' débloqués 🏆';
+    const validIds = BADGES_CONFIG.map(function(b){return b.id;});
+    const earnedCount = earned.filter(function(id){return validIds.includes(id);}).length;
+    titleEl.textContent = 'Mes badges — ' + earnedCount + ' / ' + BADGES_CONFIG.length + ' débloqués 🏆';
   }
 
   BADGES_CONFIG.forEach(function(badge) {
