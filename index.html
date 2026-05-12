@@ -735,7 +735,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div class="nav-item active" onclick="goToTab('home')"><i class="ti ti-home nav-ti"></i><div class="nav-label">Accueil</div></div>
     <div class="nav-item" onclick="goToTab('journal')"><i class="ti ti-notebook nav-ti"></i><div class="nav-label">Journal</div></div>
     <div class="nav-item" onclick="goToTab('rappels')"><i class="ti ti-bell nav-ti"></i><div class="nav-label">Rappels</div></div>
-    <div class="nav-item" onclick="goToTab('blog')"><i class="ti ti-article nav-ti"></i><div class="nav-label">Blog</div></div>
+    <div class="nav-item" onclick="goToTab('settings')"><i class="ti ti-settings nav-ti"></i><div class="nav-label">Réglages</div></div>
     <div class="nav-item" onclick="goToTab('communaute')"><i class="ti ti-users nav-ti"></i><div class="nav-label">Communauté</div></div>
   </div>
 </div>
@@ -817,7 +817,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 <!-- ARTICLE -->
 <div id="screen-article" class="screen">
   <div class="page-header">
-    <div class="back-btn" onclick="goToTab('blog')"><i class="ti ti-chevron-left"></i></div>
+    <div class="back-btn" onclick="showScreen('blog')"><i class="ti ti-chevron-left"></i></div>
     <div style="flex:1"><div id="article-cat" style="font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.5px"></div><div id="article-title-header" style="font-size:16px;font-weight:700"></div></div>
   </div>
   <div style="flex:1;overflow-y:auto">
@@ -869,7 +869,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div class="nav-item" onclick="goToTab('home')"><i class="ti ti-home nav-ti"></i><div class="nav-label">Accueil</div></div>
     <div class="nav-item active"><i class="ti ti-notebook nav-ti"></i><div class="nav-label">Journal</div></div>
     <div class="nav-item" onclick="goToTab('rappels')"><i class="ti ti-bell nav-ti"></i><div class="nav-label">Rappels</div></div>
-    <div class="nav-item" onclick="goToTab('blog')"><i class="ti ti-article nav-ti"></i><div class="nav-label">Blog</div></div>
+    <div class="nav-item" onclick="goToTab('settings')"><i class="ti ti-settings nav-ti"></i><div class="nav-label">Réglages</div></div>
     <div class="nav-item" onclick="goToTab('communaute')"><i class="ti ti-users nav-ti"></i><div class="nav-label">Communauté</div></div>
   </div>
 </div>
@@ -992,8 +992,8 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div class="nav-item" onclick="goToTab('home')"><i class="ti ti-home nav-ti"></i><div class="nav-label">Accueil</div></div>
     <div class="nav-item" onclick="goToTab('journal')"><i class="ti ti-notebook nav-ti"></i><div class="nav-label">Journal</div></div>
     <div class="nav-item" onclick="goToTab('rappels')"><i class="ti ti-bell nav-ti"></i><div class="nav-label">Rappels</div></div>
-    <div class="nav-item" onclick="goToTab('blog')"><i class="ti ti-article nav-ti"></i><div class="nav-label">Blog</div></div>
-    <div class="nav-item active" onclick="goToTab('communaute')"><i class="ti ti-users nav-ti"></i><div class="nav-label">Communauté</div></div>
+    <div class="nav-item" onclick="goToTab('settings')"><i class="ti ti-settings nav-ti"></i><div class="nav-label">Réglages</div></div>
+    <div class="nav-item active"><i class="ti ti-settings nav-ti"></i><div class="nav-label">Communauté</div></div>
   </div>
 </div>
 
@@ -1029,7 +1029,7 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <div class="nav-item" onclick="goToTab('home')"><i class="ti ti-home nav-ti"></i><div class="nav-label">Accueil</div></div>
     <div class="nav-item" onclick="goToTab('journal')"><i class="ti ti-notebook nav-ti"></i><div class="nav-label">Journal</div></div>
     <div class="nav-item" onclick="goToTab('rappels')"><i class="ti ti-bell nav-ti"></i><div class="nav-label">Rappels</div></div>
-    <div class="nav-item" onclick="goToTab('blog')"><i class="ti ti-article nav-ti"></i><div class="nav-label">Blog</div></div>
+    <div class="nav-item" onclick="goToTab('settings')"><i class="ti ti-settings nav-ti"></i><div class="nav-label">Réglages</div></div>
     <div class="nav-item active"><i class="ti ti-users nav-ti"></i><div class="nav-label">Communauté</div></div>
   </div>
 </div>
@@ -1225,10 +1225,8 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
     <!-- Sélecteur de type -->
     <div class="jtype-selector" id="jtype-selector" style="margin-bottom:14px">
       <div class="jtype-btn selected" onclick="selectJournalType('photo',this)"><div class="jt-icon">📸</div><div class="jt-label">Photo</div></div>
-      <div class="jtype-btn unsel" onclick="selectJournalType('poids',this)"><div class="jt-icon">⚖️</div><div class="jt-label">Pesée</div></div>
       <div class="jtype-btn unsel" onclick="selectJournalType('veto',this)"><div class="jt-icon">🩺</div><div class="jt-label">Véto</div></div>
-      <div class="jtype-btn unsel" onclick="selectJournalType('traitement',this)"><div class="jt-icon">💊</div><div class="jt-label">Traitement</div></div>
-      <div class="jtype-btn unsel" onclick="selectJournalType('note',this)"><div class="jt-icon">📝</div><div class="jt-label">Note</div></div>
+      <div class="jtype-btn unsel" onclick="selectJournalType('note',this)"><div class="jt-icon">📝</div><div class="jt-label">Note libre</div></div>
     </div>
 
     <!-- Zone photo (visible si type=photo) -->
@@ -1597,7 +1595,6 @@ function goToDashboard() {
 // ─── TABS ─────────────────────────────────────────────────────────────────────
 function goToTab(tab) {
   if (tab === 'journal') { openJournal(); return; }
-  if (tab === 'blog') { loadBlog(); showScreen('blog'); return; }
   if (tab === 'communaute') { showScreen('communaute'); return; }
   if (tab === 'rappels') { if (selectedAnimalId) openSoins(selectedAnimalId); else showScreen('dashboard'); return; }
   const map = { home: 'dashboard', settings: 'settings' };
@@ -2408,7 +2405,10 @@ function markDone(tid) {
   const today = new Date().toISOString().split('T')[0];
   const next = new Date(); next.setMonth(next.getMonth() + t.freqMonths);
   t.lastDate = today; t.nextDate = next.toISOString().split('T')[0];
-  saveState(); renderSoins(t.animalId); updateDashboard(); showToast('Soin marqué effectué ✓');
+  const aid = t.animalId;
+  if (!state.journal[aid]) state.journal[aid] = [];
+  state.journal[aid].push({ id: Date.now().toString(), animalId: aid, type: 'traitement', date: new Date().toISOString(), traitNom: t.name, description: '', mood: null, createdAt: new Date().toISOString() });
+  saveState(); renderSoins(t.animalId); updateDashboard(); showToast('Soin effectué ✓ — ajouté au journal');
 }
 function addToGoogleCalendar(animalName, type, autreName, nextDate) {
   const typeName = type === 'antipuces' ? 'Anti-puces' : type === 'vermifuge' ? 'Vermifuge' : type === 'vaccin' ? 'Vaccin' : autreName;
@@ -2439,8 +2439,11 @@ function saveWeight() {
   if (!state.weights[state.currentAnimalId]) state.weights[state.currentAnimalId] = [];
   state.weights[state.currentAnimalId].push({ value, date, notes: document.getElementById('w-notes').value.trim() });
   state.weights[state.currentAnimalId].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const aid = state.currentAnimalId;
+  if (!state.journal[aid]) state.journal[aid] = [];
+  state.journal[aid].push({ id: Date.now().toString(), animalId: aid, type: 'poids', date: new Date(date + 'T12:00:00').toISOString(), poidsVal: value, description: document.getElementById('w-notes').value.trim() || '', mood: null, createdAt: new Date().toISOString() });
   saveState(); closeModal('modal-poids'); renderPoids(state.currentAnimalId);
-  updateDashboard(); showToast('Poids enregistré ✓');
+  updateDashboard(); showToast('Poids enregistré ✓ — ajouté au journal');
 }
 function renderPoids(aid) {
   const weights = state.weights[aid] || [];
@@ -3755,7 +3758,7 @@ function initSwipeClose(handleId, overlayId) {
 
 // ─── SWIPE NAV ────────────────────────────────────────────────────────────────
 function initSwipeNav() {
-  const screens = ['dashboard', 'journal', 'rappels', 'blog', 'communaute'];
+  const screens = ['dashboard', 'journal', 'rappels', 'settings', 'communaute'];
   let startX = 0, startY = 0;
   document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, { passive: true });
   document.addEventListener('touchend', e => {
