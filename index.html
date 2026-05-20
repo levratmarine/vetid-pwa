@@ -12,6 +12,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -233,10 +234,18 @@ body{background:var(--bg);min-height:100vh;overflow-x:hidden}
 .os-content.active{display:block}
 .tuto-visual{background:var(--teal-light);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:13px;color:var(--teal-dark);line-height:1.5}
 .article-body{line-height:1.8;font-size:15px;color:var(--text)}
+.article-body h1,.article-body h2{font-size:19px;font-weight:700;margin:24px 0 10px;color:var(--text)}
 .article-body h3{font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--text)}
 .article-body p{margin-bottom:12px}
-.article-body ul{padding-left:20px;margin-bottom:12px}
+.article-body ul,.article-body ol{padding-left:20px;margin-bottom:12px}
 .article-body li{margin-bottom:6px}
+.article-body strong{font-weight:700;color:var(--text)}
+.article-body em{font-style:italic}
+.article-body u{text-decoration:underline}
+.article-body blockquote{border-left:3px solid var(--teal);padding:8px 14px;margin:12px 0;background:var(--teal-light);border-radius:0 8px 8px 0;color:var(--teal-dark);font-style:italic}
+.article-body code{background:var(--bg);border-radius:5px;padding:2px 6px;font-size:13px;font-family:monospace}
+.article-body hr{border:none;border-top:1px solid var(--border);margin:20px 0}
+.article-body a{color:var(--teal);text-decoration:underline}
 .error-msg{color:var(--red);font-size:13px;text-align:center;padding:4px 0;display:none}
 .error-msg.show{display:block}
 .blog-preview-card{width:120px;background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden;cursor:pointer;flex-shrink:0}
@@ -3386,10 +3395,11 @@ function openArticle(idx) {
   document.getElementById('article-emoji').textContent = a.emoji;
   document.getElementById('article-title-big').textContent = a.title;
   document.getElementById('article-meta').textContent = a.category + ' · ' + a.duration + ' min' + (a.sponsored ? ' · Sponsorisé' : '');
-  const html = a.content
-    .replace(/### (.+)/g, '<h3>$1</h3>').replace(/## (.+)/g, '<h3>$1</h3>').replace(/# (.+)/g, '<h3>$1</h3>')
-    .replace(/- (.+)/g, '<li>$1</li>').replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-    .split('\n\n').map(p => p.startsWith('<') ? p : '<p>' + p + '</p>').join('');
+  // marked.js : rendu markdown complet (bold, italic, titres, listes, liens…)
+  // Support underline via ++texte++ → <u>texte</u> (syntaxe Notion-friendly)
+  marked.setOptions({ breaks: true, gfm: true });
+  const underlined = a.content.replace(/\+\+(.*?)\+\+/g, '<u>$1</u>');
+  const html = marked.parse(underlined);
   document.getElementById('article-content').innerHTML = html;
   showScreen('article');
 }
