@@ -1,6 +1,24 @@
 const CACHE = { data: null, time: 0 };
 const TTL = 5 * 60 * 1000;
 
+// Convertit un tableau rich_text Notion en markdown
+// Lit les annotations : bold, italic, underline, strikethrough, code, liens
+function richTextToMarkdown(richTextArray) {
+  if (!richTextArray || !richTextArray.length) return '';
+  return richTextArray.map(rt => {
+    let text = rt.plain_text || '';
+    if (!text) return '';
+    const a = rt.annotations || {};
+    if (a.code)          text = '`' + text + '`';
+    if (a.bold)          text = '**' + text + '**';
+    if (a.italic)        text = '*' + text + '*';
+    if (a.underline)     text = '++' + text + '++';
+    if (a.strikethrough) text = '~~' + text + '~~';
+    if (rt.href)         text = '[' + text + '](' + rt.href + ')';
+    return text;
+  }).join('');
+}
+
 export default async function handler(req, res) {
   const token = req.headers['x-vetid-token'];
   if (token !== process.env.VETID_SECRET) {
@@ -27,7 +45,6 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           filter: { property: 'Publie', checkbox: { equals: true } },
-          // ✅ AJOUT 1 : trier par date de création décroissante directement dans Notion
           sorts: [{ timestamp: 'created_time', direction: 'descending' }]
         })
       }
@@ -50,21 +67,26 @@ export default async function handler(req, res) {
       const blocksData = await blocksRes.json();
 
       const content = blocksData.results.map(block => {
-        const text = block[block.type]?.rich_text?.map(t => t.plain_text).join('') || '';
+        // ✅ CORRIGÉ : richTextToMarkdown au lieu de plain_text
+        const text = richTextToMarkdown(block[block.type]?.rich_text || []);
+
         switch (block.type) {
-          case 'heading_1': return `# ${text}`;
-          case 'heading_2': return `## ${text}`;
-          case 'heading_3': return `### ${text}`;
+          case 'heading_1':          return `# ${text}`;
+          case 'heading_2':          return `## ${text}`;
+          case 'heading_3':          return `### ${text}`;
           case 'bulleted_list_item': return `- ${text}`;
-          case 'numbered_list_item': return `- ${text}`;
-          case 'paragraph': return text || '';
-          default: return text;
+          case 'numbered_list_item': return `1. ${text}`;
+          case 'paragraph':          return text || '';
+          case 'quote':              return `> ${text}`;
+          case 'divider':            return `---`;
+          case 'callout':            return `> ${block.callout?.icon?.emoji || ''} ${text}`;
+          case 'code':               return '```\n' + (block.code?.rich_text?.[0]?.plain_text || '') + '\n```';
+          default:                   return text;
         }
       }).filter(Boolean).join('\n\n');
 
       return {
         id: p.id,
-        // ✅ AJOUT 2 : exposer created_time pour le tri côté front si besoin
         created: p.created_time,
         title: props.Titre?.title?.[0]?.plain_text || 'Sans titre',
         category: props.Categorie?.select?.name || '',
